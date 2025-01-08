@@ -1,0 +1,36 @@
+
+@media (min-width: 992px) { /* Large devices (lg) and up */
+    .col-lg-5 {
+        flex: 0 0 35% !important;
+        max-width: 35% !important;
+    }
+}
+
+.card{
+    width: 100%;
+    max-width: 380px; /* Maximum width of card */
+    
+}
+.btn#card {
+    transition: all 250ms ease-in-out !important;
+    
+  }
+  
+  .btn:hover {
+    transform: scale(1.12);
+    transition: all 250ms ease-in-out;
+  }
+
+.mt-fixed{
+    margin-top: 10%;
+}
+     
+.card-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
