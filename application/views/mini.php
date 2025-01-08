@@ -1,23 +1,33 @@
 <!-- room style sheet -->
 <link rel="stylesheet" href="<?= base_url('public/assets/css/card_room.css') ?>">
 <!-- room style sheet -->
+<style>
 
+    .mini{
+        margin-bottom: 15% !important;
+    }
+
+    
+
+</style>
 <?php
-    $data = [
-        ['r_id'=>1,'r_number'=>1,'r_status'=>1,'r_desc'=> "" ,'r_reserved' =>0,'end_time'=>'14:30:33','close_desc'=>'ห้องถูกปิดเนื่องจากต้องซ่อมดูแล.... Lorem ipsum dolor sit amet consectetur adipisicing
-        elit. Doloribus.'],
+    // $data = [
+    //     ['r_id'=>1,'r_number'=>1,'r_status'=>1,'r_desc'=> "" ,'r_reserved' =>0,'end_time'=>'14:30:33','close_desc'=>'ห้องถูกปิดเนื่องจากต้องซ่อมดูแล.... Lorem ipsum dolor sit amet consectetur adipisicing
+    //     elit. Doloribus.'],
+       
        
        
       
         
-    ];
-    $rooms = $data;
+    // ];
+    // $rooms = $data;
+    $rooms = [];
 
 
 if(!empty($rooms)){  ?>
-<section id="main" class="container">
+<section id="main" class="container mini">
     <div class="row justify-content-center">
-      <?= $this->load->view('component/title_room') ?>
+      <?= $this->load->view('component/title_room',[],true) ?>
                 <?php foreach ($rooms as $room): ?>
                     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-5">
                     <div class="card card-shadow text-center mx-auto mt-2">
@@ -46,10 +56,10 @@ if(!empty($rooms)){  ?>
                         $i = $n % 2;
                         if ($n !== 1 && $i !== 0 ){
 
-                            echo $this->load->view('room_template');                      
+                            echo $this->load->view('room_template',[],true);                      
                   }; ?>
             
     </div>
 </section>
 
-<?php }else{ echo $this->load->view('room_notFound'); } ?>
+<?php }else{ echo $this->load->view('room_notFound',[],true); } ?>

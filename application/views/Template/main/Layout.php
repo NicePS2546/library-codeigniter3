@@ -43,6 +43,9 @@
       box-sizing: border-box;
     }
 
+    body{
+      
+    }
     #app-container {
       display: flex;
       flex-direction: column;

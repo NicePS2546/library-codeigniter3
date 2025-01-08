@@ -62,7 +62,7 @@ class RoomMini extends CI_Model {
     // Get all data
     public function getAllRoom()
     {
-        return $this->db->get($this->table)->result();
+        return $this->db->get($this->table)->result_array();
     }
 
     public function deleteRoom($id)

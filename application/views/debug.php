@@ -1,4 +1,14 @@
-<section class="container">
+<style>
+
+#debug{
+    margin-bottom: 10%;
+}
+
+
+
+</style>
+
+<section id="debug" class="container">
     <div>
         <h1>Debugging</h1>
     </div>

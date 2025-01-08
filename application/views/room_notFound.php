@@ -1,4 +1,11 @@
-<section id="main" class="container">
+<style>
+  .not-found{
+    margin-bottom: 26.5% !important;
+  }
+</style>
+
+
+<section id="main" class="container not-found">
     <div class="row justify-content-center">   
     <div class="card mt-fixed" style="width: 18rem;">
   <div class="card-body">

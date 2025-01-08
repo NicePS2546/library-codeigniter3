@@ -1,4 +1,12 @@
-<form>
+<style>
+
+    #reserv{
+        margin-bottom: 25%;
+    }
+
+
+</style>
+<form id="reserv">
     <input type="hidden" name="r_id" value="<?= $r_id ?>">
     <div class="container d-flex justify-content-center">
     <div class="col-12 col-sm-6 col-md-4 col-lg-5">
