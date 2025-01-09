@@ -47,6 +47,15 @@
     transform: scale(1.04);
 
   }
+  .btn-admin {
+    margin-left: auto;
+    transition: transform 0.4s ease-in-out !important;
+  }
+
+  .btn-admin:hover {
+    transform: scale(1.04);
+
+  }
 
   .shadow {
     box-shadow: 20px;
@@ -73,7 +82,11 @@
 
 <nav class="navbar navbar-expand-lg fixed-nav shadow bg-body-tertiary">
   <div class="container">
-    <a class="navbar-brand" href="#">Nice</a>
+  <div class="text-center">
+    <a href="<?= base_url() ?>">
+  <img src="<?= base_url('public/assets/img/logo.png') ?>" width="50" height="50" class="rounded" alt="...">
+  </a>
+</div>
 
     <!-- Hamburger Menu Icon -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -97,15 +110,23 @@
           <a class="nav-link" href="<?= base_url() ?>index.php/mini"><?= $type['mini'] ?></a>
         </li>
         <li class="nav-item <?= $page == "Debug" ? "active5" : '' ?>">
-          <a class="nav-link" href="<?= base_url() ?>index.php/debug">Debugging</a>
+          <a class="nav-link" href="<?= base_url() ?>index.php/admin/debug">Debugging</a>
         </li>
         <div id="marker"></div>
       </ul>
       <!-- Login Button -->
+       <div class="d-flex align-items-center gap-4">
       <?php if ($this->session->has_userdata('userData')) {
         $userinfo = $this->session->userdata('userData');
+        
+        if($this->session->has_userdata('admin_data')){
+          $admin_info = $this->session->userdata('admin_data');
+         
         ?>
         
+        <a style="color:white; text-decoration: none; width: 150px;" class="btn btn-success" href="<?= base_url() ?>index.php/admin/debug">Admin Panel</a>
+
+        <?php } ?>
       <div class="dropdown custom-dropdown">
     <a href="#" data-toggle="dropdown" class="align-items-center d-flex  dropdown-link " aria-haspopup="true"
       aria-expanded="false" data-offset="-70, 20">
@@ -125,12 +146,12 @@
       <a class="dropdown-item" href="#"><span class="icon icon-security"></span>Security</a>
       <a class="dropdown-item" href="#"><span class="icon icon-featured_play_list"></span>Terms of service</a>
     </div>
-  
+    </div>
 
        
       <?php } else { ?>
-        <button class="btn my-auto btn-primary btn-login" data-bs-toggle="modal"
-          data-bs-target="#exampleModal">Login</button>
+        <button class="btn my-auto btn-primary btn-login" style="width:100px" data-bs-toggle="modal"
+          data-bs-target="#exampleModal">เข้าสู่ระบบ</button>
       <?php } ?>
     </div>
   </div>

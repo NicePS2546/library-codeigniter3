@@ -1,30 +1,24 @@
-<style>
 
-    #reserv{
-        margin-bottom: 25%;
-    }
-
-
-</style>
-<form id="reserv">
-    <input type="hidden" name="r_id" value="<?= $r_id ?>">
+<form id="reserv" method="post" action="<?= base_url() ?>index.php/music/reserv/submit">
+    <input type="hidden" name="r_number" value="<?= $r_number ?>">
     <div class="container d-flex justify-content-center">
     <div class="col-12 col-sm-6 col-md-4 col-lg-5">
         <div class="">
             <label>รหัสนักศึกษา</label>
-            <input placeholder="โปรดใส่รหัสนักศึกษาคนแรก" type="text" class="form-control">
+            <input placeholder="โปรดใส่รหัสนักศึกษาคนแรก" name="st_id" type="text" class="form-control">
         </div>
 
         <div class="">
             <label>จำนวณคนที่เข้าใช้ห้อง</label>
-            <input type="number" class="form-control">
+            <input type="number" name="total" class="form-control">
         </div>
 
         <div class="form-group">
             <label for="datetime">เลือกวันที่และเวลาที่ต้องการจะจอง</label>
-            <input type="text" class="form-control" id="datetime" name="datetime" placeholder="โปรดเลือกเวลาที่จอง">
+            <input type="text" class="form-control" id="datetime" name="start_date" placeholder="โปรดเลือกเวลาที่จอง">
         </div>
         <button onclick="console_date()" class="btn mt-4 btn-primary" type="button">Console Time</button>
+        <button class="btn mt-4 btn-primary" type="submit">จอง</button>
     </div>
     </div>
 

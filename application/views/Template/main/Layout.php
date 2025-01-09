@@ -41,15 +41,21 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    body{
-      
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
+
     #app-container {
       display: flex;
       flex-direction: column;
-      min-height: 40vh;
+      min-height: 100vh;
       width: 100%;
       margin: 0;
     }
@@ -60,12 +66,18 @@
     }
 
     .footer {
-      margin-top: auto;
-      /* Push the footer to the bottom */
-    }
+  background-color: #f4f4f4;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: auto; /* Pushes the footer to the bottom */
+  width: 100%;
+  border-top: 1px solid #ddd;
+}
+
+
   </style>
 
-   
+
 </head>
 
 <body>
@@ -77,10 +89,10 @@
       </div>
     </div>
   </div>
-  
-    <!-- Navbar -->
-    <?= $layout['navbar']; ?>
-  
+
+  <!-- Navbar -->
+  <?= $layout['navbar']; ?>
+
 
 
   <!-- Modal Structure -->
@@ -89,26 +101,30 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            <h5 class="modal-title" id="exampleModalLabel">เข้าสู่ระบบ SSO</h5>
             <!-- Correctly add data-bs-dismiss="modal" to close the modal -->
             <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
           </div>
           <div class="modal-body  d-flex justify-content-center">
             <div class="col-10 col-sm-10 pb-4 col-md-10 col-lg-10">
+              <div class="text-center">
+                <img src="<?= base_url("public/assets/img/logo.png") ?>" class="rounded rounded-circle" width="150"
+                  height="150" alt="...">
+              </div>
               <div>
                 <label for="st_id">รหัสนักศึกษา</label>
                 <input type="text" placeholder="โปรดใส่รหัสนักศึกษา" name="st_id" class="form-control" id="st_id">
               </div>
               <div>
                 <label for="password">รหัสผ่าน</label>
-                <input type="text" class="form-control" name="password" placeholder="โปรดใส่รหัสผ่าน" id="password">
+                <input type="password" class="form-control" name="password" placeholder="โปรดใส่รหัสผ่าน" id="password">
               </div>
               <label class="form-label text-danger">รหัส SSO ที่เข้าใช้ WI-Fi มหาวิทยาลัย</label>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="modal" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" id="modal">Login</button>
+            <button type="button" class="btn btn-secondary" id="modal" data-bs-dismiss="modal">ปิด</button>
+            <button type="submit" class="btn btn-primary" id="modal">เข้าสู่ระบบ</button>
 
           </div>
         </div>
@@ -118,7 +134,9 @@
 
   <div id="app-container">
     <div class="content">
+
       <?= $layout['content'] ?>
+      <?= $this->load->view('component/toast_alert', [], true); ?>
     </div> <!-- Footer -->
     <footer class="footer mt-auto py-3 bg-light">
       <div class="container text-center">
@@ -132,9 +150,9 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="<?= base_url('public/assets/js/dropdown.js') ?>"></script>
-  
- 
- 
+
+
+
   <!-- Owl Carousel JS -->
   <script src="<?= base_url('assets/node_modules/owl.carousel/dist/owl.carousel.min.js') ?>"></script>
 

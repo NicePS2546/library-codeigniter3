@@ -7,10 +7,20 @@
 
 
 </style>
+<?php 
+ if (!$this->session->has_userdata('admin_data')) {
+    // If no admin session, redirect to homepage
+    $this->session->set_flashdata('error', 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้านี้!');
+    redirect('/');  // Replace 'home' with the appropriate controller or URL
+}else{
+    $admin_info = $this->session->userdata['admin_data'];
+}
 
+
+ ?>
 <section id="debug" class="container">
     <div>
-        <h1>Debugging</h1>
+        <h1>ยินดีต้อนรับ ผู้ดูแล <?= $admin_info['fname']." ". $admin_info['lname']; ?> </h1>
     </div>
     <form action="<?= base_url() ?>index.php/debug/insert" method="post">
         <div>

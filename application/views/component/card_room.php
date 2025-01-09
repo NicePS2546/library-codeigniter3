@@ -6,18 +6,18 @@
         <?php if ($room['r_status']) : ?>
             <p class="card-text <?= $room['r_reserved'] ? 'text-danger' : 'text-success' ?>">สถานะ: <?= $room['r_reserved'] ? 'ไม่ว่าง' : 'ว่าง' ?></p>
 
-            <?php if ($room['r_reserved']) : ?>
+            <?php if ($room['reserve_today']) : ?>
                 <p class="card-text text-danger">สิ้นสุดประมาณ: <?= $room['end_time']; ?></p>
             <?php else : ?>
                 <p class="card-text"><?= $desc ?></p>
             <?php endif; ?>
 
         <?php else : ?>
-            <p class="card-text"><?= $room['close_desc'] ?></p>
+            <p class="card-text"><?= $room['r_close_desc'] ?></p>
         <?php endif; ?>
 
         <div class="d-flex justify-content-center gap-3">
-            <a href="<?= base_url() ?>index.php/<?= $url ?>/reserv/<?= $room['r_id'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-success' : 'btn-danger disabled' ?>">
+            <a href="<?= base_url() ?>index.php/<?= $url ?>/reserv/<?= $room['r_number'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-success' : 'btn-danger disabled' ?>">
                 <?= $room['r_status'] ? 'จองห้อง' : 'ห้องถูกปิด' ?>
             </a>
             

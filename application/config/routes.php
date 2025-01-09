@@ -54,7 +54,7 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 // Debug Zone
-$route['debug'] = 'debug/index';
+$route['admin/debug'] = 'debug/index';
 $route['debug/insert'] = 'debug/insert_data';
 $route['debug/room'] = 'debug/fetchAllRooms';
 $route['debug/delete'] = 'debug/delete';
@@ -66,8 +66,9 @@ $route['debug/sweet'] = 'debug/testSweetAlert';
 
 // Room Music
 $route['music'] = 'music/index';
-$route['music/reserv/(:num)'] = 'music/reserv/$1';
-
+$route['music/reserv/(:num)'] = 'music/reserv_page/$1';
+//reservation-sys
+$route['music/reserv/submit'] = 'music/reserv';
 /*-------------------*/
 
 // Room Video
@@ -79,3 +80,4 @@ $route['mini'] = 'mini/index';
 
 // SSO
 $route['sso/login'] = 'sso/index';
+$route['sso/logout'] = 'sso/logout';

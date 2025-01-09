@@ -59,61 +59,61 @@ class Debug extends CI_Controller
 
     private function check_room($model, $value, $data)
     {
+        $extension_url = "index.php/";
         $this->load->model($model);
         $model = $this->$model;
         $row = $model->getRoomByNumber($value);
-
+        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
         if ($row) {
-            echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+            
             echo '<script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    setTimeout(function() {
-                        Swal.fire({
-                            position: "center",
-                            icon: "error",
-                            title: "มีหมายเลขห้อง '.$value.' อยู่แล้ว",
-                            showConfirmButton: true
-                        }).then(function() {
-                            window.location = "'.base_url().'debug"; // Redirect to debug page
-                        });
-                    }, 1000);
-                });
-            </script>';
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "มีหมายเลขห้อง '.$value.' อยู่แล้ว",
+                    showConfirmButton: true,
+                    // timer: 1500
+                }).then(function() {
+                window.location = "'.base_url().$extension_url.'debug"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
+                
+            });
+                }, 1000);
+                </script>';
         } else {
             $result = $model->insertRoom($data);
         
-            if ($result) {
-                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+            if ($result){
                 echo '<script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        setTimeout(function() {
-                            Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                title: "เพิ่มข้อมูลสำเร็จ",
-                                showConfirmButton: true
-                            }).then(function() {
-                                window.location = "'.base_url().'debug"; // Redirect to debug page
-                            });
-                        }, 1000);
+                    setTimeout(function() {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "เพิ่มข้อมูลสำเร็จ",
+                            showConfirmButton: true,
+                            // timer: 1500
+                        }).then(function() {
+                        window.location = "'.base_url().$extension_url.'debug"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
+                        
                     });
-                </script>';
+                        }, 1000);
+                        </script>';
             } else {
-                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+               
                 echo '<script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        setTimeout(function() {
-                            Swal.fire({
-                                position: "center",
-                                icon: "error",
-                                title: "เพิ่มข้อมูลไม่สำเร็จ",
-                                showConfirmButton: true
-                            }).then(function() {
-                                window.location = "'.base_url().'debug"; // Redirect to debug page
-                            });
-                        }, 1000);
-                    });
-                </script>';
+                setTimeout(function() {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "เพิ่มข้อมูลไม่สำเร็จ",
+                        showConfirmButton: true,
+                        // timer: 1500
+                    }).then(function() {
+                    window.location = "'.base_url().$extension_url.'debug"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
+                    
+                });
+                    }, 1000);
+                    </script>';
             }
         }
         
