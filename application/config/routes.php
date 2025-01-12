@@ -69,6 +69,7 @@ $route['music'] = 'music/index';
 $route['music/reserv/(:num)'] = 'music/reserv_page/$1';
 //reservation-sys
 $route['music/reserv/submit'] = 'music/reserv';
+$route['music/time/(:num)'] = 'music/get_availible_slots/$1';
 /*-------------------*/
 
 // Room Video

@@ -17,7 +17,7 @@
         <?php endif; ?>
 
         <div class="d-flex justify-content-center gap-3">
-            <a href="<?= base_url() ?>index.php/<?= $url ?>/reserv/<?= $room['r_number'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-success' : 'btn-danger disabled' ?>">
+            <a href="<?= base_url() ?>index.php/<?= $url ?>/reserv/<?= $room['r_id'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-success' : 'btn-danger disabled' ?>">
                 <?= $room['r_status'] ? 'จองห้อง' : 'ห้องถูกปิด' ?>
             </a>
             
