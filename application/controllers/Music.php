@@ -35,109 +35,141 @@ class Music extends CI_Controller
             'isBusy' => $isBusy
         ]);
     }
-    public function reserv()
-    {
+    public function reserv() {
+        $this->load->model('reservation/MusicModel');
         $extension = "index.php/";
-        $r_number = $this->input->post('r_number');
-        $st_id = $this->input->post('st_id');
-        $total_pp = $this->input->post('total');
-        $start_date = $this->input->post('start_date');
-        $ip = $this->input->ip_address();
-        if ($ip === '::1') {
-            $ip = '127.0.0.1'; // Map localhost IPv6 to IPv4 for consistency
-        }
-        $currentDate = date('Y-m-d');
-        $currentDay = getDay($currentDate);
-        $day = getDay($start_date);
-
-
-        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-        if (!$r_number) {
-            echo '<script>
-            setTimeout(function() {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "ไม่มีหมายเลขห้อง",
-                    showConfirmButton: true,
-                    // timer: 1500
-                }).then(function() {
-                window.location = "' . base_url() . $extension. 'music/reserv/' . $r_number . '"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
-                
-            });
-                }, 1000);
-                </script>';
-        }elseif($total_pp < 4 && $total_pp < 7){
-            echo '<script>
-            setTimeout(function() {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "เข้าได้ 4-7 คน",
-                    showConfirmButton: true,
-                    // timer: 1500
-                }).then(function() {
-                window.location = "' . base_url() . $extension. 'music/reserv/' . $r_number . '"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
-                
-            });
-                }, 1000);
-                </script>';
-        }
-
-        if ($day == "Saturday") {
-            echo '<script>
-            setTimeout(function() {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "วันเสาร์ห้องสมุดปิดจองไม่ได้",
-                    showConfirmButton: true,
-                    // timer: 1500
-                }).then(function() {
-                window.location = "' . base_url() . $extension. 'music/reserv/' . $r_number . '"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
-                
-            });
-                }, 1000);
-                </script>';
-
-        } else {
-            $model = $this->MusicModel;
-            
-            $result = $model->reserve_room($st_id, $r_number, $total_pp, $start_date, $ip);
-            if($result){
-                echo '<script>
-                setTimeout(function() {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "จองห้องสำเร็จ!",
-                        showConfirmButton: true,
-                        // timer: 1500
-                    }).then(function() {
-                    window.location = "' . base_url() .$extension. 'music/reserv/' . $r_number . '"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
-                    
-                });
-                    }, 1000);
-                    </script>';
-            }else{
-                echo '<script>
-                setTimeout(function() {
-                    Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        title: "จองห้องไม่สำเร็จ",
-                        showConfirmButton: true,
-                        // timer: 1500
-                    }).then(function() {
-                    window.location = "' . base_url() . $extension. 'music/reserv/' . $r_number . '"; // Redirect to.. ปรับแก ้ชอไฟล์ตามที่ต้องการให ้ไป ื่
-                    
-                });
-                    }, 1000);
-                    </script>';
-            }
+        $r_id = $this->input->post('r_id');  // Room number
+        $st_id = $this->input->post('st_id');        // Student ID
+        $total_pp = $this->input->post('total');     // Total people
         
+        $time_slot = $this->input->post('time_slot'); // Selected time slot
+        $currentDate = date('Y-m-d');  // Get the current date
+        $currentTime = date('H:i');  // Get the current time
+    // Convert the selected time range (e.g., '09:00-10:00') to start_time and exp_time
+        list($start_time, $exp_time) = explode('-', $time_slot);
+
+        $data = [
+            'st_id' => $st_id,  // Example: Replace with actual student/user ID
+            'r_id' => $r_id, // Room number
+            'total_pp' => $total_pp,  // Total people
+            'start_time' => $start_time,
+            'exp_time' => $exp_time,
+            'r_date' => $currentDate,
+            'r_status' => 'actived', // Status of the reservation
+            'r_verify' => 0,  // Verification flag (0 for unverified)
+            'created_at' => date('Y-m-d H:i:s'),
+            'update_at' => date('Y-m-d H:i:s')
+        ];
+    
+       
+    
+        // Check if the room number and other inputs are valid
+        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+        if (!$r_id || !$st_id || !$total_pp || !$time_slot) {
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music/reserv/' . $r_id . '"; 
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
+        }else if($total_pp < 4){
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "จำนวนคนน้อยกว่าที่กำหนด",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music/reserv/' . $r_id . '"; 
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
+        }else if($total_pp > 7){
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "จำนวนคนมากกว่าที่กำหนด",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music/reserv/' . $r_id . '"; 
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
         }
+        
+        if($currentTime > "16:00"){
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ไม่อยู่ในเวลาทำการ",
+                    showConfirmButton: true,
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
+        }else if($currentTime < "09:00"){
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ไม่อยู่ในเวลาทำการ",
+                    showConfirmButton: true,
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
+        }
+        // Check if the room is available
+        $model = $this->MusicModel;
+      
+       
+        $result = $model->reserve($data);
+    
+        if ($result) {
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "จองห้องสำเร็จ!",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music/reserv/' . $r_id . '"; 
+                });
+            }, 1000);
+            </script>';
+        } else {
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "จองห้องไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music/reserv/' . $r_id . '"; 
+                });
+            }, 1000);
+            </script>';
+        }
+            
     }
+    
 
 
 
@@ -148,11 +180,11 @@ class Music extends CI_Controller
             $this->load->model('reservation/MusicModel');
     
             // Get today's date or use the date passed by the user
-            $r_date = date('Y-m-d'); 
-            $r_date = "2025-01-12"; 
+            $current_date = date('Y-m-d'); 
+            
     
             // Get the reserved slots from the model
-            $reservedSlots = $this->MusicModel->get_reserved_slots($r_date,$r_id);
+            $reservedSlots = $this->MusicModel->get_reserved_slots($current_date,$r_id);
     
             // Define all possible slots
             $allSlots = [
@@ -183,7 +215,7 @@ class Music extends CI_Controller
             echo json_encode([
                 'availableSlots' => array_values($availableSlots), // Available slots
                 'rows_fromtable' => $reservedSlotRanges, // Reserved slots
-                'date' => $r_date
+                'date' => $current_date
             ]);
     
         } catch (Exception $e) {
@@ -193,7 +225,10 @@ class Music extends CI_Controller
             echo json_encode(['error' => 'An error occurred while fetching the available slots.']);
         }
     }
-
+    public function test(){
+        $time = $this->input->post('time_slot');
+        echo $time;
+    }
     public function check_availability() {
         $model = $this->RoomMusic;
         // Get selected time slot from form input

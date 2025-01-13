@@ -34,8 +34,6 @@ class RoomMusic extends CI_Model {
     // Insert data into the table
     public function insertRoom($data)
     {
-
-        $data = $this->createdStamp($data);  // Apply created timestamp
         
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();

@@ -96,13 +96,31 @@ class CI_Controller
 	{
 		$type = $this->get_type();
 
+		$currentTime = '01:00';
+		
+		
+
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
 			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'type' => $type],true), // Return navbar as string
 			'content' => $this->view($view, $data,true), // Return content as string
 		];
+		$current_url = $this->getCurrentUrl();
 
+		$page = [
+			'music' => $current_url == base_url('index.php/music'),
+			'vdo' => $current_url == base_url('index.php/vdo'),
+			'mini' => $current_url == base_url('index.php/mini'),
+			'index'=> $current_url == base_url()
+		];
+		
+		if($currentTime < "09:00" && $page['index'] || $page['music']|| $page['vdo']|| $page['mini']){
+			$layout['notice'] = $this->view('component/not_in_time',[],true);
+		}else if($currentTime > "16:00" && $current_url == base_url()){
+			$layout['notice'] = $this->view('component/not_in_time',[],true);
+			
+		}
 		// Merge the layout data with the original data
 		$data['layout'] = $layout;
 
@@ -150,6 +168,27 @@ class CI_Controller
             ->set_content_type('application/json')
             ->set_output($data);
 	}
+
+
+
+	public function getCurrentUrl()
+{
+    // Check if the connection is secure (https)
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+    // Get the hostname
+    $host = $_SERVER['HTTP_HOST'];
+
+    // Get the request URI
+    $uri = $_SERVER['REQUEST_URI'];
+
+    // Combine to create the full URL
+    $currentUrl = $protocol . $host . $uri;
+
+    return $currentUrl;
+}
+
+
 
 	// --------------------------------------------------------------------
 
