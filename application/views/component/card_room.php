@@ -4,10 +4,10 @@
         <h5 class="card-title">ห้องที่ <?= $room['r_number']; ?></h5>
 
         <?php if ($room['r_status']) : ?>
-            <p class="card-text <?= $room['r_reserved'] ? 'text-danger' : 'text-success' ?>">สถานะ: <?= $room['r_reserved'] ? 'ไม่ว่าง' : 'ว่าง' ?></p>
+            <p class="card-text <?= $room['isFree'] ? 'text-danger' : 'text-success' ?>">สถานะ: <?= $room['isFree'] ? 'ไม่ว่าง' : 'ว่าง' ?></p>
 
-            <?php if ($room['reserve_today']) : ?>
-                <p class="card-text text-danger">สิ้นสุดประมาณ: <?= $room['end_time']; ?></p>
+            <?php if ($room['isFree']) : ?>
+                <p class="card-text text-danger">สิ้นสุดประมาณ: <?= $exp_time; ?> น.</p>
             <?php else : ?>
                 <p class="card-text"><?= $desc ?></p>
             <?php endif; ?>

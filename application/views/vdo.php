@@ -17,7 +17,7 @@
       
         
     // ];
-    $rooms = [];
+    // $rooms = [];
 
 if(!empty($rooms)){ ?>
 

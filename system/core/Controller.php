@@ -92,18 +92,15 @@ class CI_Controller
 	{
 		return $this->load->view($view, $data, $return);
 	}
+
 	public function Render($view, $data)
 	{
 		$type = $this->get_type();
-
-		$currentTime = '01:00';
-		
-		
-
+		$this->check_expire();
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
-			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'type' => $type],true), // Return navbar as string
+			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
 			'content' => $this->view($view, $data,true), // Return content as string
 		];
 		$current_url = $this->getCurrentUrl();
@@ -114,12 +111,18 @@ class CI_Controller
 			'mini' => $current_url == base_url('index.php/mini'),
 			'index'=> $current_url == base_url()
 		];
+		$stage = $this->config->item('stage');
+		if($stage == "Development"){
+			$currentTime = $this->config->item('fixed_time');
+		}else{
+			$currentTime = date("H:i");
+		}
 		
-		if($currentTime < "09:00" && $page['index'] || $page['music']|| $page['vdo']|| $page['mini']){
-			$layout['notice'] = $this->view('component/not_in_time',[],true);
-		}else if($currentTime > "16:00" && $current_url == base_url()){
-			$layout['notice'] = $this->view('component/not_in_time',[],true);
-			
+
+		if ($currentTime < "09:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', [], true);
+		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', [], true);
 		}
 		// Merge the layout data with the original data
 		$data['layout'] = $layout;
@@ -169,7 +172,15 @@ class CI_Controller
             ->set_output($data);
 	}
 
-
+	public function check_expire(){
+		$this->load->model('reservation/MusicModel');
+		$model = $this->MusicModel;
+		$currentDate = date("Y-m-d");
+		$rows = $model->get_past_reservations($currentDate);
+		$model->expire_reserv($rows);
+		
+		return $rows;
+	}
 
 	public function getCurrentUrl()
 {

@@ -10,11 +10,11 @@ class Welcome extends CI_Controller {
 		$this->session->set_userdata('userdata','Hi');
 		$userdata = $this->session->userdata('userdata');
 		// $this->check_expire();
-		$rows = $this->check_expire();
+		
 		return $this->Render('welcome_message',[
 			'title'=>'home',
 			'userdata'=>$userdata,
-			'rows'=>$rows,
+			
 			'page'=>'home']);
 		
 	}

@@ -14,10 +14,16 @@ class Music extends CI_Controller
         $this->load->model('RoomMusic');
         $model = $this->RoomMusic;
         $data = $model->getAllRoom();
+
+        $this->load->model('reservation/MusicModel');
+        $reservModel = $this->MusicModel;
+      
+
         return $this->Render("music", [
             'title' => 'Music-Relax',
             'rooms' => $data,
-            'page' => 'music'
+            'page' => 'music',
+            'model'=> $reservModel
         ]);
 
     }
@@ -37,6 +43,9 @@ class Music extends CI_Controller
     }
     public function reserv() {
         $this->load->model('reservation/MusicModel');
+        $model = $this->MusicModel;
+        
+       
         $extension = "index.php/";
         $r_id = $this->input->post('r_id');  // Room number
         $st_id = $this->input->post('st_id');        // Student ID
@@ -44,10 +53,17 @@ class Music extends CI_Controller
         
         $time_slot = $this->input->post('time_slot'); // Selected time slot
         $currentDate = date('Y-m-d');  // Get the current date
-        $currentTime = date('H:i');  // Get the current time
+       
+        $stage = $this->config->item('stage');
+		if($stage == "Development"){
+			$currentTime = $this->config->item('fixed_time');
+		}else{
+            $currentTime = date('H:i');  // Get the current time
+		}
+        
     // Convert the selected time range (e.g., '09:00-10:00') to start_time and exp_time
         list($start_time, $exp_time) = explode('-', $time_slot);
-
+        $row = $model->check_duplicate($st_id,$r_id);
         $data = [
             'st_id' => $st_id,  // Example: Replace with actual student/user ID
             'r_id' => $r_id, // Room number
@@ -61,8 +77,36 @@ class Music extends CI_Controller
             'update_at' => date('Y-m-d H:i:s')
         ];
     
-       
-    
+        
+        if($currentTime > "16:00"){
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ไม่อยู่ในเวลาทำการ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'music"; 
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
+        }else if($currentTime < "09:00"){
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ไม่อยู่ในเวลาทำการ",
+                    showConfirmButton: true,
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
+        }
+        
+
         // Check if the room number and other inputs are valid
         echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
         if (!$r_id || !$st_id || !$total_pp || !$time_slot) {
@@ -109,35 +153,22 @@ class Music extends CI_Controller
             return;  // Stop execution if validation fails
         }
         
-        if($currentTime > "16:00"){
+        if($row){
             echo '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการ",
+                    title: "จำนวนการจองเกินกำหนด 1 ผู้ใช้ ต่อ 1 การจอง",
                     showConfirmButton: true,
-                });
-            }, 1000);
-            </script>';
-            return;  // Stop execution if validation fails
-        }else if($currentTime < "09:00"){
-            echo '<script>
-            setTimeout(function() {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการ",
-                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music"; 
                 });
             }, 1000);
             </script>';
             return;  // Stop execution if validation fails
         }
-        // Check if the room is available
-        $model = $this->MusicModel;
-      
-       
+        
         $result = $model->reserve($data);
     
         if ($result) {
@@ -149,7 +180,7 @@ class Music extends CI_Controller
                     title: "จองห้องสำเร็จ!",
                     showConfirmButton: true,
                 }).then(function() {
-                    window.location = "' . base_url() . $extension . 'music/reserv/' . $r_id . '"; 
+                    window.location = "' . base_url() . $extension . 'music/"; 
                 });
             }, 1000);
             </script>';
@@ -171,9 +202,6 @@ class Music extends CI_Controller
     }
     
 
-
-
-
     public function get_availible_slots($r_id) {
         try {
             // Load the model
@@ -181,11 +209,16 @@ class Music extends CI_Controller
     
             // Get today's date or use the date passed by the user
             $current_date = date('Y-m-d'); 
-            
-    
+            $stage = $this->config->item('stage');
+		if($stage == "Development"){
+			$current_time = $this->config->item('fixed_time');
+		}else{
+			$current_time = date("H:i");
+		}
             // Get the reserved slots from the model
-            $reservedSlots = $this->MusicModel->get_reserved_slots($current_date,$r_id);
-    
+            $reservedSlots = $this->MusicModel->get_reserved_slots($current_date, $r_id);
+            
+
             // Define all possible slots
             $allSlots = [
                 '09:00-10:00',
@@ -197,27 +230,33 @@ class Music extends CI_Controller
                 '15:00-16:00',
                 // Add more slots as needed
             ];
+            $closest_time = $this->get_closest_available_slot($allSlots,$reservedSlots,$current_time);
+            
+            // Remove slots that have already passed
+            $validSlots = array_filter($allSlots, function ($slot) use ($current_time) {
+                // Extract the end time of the slot
+                $parts = explode('-', $slot);
+                $start = $parts[0];
+                $end = $parts[1];
+                return $end > $current_time; // Keep only slots where the end time is in the future
+            });
     
-            // Filter out the reserved slots from all slots
+            // Filter out the reserved slots from the valid slots
             $reservedSlotRanges = [];
-
-            // Loop through each reserved slot and convert it into the range format
             foreach ($reservedSlots as $slot) {
-                // Assuming the reserved slot has the format '09:00:00' and '10:00:00' 
-                // (start_time and exp_time from the DB)
                 $reservedSlotRanges[] = date('H:i', strtotime($slot['start_time'])) . '-' . date('H:i', strtotime($slot['exp_time']));
             }
-        
-            // Filter out the reserved slots from the available slots
-            $availableSlots = array_diff($allSlots, $reservedSlotRanges);
-        
+    
+            // Find available slots
+            $availableSlots = array_diff($validSlots, $reservedSlotRanges);
+    
             // Return available slots as JSON
             echo json_encode([
                 'availableSlots' => array_values($availableSlots), // Available slots
                 'rows_fromtable' => $reservedSlotRanges, // Reserved slots
-                'date' => $current_date
+                'date' => $current_date,
+                'closest_time'=>$closest_time
             ]);
-    
         } catch (Exception $e) {
             // Log the error message
             log_message('error', 'Error in fetch_available_slots: ' . $e->getMessage());
@@ -225,6 +264,7 @@ class Music extends CI_Controller
             echo json_encode(['error' => 'An error occurred while fetching the available slots.']);
         }
     }
+    
     public function test(){
         $time = $this->input->post('time_slot');
         echo $time;
@@ -281,4 +321,43 @@ class Music extends CI_Controller
         // If no match is found, the current time is not within any reserved slot
         return "The current time ($currentTime) is not within any reserved and verified slot.";
     }
+
+
+
+    protected function get_closest_available_slot($allSlots, $reservedSlots, $currentTime)
+{
+    $closestSlot = null;
+    $smallestDiff = PHP_INT_MAX; // Initialize with a large number
+
+    // Loop through all available slots
+    foreach ($allSlots as $slot) {
+        list($startTime, $endTime) = explode('-', $slot); // Split the time range
+
+        $currentTimestamp = strtotime($currentTime);
+        $slotStartTimestamp = strtotime($startTime);
+
+        // Check if the available slot is in the future
+        if ($currentTimestamp < $slotStartTimestamp) {
+            // Check if the end time of any reserved slot matches the start time of this slot
+            foreach ($reservedSlots as $reserved) {
+                $reservedEndTime = date('H:i', strtotime($reserved['exp_time']));
+                $reservedEndTimestamp = strtotime($reservedEndTime);
+
+                // Calculate the time difference between reserved slot end and available slot start
+                if ($reservedEndTimestamp == $slotStartTimestamp) {
+                    $timeDiff = abs($reservedEndTimestamp - $currentTimestamp); // Time difference in seconds
+
+                    // Update the closest slot if the time difference is smaller
+                    if ($timeDiff < $smallestDiff) {
+                        $smallestDiff = $timeDiff;
+                        $closestSlot = $slot; // Store the closest available slot
+                    }
+                }
+            }
+        }
+    }
+
+    return $closestSlot;
+}
+
 }

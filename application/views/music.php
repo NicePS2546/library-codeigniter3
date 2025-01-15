@@ -23,16 +23,23 @@ if (!empty($rooms)) { ?>
     <section id="main" class="container">
         <div class="row justify-content-center">
         <?= $this->load->view('component/title_room',[],true) ?>    
-        <?php foreach ($rooms as $room):
-            if($room['r_number'] == 4){
-                $room['r_reserved'] = 1;
-            }
+        <?php 
+      
+        $date = date("Y-m-d");
+        
+       
+        foreach ($rooms as $room):
+            $row = $model->get_reserved_slots($date,$room['r_id']);
+            $room['isFree'] = $model->get_reserv_in_Time_range($room['r_id']);
+            $closest = $model->get_closest_available_slot($row,$room['r_id']); 
+            list($closestStartTime, $closestEndTime) = explode('-', $closest);
             ?>
                 <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-5">
                     <?= $this->load->view('component/card_room', [
                         'room' => $room,
                         'url'=>"music",
                         'desc' => 'ลงทะเบียนตั้งแต่ 4-7 คน',
+                        'exp_time'=>$closestEndTime
                     ],true) ?>
                 </div>
             <?php endforeach ?>

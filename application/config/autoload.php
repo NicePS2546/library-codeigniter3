@@ -60,6 +60,7 @@ $autoload['packages'] = array();
 */
 $autoload['libraries'] = ['database', 'session'];
 
+
 /*
 | -------------------------------------------------------------------
 |  Auto-load Drivers
@@ -103,7 +104,7 @@ $autoload['helper'] = ['url','date'];
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array();
+$autoload['config'] = ['custom_config'];
 
 /*
 | -------------------------------------------------------------------

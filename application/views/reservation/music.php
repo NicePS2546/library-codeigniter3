@@ -19,7 +19,7 @@
                 </select>
             </div>
 
-            <button class="btn mt-4 btn-primary" type="submit">Reserve</button>
+            <button class="btn mt-4 btn-primary" id="reservBtn" type="submit">Reserve</button>
             <div id="roomData">
                 <!-- Room data will be displayed here after selection -->
             </div>
@@ -38,15 +38,21 @@
             success: function (response) {
                 var availableSlots = JSON.parse(response); // Parse the returned JSON data
                 var timeSlotSelect = $('#time_slot');
+                var reservBtn = $('#reservBtn');
                 console.log(response);
                 // Clear existing options
                 timeSlotSelect.empty();
 
-               
+               if(availableSlots['availableSlots'].length > 0){
                 // Add the available slots to the select element
                 $.each(availableSlots['availableSlots'], function (index, slot) {
                     timeSlotSelect.append('<option value="' + slot + '">' + slot + '</option>');
                 });
+            }else{
+                reservBtn.prop('disabled',true);
+                timeSlotSelect.prop('disabled',true);
+                timeSlotSelect.html('<option>ไม่เหลือช่วงเวลาให้จองแล้ว</option>');
+            }
             },
             error: function () {
                 alert("Error: Unable to fetch data.");
