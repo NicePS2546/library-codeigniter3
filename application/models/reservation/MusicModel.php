@@ -157,40 +157,29 @@ class MusicModel extends CI_Model
 
 
 
-    public function get_closest_available_slot($reservedSlots, $currentTime)
+    protected function get_closest_available_slot($allSlots, $reservedSlots, $currentTime)
     {
         $closestSlot = null;
-        $smallestDiff = PHP_INT_MAX; // Initialize with a large numbe
-
-        $allSlots = [
-            '09:00-10:00',
-            '10:00-11:00',
-            '11:00-12:00',
-            '12:00-13:00',
-            '13:00-14:00',
-            '14:00-15:00',
-            '15:00-16:00',
-            // Add more slots as needed
-        ];
-
+        $smallestDiff = PHP_INT_MAX; // Initialize with a large number
+    
         // Loop through all available slots
         foreach ($allSlots as $slot) {
             list($startTime, $endTime) = explode('-', $slot); // Split the time range
-
+    
             $currentTimestamp = strtotime($currentTime);
             $slotStartTimestamp = strtotime($startTime);
-
+    
             // Check if the available slot is in the future
             if ($currentTimestamp < $slotStartTimestamp) {
                 // Check if the end time of any reserved slot matches the start time of this slot
                 foreach ($reservedSlots as $reserved) {
                     $reservedEndTime = date('H:i', strtotime($reserved['exp_time']));
                     $reservedEndTimestamp = strtotime($reservedEndTime);
-
+    
                     // Calculate the time difference between reserved slot end and available slot start
                     if ($reservedEndTimestamp == $slotStartTimestamp) {
                         $timeDiff = abs($reservedEndTimestamp - $currentTimestamp); // Time difference in seconds
-
+    
                         // Update the closest slot if the time difference is smaller
                         if ($timeDiff < $smallestDiff) {
                             $smallestDiff = $timeDiff;
@@ -200,9 +189,65 @@ class MusicModel extends CI_Model
                 }
             }
         }
-
-
+    
         return $closestSlot;
+    }
+
+
+
+
+    public function get_closest_time($r_id) {
+        try {
+            $current_date = date('Y-m-d'); 
+            $stage = $this->config->item('stage');
+		if($stage == "Development"){
+			$current_time = $this->config->item('fixed_time');
+		}else{
+			$current_time = date("H:i");
+		}
+            // Get the reserved slots from the model
+            $reservedSlots = $this->get_reserved_slots($current_date, $r_id);
+            
+
+            // Define all possible slots
+            $allSlots = [
+                '09:00-10:00',
+                '10:00-11:00',
+                '11:00-12:00',
+                '12:00-13:00',
+                '13:00-14:00',
+                '14:00-15:00',
+                '15:00-16:00',
+            ];
+            
+            
+            // Remove slots that have already passed
+            $validSlots = array_filter($allSlots, function ($slot) use ($current_time) {
+                // Extract the end time of the slot
+                $parts = explode('-', $slot);
+                $start = $parts[0];
+                $end = $parts[1];
+                return $end > $current_time; // Keep only slots where the end time is in the future
+            });
+    
+            // Filter out the reserved slots from the valid slots
+            $reservedSlotRanges = [];
+            foreach ($reservedSlots as $slot) {
+                $reservedSlotRanges[] = date('H:i', strtotime($slot['start_time'])) . '-' . date('H:i', strtotime($slot['exp_time']));
+            }
+    
+            // Find available slots
+            $availableSlots = array_diff($validSlots, $reservedSlotRanges);
+            // Find Closest time aviliable
+            $closest_time = $this->get_closest_available_slot($availableSlots,$reservedSlots,$current_time);
+            
+          return $closest_time;
+        } catch (Exception $e) {
+            // Log the error message
+            log_message('error', 'Error in fetch_available_slots: ' . $e->getMessage());
+            // Return a JSON response with an error message
+            echo $e->getMessage();
+        }
     }
 }
 

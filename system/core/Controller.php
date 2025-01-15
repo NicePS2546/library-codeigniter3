@@ -111,6 +111,7 @@ class CI_Controller
 			'mini' => $current_url == base_url('index.php/mini'),
 			'index'=> $current_url == base_url()
 		];
+		
 		$stage = $this->config->item('stage');
 		if($stage == "Development"){
 			$currentTime = $this->config->item('fixed_time');

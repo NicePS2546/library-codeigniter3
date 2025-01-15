@@ -230,7 +230,7 @@ class Music extends CI_Controller
                 '15:00-16:00',
                 // Add more slots as needed
             ];
-            $closest_time = $this->get_closest_available_slot($allSlots,$reservedSlots,$current_time);
+            
             
             // Remove slots that have already passed
             $validSlots = array_filter($allSlots, function ($slot) use ($current_time) {
@@ -249,7 +249,7 @@ class Music extends CI_Controller
     
             // Find available slots
             $availableSlots = array_diff($validSlots, $reservedSlotRanges);
-    
+            $closest_time = $this->get_closest_available_slot($availableSlots,$reservedSlots,$current_time);
             // Return available slots as JSON
             echo json_encode([
                 'availableSlots' => array_values($availableSlots), // Available slots

@@ -31,7 +31,7 @@ if (!empty($rooms)) { ?>
         foreach ($rooms as $room):
             $row = $model->get_reserved_slots($date,$room['r_id']);
             $room['isFree'] = $model->get_reserv_in_Time_range($room['r_id']);
-            $closest = $model->get_closest_available_slot($row,$room['r_id']); 
+            $closest = $model->get_closest_time($room['r_id']);
             list($closestStartTime, $closestEndTime) = explode('-', $closest);
             ?>
                 <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-5">
@@ -39,7 +39,7 @@ if (!empty($rooms)) { ?>
                         'room' => $room,
                         'url'=>"music",
                         'desc' => 'ลงทะเบียนตั้งแต่ 4-7 คน',
-                        'exp_time'=>$closestEndTime
+                        'exp_time'=>$closestStartTime
                     ],true) ?>
                 </div>
             <?php endforeach ?>
