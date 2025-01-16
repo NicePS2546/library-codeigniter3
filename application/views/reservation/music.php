@@ -1,6 +1,23 @@
 <style>
 
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 
+#result {
+    animation: bounceIn 0.5s ease-out;
+}
 
 </style>
 
@@ -149,10 +166,12 @@
         event.preventDefault(); // Prevent default form submission
 
         const query = $('#st_id1').val(); // Get input value
-
+        const total = $('#total').val();
         if (!query) {
-
             showToast('โปรดใส่รหัสผู้ใช้', 'error');
+            return false; // Stop execution if input is empty
+        }else if(!total){
+            showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
             return false; // Stop execution if input is empty
         }
 
@@ -169,8 +188,6 @@
                     showToast('ไม่พบผู้ใช้งาน', 'error'); // Show error toast
                     return false; // Stop execution if validation fails
                 }
-
-
                 
                 showToast('กำลังดำเนินการ....', 'success');
                 setTimeout(function () {
