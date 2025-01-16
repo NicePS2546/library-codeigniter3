@@ -50,6 +50,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      padding-top: 70px;
     }
 
     #app-container {
@@ -61,7 +62,7 @@
     }
 
     .content {
-      flex: 1;
+      flex: 1;+
       /* Makes the content section grow and take up available space */
     }
 
@@ -132,12 +133,16 @@
     </form>
   </div>
 
-  <div id="app-container">
+  <div id="app-container" class="row mt-4">
+    <div class="col-12">
     <div class="content">
 
       <?= $layout['content'] ?>
       <?= $this->load->view('component/toast_alert', [], true); ?>
     </div> <!-- Footer -->
+    </div>
+    </div>
+
     <footer class="footer mt-auto py-3 bg-light">
       <div class="container text-center">
         <p>ฝ่ายบริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
@@ -145,7 +150,8 @@
         <p>&copy; 2019 ARIT LibraryNPRU</p>
       </div>
     </footer>
-  </div>
+    
+  
   <?= $layout['notice'] ? $layout['notice'] : ''  ?>
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

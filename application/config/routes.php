@@ -66,6 +66,7 @@ $route['debug/sweet'] = 'debug/testSweetAlert';
 
 // Room Music
 $route['music'] = 'music/index';
+$route['music/get/user'] = 'music/get_user_sso';
 $route['music/reserv/(:num)'] = 'music/reserv_page/$1';
 //reservation-sys
 $route['music/reserv/submit'] = 'music/reserv';

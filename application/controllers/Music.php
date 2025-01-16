@@ -60,6 +60,7 @@ class Music extends CI_Controller
 		}else{
             $currentTime = date('H:i');  // Get the current time
 		}
+       
         
     // Convert the selected time range (e.g., '09:00-10:00') to start_time and exp_time
         list($start_time, $exp_time) = explode('-', $time_slot);
@@ -92,7 +93,7 @@ class Music extends CI_Controller
             }, 1000);
             </script>';
             return;  // Stop execution if validation fails
-        }else if($currentTime < "09:00"){
+        }else if($currentTime < "08:00"){
             echo '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -168,7 +169,7 @@ class Music extends CI_Controller
             </script>';
             return;  // Stop execution if validation fails
         }
-        
+       
         $result = $model->reserve($data);
     
         if ($result) {
@@ -201,7 +202,26 @@ class Music extends CI_Controller
             
     }
     
-
+public function get_user_sso(){
+    $uid = $this->input->post('uid');
+    $u_data = $this->get_user_sso_by_id($uid);
+    $user_id = $u_data[0]['uid'][0];
+    $fullname = $u_data[0]['cn'][0];
+    $info = [
+        'uid'=>$user_id,
+        'fullname'=>$fullname
+    ];
+    if($u_data){
+        echo json_encode([
+            'userdata'=>$info,
+            'message'=>'Success'
+        ]);
+    }else{
+        echo json_encode([
+            'message'=>'fail'
+        ]);
+    }
+}
     public function get_availible_slots($r_id) {
         try {
             // Load the model

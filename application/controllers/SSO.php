@@ -14,8 +14,8 @@ class SSO extends CI_Controller
     public function index()
     {
         // Retrieve POST data
-        $state = "development";
-        if ($state === "deployment") {
+        $state = "Deployment";
+        if ($state === "Deployment") {
         $st_id = $this->input->post('st_id');
         $password = $this->input->post('password');
 

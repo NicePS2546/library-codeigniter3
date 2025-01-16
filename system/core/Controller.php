@@ -120,7 +120,7 @@ class CI_Controller
 		}
 		
 
-		if ($currentTime < "09:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+		if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);
 		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);
@@ -199,6 +199,53 @@ class CI_Controller
 
     return $currentUrl;
 }
+
+
+public function get_user_sso_by_id($id)
+{
+	// $this->db->where('u_stuid',$id);
+	// $this->db->or_where('u_idcard',$id);  
+	// $query = $this->db->get('tbl_user');
+	// return $query->row();
+
+
+
+	$account = addslashes(stripslashes(htmlspecialchars(trim($id))));
+
+	$ldapconf["host"] = "ldap://202.29.9.109";
+	$ldapconf["port"] = NULL;
+	$ldapconf["basedn"] = "dc=npru,dc=ac,dc=th";
+	$ldapconf["LDAP_OPT_PROTOCOL_VERSION"] = 3;
+
+	$ds = ldap_connect($ldapconf["host"]);
+	if (!$ds) {
+		echo "Could not connect to LDAP Server.";
+		exit();
+	}
+	$ls = ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldapconf["LDAP_OPT_PROTOCOL_VERSION"]);
+	if (!$ls) {
+		echo "Failed to set protocol version.";
+		ldap_close($ds);
+		exit();
+	}
+	// 10001 = อาจารย์
+// 10002 = เจ้าหน้าที่
+// 10003 = นักศึกษา
+// 10005 = หน่อยงาน
+	$query = "( & ( |(uid=" . $account . ")(uidnumber=" . $account . ")(gecos=" . $account . "))(accountStatus=TRUE)( | (gidNumber=10001)(gidNumber=10002)(gidNumber=10003)))";
+	$sr = ldap_search($ds, $ldapconf["basedn"], $query);
+	$info = ldap_get_entries($ds, $sr);
+	//  print "<pre>";
+	// print_r($info);
+	//  print "</pre>";
+
+	if ($info['count'] == 1) {
+		return $info;
+	} else {
+		return false;
+	}
+}
+
 
 
 

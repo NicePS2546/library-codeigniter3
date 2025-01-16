@@ -47,6 +47,7 @@
     transform: scale(1.04);
 
   }
+
   .btn-admin {
     margin-left: auto;
     transition: transform 0.4s ease-in-out !important;
@@ -65,6 +66,10 @@
   .fixed-nav {
     position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    /* Higher z-index to ensure it stays on top */
     width: 100%;
     /* Make sure the navbar spans the width of the viewport */
     z-index: 1020;
@@ -75,18 +80,18 @@
     /* Optional: Add a shadow for better visibility */
   }
 
-  .margin-nav {
+  /* .margin-nav {
     margin-bottom: 4%;
-  }
+  } */
 </style>
 
 <nav class="navbar navbar-expand-lg fixed-nav shadow bg-body-tertiary">
   <div class="container">
-  <div class="text-center">
-    <a href="<?= base_url() ?>">
-  <img src="<?= base_url('public/assets/img/logo.png') ?>" width="50" height="50" class="rounded" alt="...">
-  </a>
-</div>
+    <div class="text-center">
+      <a href="<?= base_url() ?>">
+        <img src="<?= base_url('public/assets/img/logo.png') ?>" width="50" height="50" class="rounded" alt="...">
+      </a>
+    </div>
 
     <!-- Hamburger Menu Icon -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -115,45 +120,46 @@
         <div id="marker"></div>
       </ul>
       <!-- Login Button -->
-       <div class="d-flex align-items-center gap-4">
-      <?php if ($this->session->has_userdata('userData')) {
-        $userinfo = $this->session->userdata('userData');
-        
-        if($this->session->has_userdata('admin_data')){
-          $admin_info = $this->session->userdata('admin_data');
-         
-        ?>
-        
-        <a style="color:white; text-decoration: none; width: 150px;" class="btn btn-success" href="<?= base_url() ?>index.php/admin/debug">Admin Panel</a>
+      <div class="d-flex align-items-center gap-4">
+        <?php if ($this->session->has_userdata('userData')) {
+          $userinfo = $this->session->userdata('userData');
 
+          if ($this->session->has_userdata('admin_data')) {
+            $admin_info = $this->session->userdata('admin_data');
+
+            ?>
+
+            <a style="color:white; text-decoration: none; width: 150px;" class="btn btn-success"
+              href="<?= base_url() ?>index.php/admin/debug">Admin Panel</a>
+
+          <?php } ?>
+          <div class="dropdown custom-dropdown">
+            <a href="#" data-toggle="dropdown" class="align-items-center d-flex  dropdown-link " aria-haspopup="true"
+              aria-expanded="false" data-offset="-70, 20">
+              Menu
+              <span class="arrow icon-keyboard_arrow_down"></span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <h3 class="menu-heading">Help &amp; Feedback</h3>
+              <a class="dropdown-item" href="#"> <span class="icon icon-dashboard"></span> Getting started</a>
+              <a class="dropdown-item" href="#"><span class="icon icon-mail_outline"></span>Help center <span
+                  class="number">3</span></a>
+              <a class="dropdown-item" href="#"><span class="icon icon-people"></span>Contact us</a>
+              <hr>
+              <h3 class="menu-heading">About</h3>
+              <a class="dropdown-item" href="#"><span class="icon icon-comment"></span>Blog</a>
+              <a class="dropdown-item" href="#"><span class="icon icon-lock_outline"></span>Privacy</a>
+              <a class="dropdown-item" href="#"><span class="icon icon-security"></span>Security</a>
+              <a class="dropdown-item" href="#"><span class="icon icon-featured_play_list"></span>Terms of service</a>
+            </div>
+          </div>
+
+
+        <?php } else { ?>
+          <button class="btn my-auto btn-primary btn-login" style="width:100px" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">เข้าสู่ระบบ</button>
         <?php } ?>
-      <div class="dropdown custom-dropdown">
-    <a href="#" data-toggle="dropdown" class="align-items-center d-flex  dropdown-link " aria-haspopup="true"
-      aria-expanded="false" data-offset="-70, 20">
-      Menu
-      <span class="arrow icon-keyboard_arrow_down"></span>
-    </a>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <h3 class="menu-heading">Help &amp; Feedback</h3>
-      <a class="dropdown-item" href="#"> <span class="icon icon-dashboard"></span> Getting started</a>
-      <a class="dropdown-item" href="#"><span class="icon icon-mail_outline"></span>Help center <span
-          class="number">3</span></a>
-      <a class="dropdown-item" href="#"><span class="icon icon-people"></span>Contact us</a>
-      <hr>
-      <h3 class="menu-heading">About</h3>
-      <a class="dropdown-item" href="#"><span class="icon icon-comment"></span>Blog</a>
-      <a class="dropdown-item" href="#"><span class="icon icon-lock_outline"></span>Privacy</a>
-      <a class="dropdown-item" href="#"><span class="icon icon-security"></span>Security</a>
-      <a class="dropdown-item" href="#"><span class="icon icon-featured_play_list"></span>Terms of service</a>
+      </div>
     </div>
-    </div>
-
-       
-      <?php } else { ?>
-        <button class="btn my-auto btn-primary btn-login" style="width:100px" data-bs-toggle="modal"
-          data-bs-target="#exampleModal">เข้าสู่ระบบ</button>
-      <?php } ?>
-    </div>
-  </div>
 </nav>
 <div class="margin-nav"></div>

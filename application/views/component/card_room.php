@@ -7,7 +7,7 @@
             <p class="card-text <?= $room['isFree'] ? 'text-danger' : 'text-success' ?>">สถานะ: <?= $room['isFree'] ? 'ไม่ว่าง' : 'ว่าง' ?></p>
 
             <?php if ($room['isFree']) : ?>
-                <p class="card-text text-danger">สิ้นสุดประมาณ: <?= $exp_time; ?> น.</p>
+                <p class="card-text text-success">เวลาที่สามารถจองได้: <?= $exp_time; ?> น.</p>
             <?php else : ?>
                 <p class="card-text"><?= $desc ?></p>
             <?php endif; ?>
