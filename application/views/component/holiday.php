@@ -4,7 +4,7 @@
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการ",
+                    title: "ไม่อยู่ในเวลาทำการ หยุดวันเสาร์",
                     showConfirmButton: true,
                 });
             }, 1000);

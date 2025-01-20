@@ -24,11 +24,21 @@ class MusicModel extends CI_Model
         // Return the reserved slots as an array
         return $query->result_array();
     }
-    public function check_duplicate($st_id, $r_id)
+    public function get_reserved($id,$status){
+        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
+        $this->db->from('tbn_room_music');
+        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv.r_status',$status);
+        $this->db->where('tbn_room_music.r_id', $id);
+        $query = $this->db->get();
+
+    return $query->result_array(); // Returns the result as an array
+    
+    }
+    public function check_duplicate($st_id)
     {
         $this->db->select('*');
         $this->db->from('tbn_music_reserv');
-        $this->db->where('r_id', $r_id);
         $this->db->where('st_id', $st_id);
         $this->db->where('r_status', 'actived');
         $query = $this->db->get();
@@ -62,21 +72,19 @@ class MusicModel extends CI_Model
     public function get_past_reservations($currentDateTime)
     {
         // Set the timezone to Bangkok, Thailand
-
-
         // Extract the current date from the datetime
         $currentDate = date('Y-m-d', strtotime($currentDateTime));
-
+        
         // Hardcoded current time for testing
-        $currentTime = null;
+        $currentTime = date('H:i');
 
         $stage = $this->config->item('stage');
 
         if ($stage == "Development") {
             $currentTime = $this->config->item('fixed_time');
-        } else {
-            $currentTime = date('H:i', strtotime($currentDateTime));
-        }
+        } 
+           
+        
 
 
 

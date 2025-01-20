@@ -29,7 +29,7 @@ if(!empty($rooms)){  ?>
     <div class="row justify-content-center">
       <?= $this->load->view('component/title_room',[],true) ?>
                 <?php foreach ($rooms as $room): ?>
-                    <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-5">
+                    <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-5">
                     <div class="card card-shadow text-center mx-auto mt-2">
     <img class="card-img-top" src="<?= base_url() ?>/assets/img/room/15723436962.jpg"
         alt="image room no.<?= $room['r_number'] ?> ">
@@ -61,5 +61,10 @@ if(!empty($rooms)){  ?>
             
     </div>
 </section>
-
+<script>
+    // Reload the page every 60,000 milliseconds (1 minute)
+    setInterval(() => {
+        location.reload();
+    }, 60000);
+</script>
 <?php }else{ echo $this->load->view('room_notFound',[],true); } ?>

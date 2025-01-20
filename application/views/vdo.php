@@ -1,5 +1,5 @@
 <!-- room style sheet -->
-<link rel="stylesheet" href="<?= base_url('public/assets/css/card_room.css') ?>">
+<link rel="stylesheet" href="<?= base_url('public/assets/css/card_room.css') ?>?v=<?= time(); ?>">
 <!-- room style sheet -->
 
 <style>
@@ -25,7 +25,7 @@ if(!empty($rooms)){ ?>
     <div class="row justify-content-center">
     <?= $this->load->view('component/title_room',[],true) ?>
                 <?php foreach ($rooms as $room): ?>
-                <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-3">
+                <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-3">
                     <?= $this->load->view('component/card_room', [
                         'room' => $room,
                         'url'=>"vdo",
@@ -42,7 +42,12 @@ if(!empty($rooms)){ ?>
             
     </div>
 </section>
-
+<script>
+    // Reload the page every 60,000 milliseconds (1 minute)
+    setInterval(() => {
+        location.reload();
+    }, 60000);
+</script>
 <?php }else{
     
     echo $this->load->view('room_notFound',[],true);

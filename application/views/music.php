@@ -34,7 +34,7 @@ if (!empty($rooms)) { ?>
             $closest = $model->get_closest_time($room['r_id']);
             list($closestStartTime, $closestEndTime) = explode('-', $closest);
             ?>
-                <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-5">
+                <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-5">
                     <?= $this->load->view('component/card_room', [
                         'room' => $room,
                         'url'=>"music",
@@ -56,6 +56,12 @@ if (!empty($rooms)) { ?>
         </div>
     </section>
 
+    <script>
+    // Reload the page every 60,000 milliseconds (1 minute)
+    setInterval(() => {
+        location.reload();
+    }, 60000);
+</script>
 <?php } else {
 
     echo $this->load->view('room_notFound',[],true);

@@ -6,27 +6,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= $title ? $title : 'My Website'; ?></title>
   <script src="<?= base_url('public/assets/js/popper.js') ?>"></script>
+  <!--- online CDN --->
+
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
 
   <!-- Flatpickr CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet"> -->
+  
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 
   <!-- Flatpickr JS -->
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script> -->
   <!-- Thai Language Locale for Flatpickr -->
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/th.js"></script>
-  <!-- Owl Carousel -->
-  <link rel="stylesheet" href="<?= base_url('assets/node_modules/owl.carousel/dist/assets/owl.carousel.min.css') ?>">
-  <link rel="stylesheet" href="<?= base_url('assets/node_modules/owl.carousel/dist/assets/owl.theme.default.css') ?>">
+  <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/th.js"></script> -->
+
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?= base_url('assets/AdminLTE/plugins/fontawesome-free/css/all.min.css') ?>">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=K2D&display=swap" rel="stylesheet">
+<!--- online CDN --->
+
+<!--- offline CDN --->
+  <!-- Bootstrap CSS -->
+<link rel="stylesheet" href="<?= base_url('public/cdn/boostrap5_3_0/css/bootstrap.min.css')?>">
+<!-- Bootstrap JS -->
+<script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js')?>"></script>
+
+ <!-- Flatpickr CSS -->
+  <link href="<?= base_url('public/cdn/flatpicker/css/flatpickr.min.css')?>" rel="stylesheet">
+<!-- Flatpickr JS -->
+  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js')?>"></script>
+  <!-- Flatpickr TH -->
+  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js')?>"></script>
+
+
+
+<!--- offline CDN --->
+
 
   <!-- Custom Loader CSS -->
   <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" />
@@ -154,7 +174,8 @@
   
   <?= $layout['notice'] ? $layout['notice'] : ''  ?>
   <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="<?= base_url('public/cdn/jQuery/jquery-3.6.0.min.js') ?>"></script>
+  
   <script src="<?= base_url('public/assets/js/dropdown.js') ?>"></script>
 
 

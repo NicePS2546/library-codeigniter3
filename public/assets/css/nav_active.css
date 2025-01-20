@@ -112,3 +112,22 @@
   -ms-transform: translate(200px, 0);
   transform: translate(200px, 0);
 }
+
+.active{
+  
+ }
+@media (max-width: 991px) {
+  #marker {
+    display: none;
+  }
+
+  .nav-link:hover {
+    transform: scale(1.04) !important;
+    color: black;
+    transition: all 2.5s ease-in-out;
+  }
+  
+  .active{
+    color: #910078 !important;
+   }
+}

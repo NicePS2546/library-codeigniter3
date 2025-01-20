@@ -1,89 +1,4 @@
-<style>
-  .nav-link {
-    transition: transform ease-in-out 0.5s !important;
-  }
-
-  .nav-link:hover {
-    transform: scale(1.08);
-    color: black;
-
-  }
-
-  .btn#modal {
-    transition: all 250ms ease-in-out !important;
-
-  }
-
-  .btn#modal:hover {
-    transform: scale(1.12);
-    transition: all 250ms ease-in-out;
-  }
-
-  .navbar-nav {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .navbar-toggler {
-    margin-left: auto;
-    /* Push the hamburger icon to the right */
-  }
-
-  /* Optional: Custom styles if you want to tweak the appearance */
-  .modal-header {
-    background-color: #007bff;
-    color: white;
-  }
-
-  /* Adjust Login button spacing */
-  .btn-login {
-    margin-left: auto;
-    transition: transform 0.4s ease-in-out !important;
-  }
-
-  .btn-login:hover {
-    transform: scale(1.04);
-
-  }
-
-  .btn-admin {
-    margin-left: auto;
-    transition: transform 0.4s ease-in-out !important;
-  }
-
-  .btn-admin:hover {
-    transform: scale(1.04);
-
-  }
-
-  .shadow {
-    box-shadow: 20px;
-
-  }
-
-  .fixed-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-    /* Higher z-index to ensure it stays on top */
-    width: 100%;
-    /* Make sure the navbar spans the width of the viewport */
-    z-index: 1020;
-    /* Ensures the navbar stays above other elements */
-    background-color: #f8f9fa;
-    /* Set a background color */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    /* Optional: Add a shadow for better visibility */
-  }
-
-  /* .margin-nav {
-    margin-bottom: 4%;
-  } */
-</style>
+<link rel="stylesheet" href="<?= base_url('public/assets/css/nav.css') ?>?v=<?= time(); ?>" />
 
 <nav class="navbar navbar-expand-lg fixed-nav shadow bg-body-tertiary">
   <div class="container">
@@ -103,19 +18,19 @@
     <div class="collapse nav-align navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mb-2 mb-lg-0" id="main">
         <li class="nav-item <?= $page == "home" ? "active1" : '' ?>">
-          <a class="nav-link" href="<?= base_url() ?>">Home</a>
+          <a class="nav-link <?= $page == "home" ? "active" : '' ?>" href="<?= base_url() ?>">Home</a>
         </li>
         <li class="nav-item <?= $page == "music" ? "active2" : '' ?>">
-          <a class="nav-link" href="<?= base_url() ?>index.php/music"><?= $type['music'] ?></a>
+          <a class="nav-link <?= $page == "music" ? "active" : '' ?>" href="<?= base_url() ?>index.php/music"><?= $type['music'] ?></a>
         </li>
         <li class="nav-item <?= $page == "vdo" ? "active3" : '' ?>">
-          <a class="nav-link" href="<?= base_url() ?>index.php/vdo"><?= $type['vdo'] ?></a>
+          <a class="nav-link <?= $page == "vdo" ? "active" : '' ?>" href="<?= base_url() ?>index.php/vdo"><?= $type['vdo'] ?></a>
         </li>
         <li class="nav-item <?= $page == "mini" ? "active4" : '' ?>">
-          <a class="nav-link" href="<?= base_url() ?>index.php/mini"><?= $type['mini'] ?></a>
+          <a class="nav-link <?= $page == "mini" ? "active" : '' ?>" href="<?= base_url() ?>index.php/mini"><?= $type['mini'] ?></a>
         </li>
         <li class="nav-item <?= $page == "Debug" ? "active5" : '' ?>">
-          <a class="nav-link" href="<?= base_url() ?>index.php/admin/debug">Debugging</a>
+          <a class="nav-link <?= $page == "Debug" ? "active" : '' ?>" href="<?= base_url() ?>index.php/admin/debug">Debugging</a>
         </li>
         <div id="marker"></div>
       </ul>

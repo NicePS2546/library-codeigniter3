@@ -72,7 +72,8 @@
         <!-- Room data will be displayed here after selection -->
     </div>
 </section>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery -->
+  <script src="<?= base_url('public/cdn/jQuery/jquery-3.6.0.min.js') ?>"></script>
 
 
 <script>

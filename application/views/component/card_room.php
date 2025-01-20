@@ -6,8 +6,13 @@
         <?php if ($room['r_status']) : ?>
             <p class="card-text <?= $room['isFree'] ? 'text-danger' : 'text-success' ?>">สถานะ: <?= $room['isFree'] ? 'ไม่ว่าง' : 'ว่าง' ?></p>
 
-            <?php if ($room['isFree']) : ?>
+            <?php if ($room['isFree']) : 
+                    if(!empty($exp_time)):
+                ?>
                 <p class="card-text text-success">เวลาที่สามารถจองได้: <?= $exp_time; ?> น.</p>
+                <?php else : ?>
+                <p class="card-text text-danger">ไม่เหลือช่วงเวลาให้จองแล้ว</p>
+                <?php endif; ?>
             <?php else : ?>
                 <p class="card-text"><?= $desc ?></p>
             <?php endif; ?>
@@ -22,7 +27,7 @@
             </a>
             
             <?php if ($room['r_status']) : ?>
-                <a href="<?= base_url() ?><?= $url ?>/reserv/check" id="card" class="btn <?= $room['r_status'] ? 'btn-primary' : 'btn-danger' ?>">ตรวจสอบ</a>
+                <a href="<?= base_url() ?>index.php/<?= $url ?>/check/<?= $room['r_id'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-primary' : 'btn-danger' ?>">ตรวจสอบ</a>
             <?php endif; ?>
         </div>
     </div>

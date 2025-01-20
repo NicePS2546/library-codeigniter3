@@ -104,7 +104,7 @@ class CI_Controller
 			'content' => $this->view($view, $data,true), // Return content as string
 		];
 		$current_url = $this->getCurrentUrl();
-
+		$current_date = date("Y-m-d H:i");
 		$page = [
 			'music' => $current_url == base_url('index.php/music'),
 			'vdo' => $current_url == base_url('index.php/vdo'),
@@ -119,8 +119,10 @@ class CI_Controller
 			$currentTime = date("H:i");
 		}
 		
-
-		if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+		$day = getDay($current_date);
+		if($day == "Saturday"){
+			$layout['notice'] = $this->view('component/holiday', [], true);
+		}else if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);
 		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);

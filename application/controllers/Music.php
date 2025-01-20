@@ -77,8 +77,23 @@ class Music extends CI_Controller
             'created_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s')
         ];
-    
-        
+        echo "<script src='". base_url('public/cdn/sweetalert.js')."'></script>";
+        $day = getDay(date("Y-m-d H:i"));
+        if($day == "Saturday"){
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ไม่อยู่ในเวลาทำการหยุดวันเสาร์",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'music"; 
+                });
+            }, 1000);
+            </script>';
+            return;  // Stop execution if validation fails
+        }
         if($currentTime > "16:00"){
             echo '<script>
             setTimeout(function() {
@@ -109,7 +124,7 @@ class Music extends CI_Controller
         
 
         // Check if the room number and other inputs are valid
-        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+        
         if (!$r_id || !$st_id || !$total_pp || !$time_slot) {
             echo '<script>
             setTimeout(function() {
@@ -222,6 +237,17 @@ public function get_user_sso(){
         ]);
     }
 }
+    public function checkReserv($r_id){
+        $this->load->model('reservation/MusicModel');
+        $model = $this->MusicModel;
+        $reserved = $model->get_reserved($r_id,'actived');
+        return $this->Render("checkroom/table.php",[
+            'rows' => $reserved,
+            'title'=>'Check Reserved',
+            'page'=>'music',
+            'table'=>'music'
+        ]);
+    }
     public function get_availible_slots($r_id) {
         try {
             // Load the model
