@@ -77,11 +77,15 @@ $route['music/time/test'] = 'music/test';
 
 // Room Video
 $route['vdo'] = 'vdo/index';
+$route['vdo/reserv/(:num)'] = 'vdo/reserv_page/$1';
 $route['vdo/seat'] = 'vdo/testLayout';
 
 // Room Mini
 $route['mini'] = 'mini/index';
 
 // SSO
-$route['sso/login'] = 'sso/index';
-$route['sso/logout'] = 'sso/logout';
+$route['sso/login'] = 'SSO/index';
+$route['sso/logout'] = 'SSO/logout';
+
+// Test
+$route['test/sweet'] = 'test/testSweet';

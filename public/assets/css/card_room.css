@@ -7,38 +7,49 @@
 
     
 }
+
 @media (min-width: 992px) and (max-width: 1199px) {
     .col-lg-3 {
         flex: 0 0 45%; /* 50% width for 2 cards in a row */
         max-width: 45%;
     }
 }
-
-.card{
+.animate__animated {
+    animation-fill-mode: none; /* Resets animation state after completion */
+}
+.card {
     width: 100%;
     max-width: 380px; /* Maximum width of card */
-    
+    opacity: 0;
+   
 }
-.btn#card {
-    transition: all 250ms ease-in-out !important;
-    
-  }
-  
-  .btn:hover {
-    transform: scale(1.12);
-    transition: all 250ms ease-in-out;
-  }
 
-.mt-fixed{
-    margin-top: 10%;
+/* On visible, opacity will transition to 1 */
+.card.visible {
+    transition: opacity 0.5s ease-in-out, transform 0.4s ease, box-shadow 0.3s ease !important; /* Combined transitions */
+    opacity: 1;
 }
-     
+
+/* Box shadow and hover effect for card */
 .card-shadow {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 .card-shadow:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px) !important; /* Moves card upwards */
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1) !important; /* Stronger shadow */
+}
+
+/* Button transition */
+.btn#card {
+    transition: all 250ms ease-in-out !important;
+}
+
+.btn:hover {
+    transform: scale(1.12);
+    transition: all 250ms ease-in-out;
+}
+
+.mt-fixed {
+    margin-top: 10%;
 }

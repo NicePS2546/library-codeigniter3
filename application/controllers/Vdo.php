@@ -16,11 +16,16 @@ class Vdo extends CI_Controller
         ]);
 
     }
-    public function reserv($r_id){
-        return $this->Render('music_reserv',[
-            'title'=>'Reservation',
-            'r_id'=>$r_id,
-            'page'=>'music'
+    public function reserv_page($r_id){
+        $this->load->model('Vdo_service_Model');
+        $model = $this->Vdo_service_Model;
+        $services = $model->get_all();
+
+        return $this->Render('reservation/vdo/vdo_service',[
+            'title'=>'VDO Service',
+            'r_id' =>$r_id,
+            'services'=>$services,
+            'page'=>'vdo'
         ]);
     }
 }

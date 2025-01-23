@@ -77,10 +77,10 @@ class Music extends CI_Controller
             'created_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s')
         ];
-        echo "<script src='". base_url('public/cdn/sweetalert.js')."'></script>";
+        $sweet = '';
         $day = getDay(date("Y-m-d H:i"));
         if($day == "Saturday"){
-            echo '<script>
+            $sweet =  '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -92,10 +92,10 @@ class Music extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return;  // Stop execution if validation fails
+            return $this->sweet($sweet);  // Stop execution if validation fails
         }
         if($currentTime > "16:00"){
-            echo '<script>
+            $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -107,9 +107,9 @@ class Music extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return;  // Stop execution if validation fails
+            return $this->sweet($sweet);  // Stop execution if validation fails
         }else if($currentTime < "08:00"){
-            echo '<script>
+            $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -119,14 +119,14 @@ class Music extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return;  // Stop execution if validation fails
+            return $this->sweet($sweet);  // Stop execution if validation fails
         }
         
 
         // Check if the room number and other inputs are valid
         
         if (!$r_id || !$st_id || !$total_pp || !$time_slot) {
-            echo '<script>
+            $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -138,9 +138,9 @@ class Music extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return;  // Stop execution if validation fails
+           return $this->sweet($sweet);  // Stop execution if validation fails
         }else if($total_pp < 4){
-            echo '<script>
+            $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -152,9 +152,9 @@ class Music extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return;  // Stop execution if validation fails
+            return $this->sweet($sweet);  // Stop execution if validation fails
         }else if($total_pp > 7){
-            echo '<script>
+            $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -166,11 +166,11 @@ class Music extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return;  // Stop execution if validation fails
+            return $this->sweet($sweet);  // Stop execution if validation fails
         }
         
         if($row){
-            echo '<script>
+            $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -182,13 +182,13 @@ class Music extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return;  // Stop execution if validation fails
+            return $this->sweet($sweet);  // Stop execution if validation fails
         }
        
         $result = $model->reserve($data);
-    
+        
         if ($result) {
-            echo '<script>
+            $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -201,7 +201,7 @@ class Music extends CI_Controller
             }, 1000);
             </script>';
         } else {
-            echo '<script>
+            $sweet =  '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -214,6 +214,7 @@ class Music extends CI_Controller
             }, 1000);
             </script>';
         }
+        return $this->sweet($sweet);
             
     }
     

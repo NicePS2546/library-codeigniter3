@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // $config['base_url'] = 'http://localhost/library-3/';
-$config['base_url'] = 'http://192.168.80.199/library-3/';
+$config['base_url'] = 'http://10.1.59.239/library-codeigniter3/';
 
 /*
 |--------------------------------------------------------------------------

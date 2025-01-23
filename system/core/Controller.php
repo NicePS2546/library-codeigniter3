@@ -185,6 +185,13 @@ class CI_Controller
 		return $rows;
 	}
 
+	public function sweet($sweet){
+		return $this->Render('sweet', [
+			'sweet'=>$sweet,
+            'title' => 'sweet',
+            'page' => '*',
+        ]);
+	}
 	public function getCurrentUrl()
 {
     // Check if the connection is secure (https)

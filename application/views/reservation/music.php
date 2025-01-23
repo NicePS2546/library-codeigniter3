@@ -145,7 +145,7 @@
                             output = `<p class="card border-success py-2 px-2 w-50 text-center">${results.fullname}</p>`;
                         } else if (data.message == "fail") {
                             // Show message if no results
-                            output = '<div class="card border-danger text-center py-2 px-2 w-50"><div>ไม่เจอผู้ใช้ในระบบ <a href="#">สมัครตรงนี้</a></div></div>';
+                            output = '<div class="card border-danger text-center py-2 px-2 w-50"><div>ไม่เจอผู้ใช้ในระบบ <a href="https://sso.npru.ac.th/">สมัครตรงนี้</a></div></div>';
                         }
 
                         // Display the results in the result div

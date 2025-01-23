@@ -18,24 +18,22 @@
         
     // ];
     // $rooms = [];
-    $rooms[2] = ['r_id'=>3,'r_number'=> 2,'r_status'=> 1 ,'r_desc'=>2211,'r_type'=>2];
 
-if(!empty($rooms)){ ?>
+if(!empty($services)){ ?>
 
 <section id="main" class="container">
     <div class="row justify-content-center">
     <?= $this->load->view('component/title_room',[],true) ?>
-                <?php foreach ($rooms as $room): ?>
+                <?php foreach ($services as $service): ?>
                 <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-3">
-                    <?= $this->load->view('component/card_room', [
-                        'room' => $room,
-                        'url'=>"vdo",
-                        'desc' => 'ลงทะเบียนต้องแต่ 1-6 คน'
+                    <?= $this->load->view('component/vdo/card_vdo', [
+                        'service' => $service,
+                       
                     ],true) ?>
                 </div>
                 <?php endforeach ?>
                 <?php 
-                        $n = count($rooms);
+                        $n = count($services);
                         $i = $n % 2;
                         if ($n !== 1 && $i !== 0 ){
                             echo $this->load->view('room_template',[],true);
@@ -44,26 +42,13 @@ if(!empty($rooms)){ ?>
     </div>
 </section>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        setInterval(() => {
-        const elements = document.querySelectorAll('.ani-element');
-        elements.forEach((el, index) => {
-          // Delay each element by a factor of its index (300ms = 0.3 second per element)
-          setTimeout(() => {
-            
-            
-            el.classList.add('visible','animate__animated', 'animate__fadeInUp');
-          }, index * 300); // The delay increases for each element
-        });
-      }, 500);
-    });
     // Reload the page every 60,000 milliseconds (1 minute)
     setInterval(() => {
         location.reload();
-    }, 60000);
+    }, 400000);
 </script>
 <?php }else{
     
-    echo $this->load->view('room_notFound',[],true);
+    echo $this->load->view('component/vdo/service_notFound',[],true);
  } ?>
 

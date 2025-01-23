@@ -13,7 +13,7 @@
 
   <!-- Flatpickr CSS -->
   <!-- <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet"> -->
-  
+
   <!-- Bootstrap JS -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 
@@ -21,6 +21,7 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script> -->
   <!-- Thai Language Locale for Flatpickr -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/th.js"></script> -->
+  
 
 
   <!-- Font Awesome -->
@@ -28,24 +29,24 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=K2D&display=swap" rel="stylesheet">
-<!--- online CDN --->
+  <!--- online CDN --->
 
-<!--- offline CDN --->
+  <!--- offline CDN --->
   <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="<?= base_url('public/cdn/boostrap5_3_0/css/bootstrap.min.css')?>">
-<!-- Bootstrap JS -->
-<script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js')?>"></script>
+  <link rel="stylesheet" href="<?= base_url('public/cdn/boostrap5_3_0/css/bootstrap.min.css') ?>">
+  <!-- Bootstrap JS -->
+  <script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js') ?>"></script>
 
- <!-- Flatpickr CSS -->
-  <link href="<?= base_url('public/cdn/flatpicker/css/flatpickr.min.css')?>" rel="stylesheet">
-<!-- Flatpickr JS -->
-  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js')?>"></script>
+  <!-- Flatpickr CSS -->
+  <link href="<?= base_url('public/cdn/flatpicker/css/flatpickr.min.css') ?>" rel="stylesheet">
+  <!-- Flatpickr JS -->
+  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js') ?>"></script>
   <!-- Flatpickr TH -->
-  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js')?>"></script>
+  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js') ?>"></script>
 
 
 
-<!--- offline CDN --->
+  <!--- offline CDN --->
 
 
   <!-- Custom Loader CSS -->
@@ -54,7 +55,7 @@
   <link rel="stylesheet" href="<?= base_url('public/assets/css/nav_active.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/dropdown.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/fonts/icomoon/style.css') ?>?v=<?= time(); ?>" />
-
+  <link rel="stylesheet" href="<?= base_url('public/cdn/animated.css')?>" />
 
 
 
@@ -82,20 +83,20 @@
     }
 
     .content {
-      flex: 1;+
+      flex: 1;
+      +
       /* Makes the content section grow and take up available space */
     }
 
     .footer {
-  background-color: #f4f4f4;
-  text-align: center;
-  padding: 10px 0;
-  margin-top: auto; /* Pushes the footer to the bottom */
-  width: 100%;
-  border-top: 1px solid #ddd;
-}
-
-
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 10px 0;
+      margin-top: auto;
+      /* Pushes the footer to the bottom */
+      width: 100%;
+      border-top: 1px solid #ddd;
+    }
   </style>
 
 
@@ -155,27 +156,27 @@
 
   <div id="app-container" class="row mt-4">
     <div class="col-12">
-    <div class="content">
+      <div class="content">
 
-      <?= $layout['content'] ?>
-      <?= $this->load->view('component/toast_alert', [], true); ?>
-    </div> <!-- Footer -->
+        <?= $layout['content'] ?>
+        <?= $this->load->view('component/toast_alert', [], true); ?>
+      </div> <!-- Footer -->
     </div>
-    </div>
+  </div>
 
-    <footer class="footer mt-auto py-3 bg-light">
-      <div class="container text-center">
-        <p>ฝ่ายบริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
-        <p>สำนักวิทยบริการและเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครปฐม</p>
-        <p>&copy; 2019 ARIT LibraryNPRU</p>
-      </div>
-    </footer>
-    
-  
-  <?= $layout['notice'] ? $layout['notice'] : ''  ?>
+  <footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+      <p>ฝ่ายบริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
+      <p>สำนักวิทยบริการและเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครปฐม</p>
+      <p>&copy; 2019 ARIT LibraryNPRU</p>
+    </div>
+  </footer>
+
+
+  <?= $layout['notice'] ? $layout['notice'] : '' ?>
   <!-- jQuery -->
   <script src="<?= base_url('public/cdn/jQuery/jquery-3.6.0.min.js') ?>"></script>
-  
+
   <script src="<?= base_url('public/assets/js/dropdown.js') ?>"></script>
 
 
@@ -225,8 +226,16 @@
 
 
   </script>
+<script>
 
-
+$(document).ready(function () {
+    $('#nav-icon1,#nav-icon2,#nav-icon3,#nav-icon4').click(function () {
+      $(this).toggleClass('open');
+    });
+  });
+  
+</script>
+  
 
 
 </body>

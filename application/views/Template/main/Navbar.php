@@ -9,9 +9,16 @@
     </div>
 
     <!-- Hamburger Menu Icon -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler" id="nav-icon2" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+
     </button>
 
     <!-- Navbar Links & Login Button -->
@@ -21,16 +28,20 @@
           <a class="nav-link <?= $page == "home" ? "active" : '' ?>" href="<?= base_url() ?>">Home</a>
         </li>
         <li class="nav-item <?= $page == "music" ? "active2" : '' ?>">
-          <a class="nav-link <?= $page == "music" ? "active" : '' ?>" href="<?= base_url() ?>index.php/music"><?= $type['music'] ?></a>
+          <a class="nav-link <?= $page == "music" ? "active" : '' ?>"
+            href="<?= base_url() ?>index.php/music"><?= $type['music'] ?></a>
         </li>
         <li class="nav-item <?= $page == "vdo" ? "active3" : '' ?>">
-          <a class="nav-link <?= $page == "vdo" ? "active" : '' ?>" href="<?= base_url() ?>index.php/vdo"><?= $type['vdo'] ?></a>
+          <a class="nav-link <?= $page == "vdo" ? "active" : '' ?>"
+            href="<?= base_url() ?>index.php/vdo"><?= $type['vdo'] ?></a>
         </li>
         <li class="nav-item <?= $page == "mini" ? "active4" : '' ?>">
-          <a class="nav-link <?= $page == "mini" ? "active" : '' ?>" href="<?= base_url() ?>index.php/mini"><?= $type['mini'] ?></a>
+          <a class="nav-link <?= $page == "mini" ? "active" : '' ?>"
+            href="<?= base_url() ?>index.php/mini"><?= $type['mini'] ?></a>
         </li>
         <li class="nav-item <?= $page == "Debug" ? "active5" : '' ?>">
-          <a class="nav-link <?= $page == "Debug" ? "active" : '' ?>" href="<?= base_url() ?>index.php/admin/debug">Debugging</a>
+          <a class="nav-link <?= $page == "Debug" ? "active" : '' ?>"
+            href="<?= base_url() ?>index.php/admin/debug">Debugging</a>
         </li>
         <div id="marker"></div>
       </ul>
@@ -77,4 +88,5 @@
       </div>
     </div>
 </nav>
+
 <div class="margin-nav"></div>
