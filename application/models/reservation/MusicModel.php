@@ -130,8 +130,6 @@ class MusicModel extends CI_Model
         } else {
             $currentTime = date('H:i');
         }
-
-
         $this->db->select('*');
         $this->db->from('tbn_music_reserv');
         $this->db->where('r_id', $r_id);
@@ -139,7 +137,7 @@ class MusicModel extends CI_Model
         $this->db->where('r_status', 'actived');
         $query = $this->db->get();
 
-        return $query->result_array();
+        return $query->row_array();
 
     }
 
@@ -163,43 +161,67 @@ class MusicModel extends CI_Model
     }
 
 
-
-
-    protected function get_closest_available_slot($allSlots, $reservedSlots, $currentTime)
-    {
+    protected function get_closest_available_slot($allSlots,  $currentTime) {
         $closestSlot = null;
-        $smallestDiff = PHP_INT_MAX; // Initialize with a large number
+        $smallestDiff = PHP_INT_MAX;
     
-        // Loop through all available slots
+        $currentTimestamp = strtotime($currentTime);
+    
         foreach ($allSlots as $slot) {
-            list($startTime, $endTime) = explode('-', $slot); // Split the time range
-    
-            $currentTimestamp = strtotime($currentTime);
+            list($startTime, $endTime) = explode('-', $slot);
             $slotStartTimestamp = strtotime($startTime);
     
-            // Check if the available slot is in the future
-            if ($currentTimestamp < $slotStartTimestamp) {
-                // Check if the end time of any reserved slot matches the start time of this slot
-                foreach ($reservedSlots as $reserved) {
-                    $reservedEndTime = date('H:i', strtotime($reserved['exp_time']));
-                    $reservedEndTimestamp = strtotime($reservedEndTime);
+            // Check if the slot is in the future
+            if ($slotStartTimestamp >= $currentTimestamp) {
+                $timeDiff = $slotStartTimestamp - $currentTimestamp;
     
-                    // Calculate the time difference between reserved slot end and available slot start
-                    if ($reservedEndTimestamp == $slotStartTimestamp) {
-                        $timeDiff = abs($reservedEndTimestamp - $currentTimestamp); // Time difference in seconds
-    
-                        // Update the closest slot if the time difference is smaller
-                        if ($timeDiff < $smallestDiff) {
-                            $smallestDiff = $timeDiff;
-                            $closestSlot = $slot; // Store the closest available slot
-                        }
-                    }
+                // Update if this slot is closer than the previously found closest
+                if ($timeDiff < $smallestDiff) {
+                    $smallestDiff = $timeDiff;
+                    $closestSlot = $slot;
                 }
             }
         }
     
-        return $closestSlot;
+        return $closestSlot ? $closestSlot : 'No available slots' ;
     }
+    
+
+    // protected function get_closest_available_slot($allSlots, $reservedSlots, $currentTime)
+    // {
+    //     $closestSlot = null;
+    //     $smallestDiff = PHP_INT_MAX; // Initialize with a large number
+    
+    //     // Loop through all available slots
+    //     foreach ($allSlots as $slot) {
+    //         list($startTime, $endTime) = explode('-', $slot); // Split the time range
+    
+    //         $currentTimestamp = strtotime($currentTime);
+    //         $slotStartTimestamp = strtotime($startTime);
+    
+    //         // Check if the available slot is in the future
+    //         if ($currentTimestamp < $slotStartTimestamp) {
+    //             // Check if the end time of any reserved slot matches the start time of this slot
+    //             foreach ($reservedSlots as $reserved) {
+    //                 $reservedEndTime = date('H:i', strtotime($reserved['exp_time']));
+    //                 $reservedEndTimestamp = strtotime($reservedEndTime);
+    
+    //                 // Calculate the time difference between reserved slot end and available slot start
+    //                 if ($reservedEndTimestamp == $slotStartTimestamp) {
+    //                     $timeDiff = abs($reservedEndTimestamp - $currentTimestamp); // Time difference in seconds
+    
+    //                     // Update the closest slot if the time difference is smaller
+    //                     if ($timeDiff < $smallestDiff) {
+    //                         $smallestDiff = $timeDiff;
+    //                         $closestSlot = $slot; // Store the closest available slot
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    
+    //     return $closestSlot;
+    // }
 
 
 
@@ -218,18 +240,19 @@ class MusicModel extends CI_Model
             
 
             // Define all possible slots
-            $allSlots = [
-                '09:00-10:00',
-                '10:00-11:00',
-                '11:00-12:00',
-                '12:00-13:00',
-                '13:00-14:00',
-                '14:00-15:00',
-                '15:00-16:00',
-            ];
+            // $allSlots = [
+            //     '09:00-10:00',
+            //     '10:00-11:00',
+            //     '11:00-12:00',
+            //     '12:00-13:00',
+            //     '13:00-14:00',
+            //     '14:00-15:00',
+            //     '15:00-16:00',
+            // ];
+            $allSlots = $this->get_all_time(1);
             
             
-            // Remove slots that have already passed
+           
             $validSlots = array_filter($allSlots, function ($slot) use ($current_time) {
                 // Extract the end time of the slot
                 $parts = explode('-', $slot);
@@ -237,17 +260,18 @@ class MusicModel extends CI_Model
                 $end = $parts[1];
                 return $end > $current_time; // Keep only slots where the end time is in the future
             });
-    
+            
             // Filter out the reserved slots from the valid slots
             $reservedSlotRanges = [];
             foreach ($reservedSlots as $slot) {
                 $reservedSlotRanges[] = date('H:i', strtotime($slot['start_time'])) . '-' . date('H:i', strtotime($slot['exp_time']));
             }
-    
+            
             // Find available slots
             $availableSlots = array_diff($validSlots, $reservedSlotRanges);
+            
             // Find Closest time aviliable
-            $closest_time = $this->get_closest_available_slot($availableSlots,$reservedSlots,$current_time);
+            $closest_time = $this->get_closest_available_slot($availableSlots,$current_time);
             
           return $closest_time;
         } catch (Exception $e) {

@@ -65,6 +65,14 @@ class CI_Model {
 	 *
 	 * @param	string	$key
 	 */
+
+	 public function get_all_time($s_id){
+		$this->load->model('Time_Setting_Model');
+		$time_setting_Model = $this->Time_Setting_Model;
+		$time_data = $time_setting_Model->getTimeByS_Id($s_id);
+		$allSlots = generateTimeSlots($time_data['start_time'],$time_data['end_time'],$time_data['interval_hours']);
+		return $allSlots;
+	}
 	public function __get($key)
 	{
 		// Debugging note:

@@ -14,7 +14,6 @@ class Welcome extends CI_Controller {
 		return $this->Render('welcome_message',[
 			'title'=>'home',
 			'userdata'=>$userdata,
-			
 			'page'=>'home']);
 		
 	}
@@ -25,7 +24,6 @@ class Welcome extends CI_Controller {
 		$currentDate = date("Y-m-d");
 		$rows = $model->get_past_reservations($currentDate);
 		$model->expire_reserv($rows);
-		
 		return $rows;
 	}
 }

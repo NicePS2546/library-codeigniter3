@@ -96,7 +96,9 @@ class CI_Controller
 	public function Render($view, $data)
 	{
 		$type = $this->get_type();
-		$this->check_expire();
+		$this->check_expire_music(); // check expire for music
+		$this->check_expire_vdo(); // check expire for music
+
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
@@ -175,9 +177,18 @@ class CI_Controller
             ->set_output($data);
 	}
 
-	public function check_expire(){
+	public function check_expire_music(){
 		$this->load->model('reservation/MusicModel');
 		$model = $this->MusicModel;
+		$currentDate = date("Y-m-d");
+		$rows = $model->get_past_reservations($currentDate);
+		$model->expire_reserv($rows);
+		
+		return $rows;
+	}
+	public function check_expire_vdo(){
+		$this->load->model('reservation/VdoModel');
+		$model = $this->VdoModel;
 		$currentDate = date("Y-m-d");
 		$rows = $model->get_past_reservations($currentDate);
 		$model->expire_reserv($rows);
@@ -209,7 +220,13 @@ class CI_Controller
     return $currentUrl;
 }
 
-
+public function get_all_time($s_id){
+	$this->load->model('Time_Setting_Model');
+	$time_setting_Model = $this->Time_Setting_Model;
+	$time_data = $time_setting_Model->getTimeByS_Id($s_id);
+	$allSlots = generateTimeSlots($time_data['start_time'],$time_data['end_time'],$time_data['interval_hours']);
+	return $allSlots;
+}
 public function get_user_sso_by_id($id)
 {
 	// $this->db->where('u_stuid',$id);

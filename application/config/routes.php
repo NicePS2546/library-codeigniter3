@@ -77,8 +77,10 @@ $route['music/time/test'] = 'music/test';
 
 // Room Video
 $route['vdo'] = 'vdo/index';
-$route['vdo/reserv/(:num)'] = 'vdo/reserv_page/$1';
+$route['vdo/service/(:num)'] = 'vdo/service_page/$1';
+$route['vdo/reserv/(:num)/(:num)'] = 'vdo/reserv_page/$1/$2';
 $route['vdo/seat'] = 'vdo/testLayout';
+$route['vdo/time/(:num)'] = 'vdo/get_availible_slots/$1';
 
 // Room Mini
 $route['mini'] = 'mini/index';

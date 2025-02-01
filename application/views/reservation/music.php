@@ -18,11 +18,18 @@
 #result {
     animation: bounceIn 0.5s ease-out;
 }
+.ani-element{
+    opacity: 0;
+}
+.ani-element.visible{
+    opacity: 1;
+    transition: opacity 1s ease-in;
+}
 
 </style>
 
 <div class="container">
-    <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto">
+    <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
         <h1>Reserve a Time Slot</h1>
         <form action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
             onsubmit="return Submit(event)" method="POST">
@@ -112,6 +119,19 @@
         });
     });
 
+    document.addEventListener("DOMContentLoaded", function () {
+            setInterval(() => {
+                const className = '.ani-element';
+                const elements = document.querySelectorAll(className);
+                
+            elements.forEach((el, index) => {
+              // Delay each element by a factor of its index (300ms = 0.3 second per element)
+              setTimeout(() => {
+                el.classList.add('visible');
+              }, index * 300); // The delay increases for each element
+            });
+          }, 500);
+        });
 
     let typingTimer; // Timer identifier
     const doneTypingInterval = 500; // Set the time delay for detecting stop typing (500ms)

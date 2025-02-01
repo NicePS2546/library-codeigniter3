@@ -42,6 +42,19 @@ if(!empty($services)){ ?>
     </div>
 </section>
 <script>
+     document.addEventListener("DOMContentLoaded", function () {
+            setInterval(() => {
+                const className = '.ani-element';
+                const elements = document.querySelectorAll(className);
+                console.log("Selected elements:", elements);
+            elements.forEach((el, index) => {
+              // Delay each element by a factor of its index (300ms = 0.3 second per element)
+              setTimeout(() => {
+                el.classList.add('visible','animate__animated', 'animate__fadeInUp');
+              }, index * 300); // The delay increases for each element
+            });
+          }, 500);
+        });
     // Reload the page every 60,000 milliseconds (1 minute)
     setInterval(() => {
         location.reload();

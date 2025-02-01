@@ -249,6 +249,7 @@ public function get_user_sso(){
             'table'=>'music'
         ]);
     }
+    
     public function get_availible_slots($r_id) {
         try {
             // Load the model
@@ -267,16 +268,17 @@ public function get_user_sso(){
             
 
             // Define all possible slots
-            $allSlots = [
-                '09:00-10:00',
-                '10:00-11:00',
-                '11:00-12:00',
-                '12:00-13:00',
-                '13:00-14:00',
-                '14:00-15:00',
-                '15:00-16:00',
-                // Add more slots as needed
-            ];
+            // $allSlots = [
+            //     '09:00-10:00',
+            //     '10:00-11:00',
+            //     '11:00-12:00',
+            //     '12:00-13:00',
+            //     '13:00-14:00',
+            //     '14:00-15:00',
+            //     '15:00-16:00',
+            //     // Add more slots as needed
+            // ];
+            $allSlots = $this->get_all_time(1);
             
             
             // Remove slots that have already passed
