@@ -48,6 +48,10 @@ class Vdo extends CI_Controller
         $this->load->model('reservation/VdoModel');
         $model = $this->VdoModel;
 
+        $this->load->model('reservation/MusicModel');
+        $musicModel = $this->MusicModel;
+        
+
         $extension = "index.php/";
         $r_id = $this->input->post('r_id');  // Room number
         $st_id = $this->input->post('st_id');        // Student ID
@@ -67,7 +71,8 @@ class Vdo extends CI_Controller
         
     // Convert the selected time range (e.g., '09:00-10:00') to start_time and exp_time
         list($start_time, $exp_time) = explode('-', $time_slot);
-        $row = $model->check_duplicate($st_id,$r_id);
+        $vdo_dupl = $model->check_duplicate($st_id,$r_id);
+        $music_dulp = $musicModel->check_duplicate($st_id,$r_id);
         $data = [
             'st_id' => $st_id,  // Example: Replace with actual student/user ID
             'r_id' => $r_id, // Room number
@@ -96,7 +101,7 @@ class Vdo extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return $this->sweet($sweet);  // Stop execution if validation fails
+            return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }
         if($currentTime > "16:00"){
             $sweet = '<script>
@@ -111,7 +116,7 @@ class Vdo extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return $this->sweet($sweet);  // Stop execution if validation fails
+            return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }else if($currentTime < "08:00"){
             $sweet = '<script>
             setTimeout(function() {
@@ -123,7 +128,7 @@ class Vdo extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return $this->sweet($sweet);  // Stop execution if validation fails
+            return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }
         
 
@@ -142,7 +147,7 @@ class Vdo extends CI_Controller
                 });
             }, 1000);
             </script>';
-           return $this->sweet($sweet);  // Stop execution if validation fails
+           return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }else if($total_pp < 1){
             $sweet = '<script>
             setTimeout(function() {
@@ -156,7 +161,7 @@ class Vdo extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return $this->sweet($sweet);  // Stop execution if validation fails
+            return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }else if($total_pp > 6){
             $sweet = '<script>
             setTimeout(function() {
@@ -170,10 +175,10 @@ class Vdo extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return $this->sweet($sweet);  // Stop execution if validation fails
+            return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }
         
-        if($row){
+        if($music_dulp || $vdo_dupl){
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -186,7 +191,7 @@ class Vdo extends CI_Controller
                 });
             }, 1000);
             </script>';
-            return $this->sweet($sweet);  // Stop execution if validation fails
+            return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }
        
         $result = $model->reserve($data);
@@ -218,7 +223,7 @@ class Vdo extends CI_Controller
             }, 1000);
             </script>';
         }
-        return $this->sweet($sweet);
+        return $this->sweet($sweet,'Video Reservation','vdo');
             
     }
 

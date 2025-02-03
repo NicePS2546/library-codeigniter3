@@ -196,11 +196,11 @@ class CI_Controller
 		return $rows;
 	}
 
-	public function sweet($sweet){
+	public function sweet($sweet,$title = "submit",$page = "*"){
 		return $this->Render('sweet', [
 			'sweet'=>$sweet,
-            'title' => 'sweet',
-            'page' => '*',
+            'title' => $title,
+            'page' => $page,
         ]);
 	}
 	public function getCurrentUrl()

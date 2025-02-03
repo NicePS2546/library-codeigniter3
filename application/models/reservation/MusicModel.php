@@ -183,7 +183,7 @@ class MusicModel extends CI_Model
             }
         }
     
-        return $closestSlot ? $closestSlot : 'No available slots' ;
+        return $closestSlot ;
     }
     
 
