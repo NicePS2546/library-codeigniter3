@@ -30,15 +30,11 @@ class Music extends CI_Controller
     public function reserv_page($r_id)
     {
 
-        $currentDate = date("Y-m-d");
-        $currentDate = date("2025-01-12");
-
-        $isBusy = $this->check_current_time_slot($currentDate, $r_id);
         return $this->Render('reservation/music', [
             'title' => 'Reservation',
             'r_id' => $r_id,
             'page' => 'music',
-            'isBusy' => $isBusy
+            
         ]);
     }
     public function reserv()
@@ -190,25 +186,9 @@ class Music extends CI_Controller
             </script>';
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
         }
-        // Start Transaction //
+        $result = transaction($this->db,$model->reserve($data),$statistic->updateDailyStatistics(1, $total_pp, 1));
 
-        $this->db->trans_start(); // Start transaction
-
-        $result = $model->reserve($data);
-        $result_s = $statistic->updateDailyStatistics(1, $total_pp, 1);
-
-        $this->db->trans_complete(); // Complete the transaction
-        if ($this->db->trans_status() === FALSE) {
-            // Transaction failed, rollback
-            $this->db->trans_rollback();
-        } else {
-            // Transaction successful, commit
-            $this->db->trans_commit();
-        }
-
-        // End Transaction //
-
-        if ($result && $result_s) {
+        if ($result) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -249,6 +229,15 @@ class Music extends CI_Controller
             'uid' => $user_id,
             'fullname' => $fullname
         ];
+        
+        if($user_id == '654230053'){
+            $info['fullname'] = 'เด็กชายเปรม ยิ้มสวย บ้านอยู่หลังวัด ';
+        }else if($user_id == '654230044'){
+            $info['fullname'] = 'โอ๊ต เด็กวัด ';
+        }else if($user_id == '654230042'){
+            $info['fullname'] = "The Homeless Man";
+        }
+        // <img class='rounded' height='50px' width='50px' src='".base_url('public/assets/friend/icon/easterEgg.png')."'>
         if ($u_data) {
             echo json_encode([
                 'userdata' => $info,
@@ -302,6 +291,7 @@ class Music extends CI_Controller
             //     '15:00-16:00',
             //     // Add more slots as needed
             // ];
+            
             $allSlots = $this->get_all_time(1);
 
 
@@ -372,7 +362,6 @@ class Music extends CI_Controller
         // Get the current date and time
         $currentDate = date('Y-m-d'); // Current date (e.g., 2025-01-12)
         $currentTime = date('H:i'); // Current time (e.g., 11:37)
-        $currentTime = "11:37"; // Current time (e.g., 11:37)
 
         // Load the model
         $this->load->model('reservation/MusicModel');

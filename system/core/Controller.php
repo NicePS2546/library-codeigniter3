@@ -98,6 +98,7 @@ class CI_Controller
 		$type = $this->get_type();
 		$this->check_expire_music(); // check expire for music
 		$this->check_expire_vdo(); // check expire for music
+		$this->check_expire_mini(); // check expire for music
 
 		// Layout structure
 		$layout = [
@@ -180,6 +181,15 @@ class CI_Controller
 	public function check_expire_music(){
 		$this->load->model('reservation/MusicModel');
 		$model = $this->MusicModel;
+		$currentDate = date("Y-m-d");
+		$rows = $model->get_past_reservations($currentDate);
+		$model->expire_reserv($rows);
+		
+		return $rows;
+	}
+	public function check_expire_mini(){
+		$this->load->model('reservation/MiniModel');
+		$model = $this->MiniModel;
 		$currentDate = date("Y-m-d");
 		$rows = $model->get_past_reservations($currentDate);
 		$model->expire_reserv($rows);

@@ -51,6 +51,8 @@ class Vdo extends CI_Controller
         $this->load->model('reservation/MusicModel');
         $musicModel = $this->MusicModel;
         
+        $this->load->model('statistic/StatisticModel');
+        $statistic = $this->StatisticModel;
 
         $extension = "index.php/";
         $r_id = $this->input->post('r_id');  // Room number
@@ -194,8 +196,8 @@ class Vdo extends CI_Controller
             return $this->sweet($sweet,'Video Reservation','vdo');  // Stop execution if validation fails
         }
        
-        $result = $model->reserve($data);
-        
+        $result = transaction($this->db,$model->reserve($data),$statistic->updateDailyStatistics(2, $total_pp, 1));
+
         if ($result) {
             $sweet = '<script>
             setTimeout(function() {

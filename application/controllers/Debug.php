@@ -14,7 +14,7 @@ class Debug extends CI_Controller
 
     public function index()
     {
-        $data['title'] = 'Debug';
+        
         return $this->Render('debug', [
             "title" => "Debug",
             'page' => 'Debug'

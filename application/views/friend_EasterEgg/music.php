@@ -18,7 +18,7 @@
 
 // ];
 //     $rooms = $data;
-if(!$this->session->has_userdata('is_friend')){
+
 if (!empty($rooms)) {
     // $u_data = $this->session->userdata('userData');
     // echo var_dump($u_data['uid'])
@@ -27,7 +27,7 @@ if (!empty($rooms)) {
         <div class="row justify-content-center">
             <?= $this->load->view('component/title_room', [], true) ?>
             <?php
-            
+
             $date = date("Y-m-d");
 
 
@@ -40,7 +40,7 @@ if (!empty($rooms)) {
                 list($closestStartTime, $closestEndTime) = explode('-', $closest);
                 ?>
                 <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-5">
-                    <?= $this->load->view('component/card_room', [
+                    <?= $this->load->view('friend_EasterEgg/component/card_room', [
                         'room' => $room,
                         'url' => "music",
                         'desc' => $room['r_desc'],
@@ -86,10 +86,5 @@ if (!empty($rooms)) {
     echo $this->load->view('room_notFound', [], true);
 
 }
-}else{
-    echo $this->load->view('friend_EasterEgg/music',[
-        'rooms' => $rooms,
-        'model' => $model
-    ],true);
-}
+
 ?>

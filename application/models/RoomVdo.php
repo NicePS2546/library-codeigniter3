@@ -63,7 +63,7 @@ class RoomVdo extends CI_Model {
     // Get all data
     public function getAllRoom()
     {
-        return $this->db->get($this->table)->result_array();
+        return $this->db->order_by('r_number', 'ASC')->get($this->table)->result_array();
     }
 
     public function deleteRoom($id)

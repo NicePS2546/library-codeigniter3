@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -85,9 +86,21 @@ $route['vdo/time/(:num)'] = 'vdo/get_availible_slots/$1';
 // Room Mini
 $route['mini'] = 'mini/index';
 
+
+
+
+
 // SSO
 $route['sso/login'] = 'SSO/index';
 $route['sso/logout'] = 'SSO/logout';
 
 // Test
 $route['test/sweet'] = 'test/testSweet';
+
+
+    
+
+
+
+
+

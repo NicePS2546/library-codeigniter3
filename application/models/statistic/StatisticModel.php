@@ -34,7 +34,7 @@ class StatisticModel extends CI_Model
             $this->db->set('total_reservations', 'total_reservations + ' . (int) $new_reservations, FALSE);
             $this->db->where('stat_date', $today);
             $this->db->where('service_id', $service_id);
-            $this->db->update($this->table);
+            return $this->db->update($this->table);
         } else {
             // Insert a new record for today
             $data = [
@@ -43,7 +43,7 @@ class StatisticModel extends CI_Model
                 'total_users' => $new_users,
                 'total_reservations' => $new_reservations
             ];
-            $this->db->insert($this->table, $data);
+            return $this->db->insert($this->table, $data);
         }
     }
 }

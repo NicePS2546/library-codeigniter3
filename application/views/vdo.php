@@ -18,7 +18,7 @@
         
     // ];
     // $rooms = [];
-    $rooms[2] = ['r_id'=>3,'r_number'=> 2,'r_status'=> 1 ,'r_desc'=>2211,'r_type'=>2];
+   
 
 if(!empty($rooms)){ ?>
 
@@ -41,7 +41,7 @@ print_r($slot); ?></pre>
                     <?= $this->load->view('component/card_room', [
                         'room' => $room,
                         'url'=>"vdo",
-                        'desc' => 'ลงทะเบียนต้องแต่ 1-6 คน',
+                        'desc' => $room['r_desc'],
                         'exp_time' => $closestStartTime
                     ],true) ?>
                 </div>
