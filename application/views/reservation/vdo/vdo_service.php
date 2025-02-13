@@ -46,7 +46,7 @@ if(!empty($services)){ ?>
             setInterval(() => {
                 const className = '.ani-element';
                 const elements = document.querySelectorAll(className);
-                console.log("Selected elements:", elements);
+                
             elements.forEach((el, index) => {
               // Delay each element by a factor of its index (300ms = 0.3 second per element)
               setTimeout(() => {

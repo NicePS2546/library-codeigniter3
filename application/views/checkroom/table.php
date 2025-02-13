@@ -140,6 +140,8 @@
                 <?php
                 if ($table === "music") {
                     echo $this->load->view('component/table/music', ['rows' => $rows], true);
+                }else if($table === "vdo"){
+                  echo $this->load->view('component/table/vdo', ['rows' => $rows], true);
                 } ?>
             </table>
         </div>
@@ -175,14 +177,13 @@
 
     intializingDataTable('#Table');
 
-
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         setInterval(() => {
             const className = <?= !empty($rooms) ? "'.ani-element'" : "'.notFound'" ?>;
             const elements = document.querySelectorAll(className);
-            console.log("Selected elements:", elements);
+            
             elements.forEach((el, index) => {
                 // Delay each element by a factor of its index (300ms = 0.3 second per element)
                 setTimeout(() => {

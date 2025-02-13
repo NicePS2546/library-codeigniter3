@@ -61,7 +61,21 @@ if (!empty($rooms)) {
         </div>
     </section>
 
-    <script>
+    
+<?php } else {
+
+    echo $this->load->view('room_notFound', [], true);
+
+}
+}else{
+    echo $this->load->view('friend_EasterEgg/music',[
+        'rooms' => $rooms,
+        'model' => $model
+    ],true);
+}
+?>
+
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         setInterval(() => {
         const elements = document.querySelectorAll('.ani-element');
@@ -81,15 +95,3 @@ if (!empty($rooms)) {
             location.reload();
         }, 60000);
     </script>
-<?php } else {
-
-    echo $this->load->view('room_notFound', [], true);
-
-}
-}else{
-    echo $this->load->view('friend_EasterEgg/music',[
-        'rooms' => $rooms,
-        'model' => $model
-    ],true);
-}
-?>

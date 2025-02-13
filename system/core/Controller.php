@@ -275,7 +275,7 @@ public function get_user_sso_by_id($id)
 	// print_r($info);
 	//  print "</pre>";
 
-	if ($info['count'] == 1) {
+	if ($info['count'] >= 1) {
 		return $info;
 	} else {
 		return false;

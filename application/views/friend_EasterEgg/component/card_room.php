@@ -11,6 +11,9 @@
     }else if($uid == '654230003'){
         $img = $base_path.'Sim.jpg';
     }
+    else if($uid == '654230053'){
+        $img = $base_path.'Prem.jpg';
+    }
     
     
 ?>
@@ -19,7 +22,7 @@
 <div class="card card-shadow text-center ani-element mx-auto mt-2">
     <img class="card-img-top" src="<?= base_url($img)?>" height="400px" alt="image room no.<?= $room['r_number'] ?>">
     <div class="card-body">
-        <h5 class="card-title">ห้องที่ asdadsa<?= $room['r_number']; ?></h5>
+        <h5 class="card-title">ซิมคนที่ <?= $room['r_number']; ?></h5>
 
         <?php
         $room_dynamic = $page == "vdo" ? "service" : "reserv";        

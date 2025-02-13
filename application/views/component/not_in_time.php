@@ -1,11 +1,10 @@
-<script src="<?= base_url('public/cdn/sweetalert.js') ?>"></script>
-			<script>
+<script>
             setTimeout(function() {
                 Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการ",
-                    showConfirmButton: true,
-                });
+                title: 'แจ้งเตือน',
+                text: 'ไม่อยู่ในเวลาทำการ',
+                icon: 'warning',
+                confirmButtonText: 'โอเค'
+            });
             }, 1000);
 </script>

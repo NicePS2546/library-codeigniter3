@@ -14,6 +14,14 @@ class Test extends CI_Controller
         ]);
 
     }
+    public function sweet2()
+    {
+        return $this->Render('test_sweet', [
+            'title' => 'test',
+            'page' => 'home'
+        ]);
+
+    }
     public function testSweet()
     {
 

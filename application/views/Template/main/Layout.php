@@ -21,7 +21,7 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script> -->
   <!-- Thai Language Locale for Flatpickr -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/th.js"></script> -->
-  
+
 
 
   <!-- Font Awesome -->
@@ -49,14 +49,16 @@
   <!--- offline CDN --->
 
 
-  <!-- Custom Loader CSS -->
+
   <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" />
+  <!-- Custom Loader CSS -->
   <link rel="stylesheet" href="<?= base_url('public/assets/css/component.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/nav_active.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/dropdown.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/fonts/icomoon/style.css') ?>?v=<?= time(); ?>" />
-  <link rel="stylesheet" href="<?= base_url('public/cdn/animated.css')?>" />
-
+  <link rel="stylesheet" href="<?= base_url('public/cdn/animated.css') ?>" />
+  <script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
+  <link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
 
 
   <style>
@@ -119,7 +121,7 @@
 
   <!-- Modal Structure -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form method="post" action="<?= base_url() ?>index.php/sso/login">
+    <form method="post" id="modal-form" action="<?= base_url() ?>index.php/sso/login" onsubmit="return Submit(event)" >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -181,8 +183,7 @@
 
 
 
-  <!-- Owl Carousel JS -->
-  <script src="<?= base_url('assets/node_modules/owl.carousel/dist/owl.carousel.min.js') ?>"></script>
+
 
   <!-- Custom Scripts -->
 
@@ -207,37 +208,84 @@
         locale: 'th'         // Increment minutes by 1
       });
     });
-    // Initialize Owl Carousel
-    $(document).ready(function () {
-      $('.owl-carousel').owlCarousel({
-        loop: true,
-        margin: 10,
-        nav: false,
-        responsive: {
-          0: { items: 1 },
-          800: { items: 1 },
-          900: { items: 5 },
-          1500: { items: 6 }
-        }
-      });
-    });
+
 
 
 
 
   </script>
-<script>
+  <script>
 
-$(document).ready(function () {
-    $('#nav-icon1,#nav-icon2,#nav-icon3,#nav-icon4').click(function () {
-      $(this).toggleClass('open');
+    $(document).ready(function () {
+      $('#nav-icon1,#nav-icon2,#nav-icon3,#nav-icon4').click(function () {
+        $(this).toggleClass('open');
+      });
     });
-  });
-  
-</script>
-  
+
+  </script>
 
 
+  <script>
+    function Submit(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const uid = $('#st_id').val(); // Get input value
+      const password = $('#password').val();
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+
+      if (!uid) {
+        showSweet('warn', 'โปรดใส่รหัสผู้ใช้')
+        return false; // Stop execution if input is empty
+      } else if (!password) {
+        showSweet('warn', 'โปรดใส่รหัสผ่าน')
+        return false; // Stop execution if input is empty
+      }
+
+
+      setTimeout(function () {
+        document.getElementById('modal-form').submit(); // Submit the form
+      }, 800); // Wait 2 seconds (2000ms)
+
+      return false; // Prevent default submission until AJAX completes
+    }
+
+  </script>
+  <script>
+  function showSweet(status, msg, title) {
+      if (status == 'success') {
+        Swal.fire({
+          title: title ? title : "สำเร็จ",
+          text: msg,
+          icon: 'success',
+          confirmButtonText: 'โอเค'
+        });
+      } else if (status == 'warn') {
+        Swal.fire({
+          title: title ? title : "แจ้งเตือน",
+          text: msg,
+          icon: 'warning',
+          confirmButtonText: 'โอเค'
+        });
+      } else {
+        Swal.fire({
+          title: title ? title : "ผิดพลาด",
+          text: msg,
+          icon: 'error',
+          confirmButtonText: 'โอเค'
+        });
+      }
+    }</script>
 </body>
 
 </html>

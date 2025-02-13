@@ -1,31 +1,33 @@
 <style>
+    @keyframes bounceIn {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
 
-@keyframes bounceIn {
-    0% {
-        transform: scale(0);
+        50% {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    #result {
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    .ani-element {
         opacity: 0;
     }
-    50% {
-        transform: scale(1.1);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
 
-#result {
-    animation: bounceIn 0.5s ease-out;
-}
-.ani-element{
-    opacity: 0;
-}
-.ani-element.visible{
-    opacity: 1;
-    transition: opacity 1s ease-in;
-}
-
+    .ani-element.visible {
+        opacity: 1;
+        transition: opacity 1s ease-in;
+    }
 </style>
 
 <div class="container">
@@ -86,52 +88,80 @@
 
 
 
-
 <script>
-    $(document).ready(function () {
+    // $(document).ready(function () {
 
-        // Fetch available time slots when the page loads
-        $.ajax({
-            url: '<?= site_url("music/time/$r_id") ?>',
-            type: 'GET',
-            success: function (response) {
-                var availableSlots = JSON.parse(response); // Parse the returned JSON data
-                var timeSlotSelect = $('#time_slot');
-                var reservBtn = $('#reservBtn');
-                console.log(response);
-                // Clear existing options
-                timeSlotSelect.empty();
+    //     // Fetch available time slots when the page loads
+    //     $.ajax({
+    //         url: '<?= site_url("music/time/$r_id") ?>',
+    //         type: 'GET',
+    //         success: function (response) {
+    //             var availableSlots = JSON.parse(response); // Parse the returned JSON data
+    //             var timeSlotSelect = $('#time_slot');
+    //             var reservBtn = $('#reservBtn');
+    //             console.log(response);
+    //             // Clear existing options
+    //             timeSlotSelect.empty();
 
-                if (availableSlots['availableSlots'].length > 0) {
-                    // Add the available slots to the select element
-                    $.each(availableSlots['availableSlots'], function (index, slot) {
-                        timeSlotSelect.append('<option value="' + slot + '">' + slot + '</option>');
-                    });
-                } else {
-                    reservBtn.prop('disabled', true);
-                    timeSlotSelect.prop('disabled', true);
-                    timeSlotSelect.html('<option>ไม่เหลือช่วงเวลาให้จองแล้ว</option>');
-                }
-            },
-            error: function () {
-                alert("Error: Unable to fetch data.");
-            }
-        });
-    });
+    //             if (availableSlots['availableSlots'].length > 0) {
+    //                 // Add the available slots to the select element
+    //                 $.each(availableSlots['availableSlots'], function (index, slot) {
+    //                     timeSlotSelect.append('<option value="' + slot + '">' + slot + '</option>');
+    //                 });
+    //             } else {
+    //                 reservBtn.prop('disabled', true);
+    //                 timeSlotSelect.prop('disabled', true);
+    //                 timeSlotSelect.html('<option>ไม่เหลือช่วงเวลาให้จองแล้ว</option>');
+    //             }
+    //         },
+    //         error: function () {
+    //             alert("Error: Unable to fetch data.");
+    //         }
+    //     });
+    // });
+
+    $(document).ready(async () => {
+    try {
+        const timeUrl = "<?= site_url("music/time/$r_id") ?>"; // Ensure this is a valid URL string
+        const res = await fetch(timeUrl);
+
+        if (!res.ok) throw new Error("Failed to fetch data");
+
+        const data = await res.json(); // Parse JSON response
+        console.log(data);
+
+        const timeSlotSelect = document.getElementById("time_slot");
+        const reservBtn = document.getElementById("reservBtn");
+
+        if (data.availableSlots.length > 0) {
+            // Populate dropdown with available time slots
+            timeSlotSelect.innerHTML = data.availableSlots
+                .map(slot => `<option value="${slot}">${slot}</option>`)
+                .join("");
+        } else {
+            reservBtn.disabled = true;
+            timeSlotSelect.disabled = true;
+            timeSlotSelect.innerHTML = '<option>ไม่เหลือช่วงเวลาให้จองแล้ว</option>';
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error: Unable to fetch data.");
+    }
+});
 
     document.addEventListener("DOMContentLoaded", function () {
-            setInterval(() => {
-                const className = '.ani-element';
-                const elements = document.querySelectorAll(className);
-                
+        setInterval(() => {
+            const className = '.ani-element';
+            const elements = document.querySelectorAll(className);
+
             elements.forEach((el, index) => {
-              // Delay each element by a factor of its index (300ms = 0.3 second per element)
-              setTimeout(() => {
-                el.classList.add('visible');
-              }, index * 300); // The delay increases for each element
+                // Delay each element by a factor of its index (300ms = 0.3 second per element)
+                setTimeout(() => {
+                    el.classList.add('visible');
+                }, index * 300); // The delay increases for each element
             });
-          }, 500);
-        });
+        }, 500);
+    });
 
     let typingTimer; // Timer identifier
     const doneTypingInterval = 500; // Set the time delay for detecting stop typing (500ms)
@@ -152,10 +182,11 @@
                 $.ajax({
                     url: '<?= site_url('music/get/user') ?>',  // Mock API endpoint
                     type: 'POST',
-                    data: { uid: query },
+                    data: { uid: query, reserv: 1 },
                     success: function (response) {
                         // Parse the JSON response
                         const data = JSON.parse(response);
+                        console.log(data);
                         const results = data.userdata;
                         let output = '';
 
@@ -187,13 +218,48 @@
 
         const query = $('#st_id1').val(); // Get input value
         const total = $('#total').val();
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+
+        // if (!query) {
+        //     showToast('โปรดใส่รหัสผู้ใช้', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(!total){
+        //     showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(total <= 4){
+        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(total >= 6){
+        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 6 คน', 'error');
+        //     return false; // Stop execution if input is empty
+        // }
+
         if (!query) {
-            showToast('โปรดใส่รหัสผู้ใช้', 'error');
+            showSweet('warn','โปรดใส่รหัสผู้ใช้')
             return false; // Stop execution if input is empty
-        }else if(!total){
-            showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
+        } else if (!total) {
+            showSweet('warn','โปรดใส่จำนวนผู้เข้าจอง')
+            return false; // Stop execution if input is empty
+        } else if (total < 4) {
+            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน')
+            return false; // Stop execution if input is empty
+        } else if (total > 6) {
+            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 6 คน')
             return false; // Stop execution if input is empty
         }
+
 
         // AJAX call
         $.ajax({
@@ -205,19 +271,20 @@
 
                 if (data.message === "fail" || !data.userdata) {
 
-                    showToast('ไม่พบผู้ใช้งาน', 'error'); // Show error toast
+                    showSweet('warn', 'ไม่พบผู้ใช้งาน') // Show error toast
                     return false; // Stop execution if validation fails
                 }
-                
-                showToast('กำลังดำเนินการ....', 'success');
+
+                Toast.fire({
+                    icon: "success",
+                    title: "กำลังดำเนินการ"
+                });
                 setTimeout(function () {
                     document.getElementById('formId').submit(); // Submit the form
                 }, 800); // Wait 2 seconds (2000ms)
             },
             error: function () {
-
-
-                showToast('เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่', 'error');
+                showSweet('error', 'เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่')
                 return false; // Stop execution on error
             }
         });
@@ -227,7 +294,30 @@
 
 </script>
 <script>
-
+    function showSweet(status, msg, title) {
+        if (status == 'success') {
+            Swal.fire({
+                title: title ? title : "สำเร็จ",
+                text: msg,
+                icon: 'success',
+                confirmButtonText: 'โอเค'
+            });
+        }else if(status == 'warn') {
+            Swal.fire({
+                title: title ? title : "แจ้งเตือน",
+                text: msg,
+                icon: 'warning',
+                confirmButtonText: 'โอเค'
+            });
+        }else {
+            Swal.fire({
+                title: title ? title : "ผิดพลาด",
+                text: msg,
+                icon: 'error',
+                confirmButtonText: 'โอเค'
+            });
+        }
+    }
     function showToast(message, type = 'success') {
         const toast = document.getElementById('liveToast');
         const toastBody = toast.querySelector('.toast-body');
@@ -241,7 +331,7 @@
             toast.classList.remove('text-danger');
         } else if (type === 'error') {
             toast.classList.add('text-danger');
-            
+
         }
 
         // Use Bootstrap's Toast functionality

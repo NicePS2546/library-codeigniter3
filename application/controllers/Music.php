@@ -225,23 +225,30 @@ class Music extends CI_Controller
         $u_data = $this->get_user_sso_by_id($uid);
         $user_id = $u_data[0]['uid'][0];
         $fullname = $u_data[0]['cn'][0];
+        $is_reserv = $this->input->post('reserv');
         $info = [
             'uid' => $user_id,
             'fullname' => $fullname
         ];
         
+        if($is_reserv == 1){
         if($user_id == '654230053'){
             $info['fullname'] = 'เด็กชายเปรม ยิ้มสวย บ้านอยู่หลังวัด ';
         }else if($user_id == '654230044'){
             $info['fullname'] = 'โอ๊ต เด็กวัด ';
         }else if($user_id == '654230042'){
             $info['fullname'] = "The Homeless Man";
+        }else if($user_id == '654230041'){
+            $info['fullname'] = "ธนาปล่อยลมยาง";
         }
+    }
+       
         // <img class='rounded' height='50px' width='50px' src='".base_url('public/assets/friend/icon/easterEgg.png')."'>
         if ($u_data) {
             echo json_encode([
                 'userdata' => $info,
-                'message' => 'Success'
+                'message' => 'Success',
+                'reserve' =>$is_reserv
             ]);
         } else {
             echo json_encode([
@@ -253,9 +260,19 @@ class Music extends CI_Controller
     {
         $this->load->model('reservation/MusicModel');
         $model = $this->MusicModel;
-        $reserved = $model->get_reserved($r_id, 'actived');
+        $reserveds = $model->get_reserved($r_id, 'actived');
+        foreach ($reserveds as $key => $reserved) {
+            $u_data = $this->get_user_sso_by_id($reserved['st_id']);
+            
+            // Ensure $u_data exists and has the expected structure
+            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+        
+            // Store fullname in the correct entry inside the array
+            $reserveds[$key]['fullname'] = $fullname;
+        }
+        
         return $this->Render("checkroom/table.php", [
-            'rows' => $reserved,
+            'rows' => $reserveds,
             'title' => 'Check Reserved',
             'page' => 'music',
             'table' => 'music'

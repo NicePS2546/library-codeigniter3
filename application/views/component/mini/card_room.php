@@ -28,8 +28,8 @@
                 <?= $room['r_status'] ? 'จองห้อง' : 'ห้องถูกปิด' ?>
             </a>
             
-            <?php if ($room['r_status']) : ?>
-                <a href="<?= base_url() ?>index.php/<?= $url ?>/check/<?= $room['r_id'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-primary' : 'btn-danger' ?>">ตรวจสอบ</a>
+            <?php if ($room['r_status'] && $room['isFree'] ) : ?>
+                <a href="<?= base_url() ?>index.php/<?= $url ?>/check/<?= $room['r_id'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-primary' : 'btn-danger' ?>">เข้าร่วมห้อง</a>
             <?php endif; ?>
         </div>
     </div>

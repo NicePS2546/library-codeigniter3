@@ -207,7 +207,7 @@ class Vdo extends CI_Controller
                     title: "จองห้องสำเร็จ!",
                     showConfirmButton: true,
                 }).then(function() {
-                    window.location = "' . base_url() . $extension . 'vdo/check"; 
+                    window.location = "' . base_url() . $extension . 'vdo/check/'.$r_id.'"; 
                 });
             }, 1000);
             </script>';
@@ -286,6 +286,32 @@ class Vdo extends CI_Controller
             // Return a JSON response with an error message
             echo json_encode(['error' => 'An error occurred while fetching the available slots.']);
         }
+    }
+    public function checkReserv($r_id)
+    {
+        $this->load->model('reservation/VdoModel');
+        $this->load->model('Vdo_service_Model');
+        $serviceModel = $this->Vdo_service_Model;
+
+        $model = $this->VdoModel;
+        $reserveds = $model->get_reserved($r_id, 'actived');
+        foreach ($reserveds as $key => $reserved) {
+            $u_data = $this->get_user_sso_by_id($reserved['st_id']);
+            $service = $this->Vdo_service_Model->get_by_id($reserved['s_id']);
+            // Ensure $u_data exists and has the expected structure
+            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+        
+            // Store fullname in the correct entry inside the array
+            $reserveds[$key]['fullname'] = $fullname;
+            $reserveds[$key]['service'] = $service;
+        }
+        
+        return $this->Render("checkroom/table.php", [
+            'rows' => $reserveds,
+            'title' => 'Check Reserved',
+            'page' => 'vdo',
+            'table' => 'vdo'
+        ]);
     }
 
     protected function get_closest_available_slot($allSlots, $reservedSlots, $currentTime)

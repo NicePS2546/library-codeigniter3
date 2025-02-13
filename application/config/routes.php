@@ -82,12 +82,11 @@ $route['vdo/service/(:num)'] = 'vdo/service_page/$1';
 $route['vdo/reserv/(:num)/(:num)'] = 'vdo/reserv_page/$1/$2';
 $route['vdo/seat'] = 'vdo/testLayout';
 $route['vdo/time/(:num)'] = 'vdo/get_availible_slots/$1';
-
+$route['vdo/check/(:num)'] = 'vdo/checkReserv/$1';
 // Room Mini
 $route['mini'] = 'mini/index';
-
-
-
+$route['mini/reserv/(:num)'] = 'mini/reserv/$1';
+$route['mini/check/(:num)'] = 'mini/checkReserv/$1';
 
 
 // SSO
@@ -96,6 +95,7 @@ $route['sso/logout'] = 'SSO/logout';
 
 // Test
 $route['test/sweet'] = 'test/testSweet';
+$route['test/sweet2'] = 'Test/sweet2';
 
 
     

@@ -25,11 +25,11 @@ class VdoModel extends CI_Model
 
     public function get_reserved($id, $status)
     {
-        $this->db->select('tbn_room_music.r_number, tbn_vdo_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_vdo_reserv', 'tbn_room_music.r_id = tbn_vdo_reserv.r_id', 'inner');
+        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
+        $this->db->from('tbn_room_vdo');
+        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
         $this->db->where('tbn_vdo_reserv.r_status', $status);
-        $this->db->where('tbn_room_music.r_id', $id);
+        $this->db->where('tbn_room_vdo.r_id', $id);
         $query = $this->db->get();
 
         return $query->result_array();

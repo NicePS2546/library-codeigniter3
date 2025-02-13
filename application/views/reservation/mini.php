@@ -31,15 +31,15 @@
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
         <h1>Reserve a Time Slot</h1>
-        <form action="<?php echo base_url('index.php/vdo/reserv/submit'); ?>" id="formId"
+        <form action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
             onsubmit="return Submit(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
-            <input type="hidden" name="s_id" value="<?= $s_id ?>">
             <div>
                 <label class="form-label" for="st_id">รหัสนักศึกษา</label>
                 <input type="text" class="form-control" name="st_id" id="st_id1">
                 <div id="result" class="mt-4 mb-2">
                 </div>
+
             </div>
             <div>
                 <label class="form-label" for="total">จำนวนคนเข้าใช้</label>
@@ -87,7 +87,7 @@
 <script>
      $(document).ready(async () => {
     try {
-        const timeUrl = "<?= site_url("vdo/time/$r_id") ?>"; // Ensure this is a valid URL string
+        const timeUrl = "<?= site_url("mini/time/$r_id") ?>"; // Ensure this is a valid URL string
         const res = await fetch(timeUrl);
 
         if (!res.ok) throw new Error("Failed to fetch data");
@@ -147,17 +147,18 @@
                 $.ajax({
                     url: '<?= site_url('music/get/user') ?>',  // Mock API endpoint
                     type: 'POST',
-                    data: { uid: query , reserv:1},
+                    data: { uid: query,reserv:1 },
                     success: function (response) {
                         // Parse the JSON response
                         const data = JSON.parse(response);
+                        console.log(data);
                         const results = data.userdata;
                         let output = '';
 
                         // Check the message from the API response
                         if (data.message == "Success") {
                             // Display the full name if successful
-                            output = `<p class="card border-success py-2 px-2 w-50 text-center">${results.fullname}</p>`;
+                            output = `<p class="card border-success py-2 px-2 w-50 d-flex align-items-center text-center">${results.fullname}</p>`;
                         } else if (data.message == "fail") {
                             // Show message if no results
                             output = '<div class="card border-danger text-center py-2 px-2 w-50"><div>ไม่เจอผู้ใช้ในระบบ <a href="https://sso.npru.ac.th/">สมัครตรงนี้</a></div></div>';
@@ -188,8 +189,12 @@
         }else if(!total){
             showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
             return false; // Stop execution if input is empty
+        }else if(total < 10){
+            showToast('จำนวนผู้ใช้งานขั้นต่ำ 10 คนขึ้นไป', 'error');
+            return false; // Stop execution if input is empty
         }
 
+        
         // AJAX call
         $.ajax({
             url: '<?= site_url("music/get/user") ?>', // API endpoint
