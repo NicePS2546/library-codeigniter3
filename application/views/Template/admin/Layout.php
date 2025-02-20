@@ -6,22 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= $title ? $title : 'My Website'; ?></title>
   <script src="<?= base_url('public/assets/js/popper.js') ?>"></script>
-  <!--- online CDN --->
-
-  <!-- Bootstrap CSS -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
-
-  <!-- Flatpickr CSS -->
-  <!-- <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet"> -->
-
-  <!-- Bootstrap JS -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
-
-  <!-- Flatpickr JS -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script> -->
-  <!-- Thai Language Locale for Flatpickr -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/th.js"></script> -->
-
 
 
   <!-- Font Awesome -->
@@ -37,15 +21,21 @@
   <!-- Bootstrap JS -->
   <script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js') ?>"></script>
 
-
+  <!-- Flatpickr CSS -->
+  <link href="<?= base_url('public/cdn/flatpicker/css/flatpickr.min.css') ?>" rel="stylesheet">
+  <!-- Flatpickr JS -->
+  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js') ?>"></script>
+  <!-- Flatpickr TH -->
+  <script src="<?= base_url('public/cdn/flatpicker/js/flatpickr.min.js') ?>"></script>
 
 
 
   <!--- offline CDN --->
 
-  <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" /> <!-- Custom Loader CSS -->
-  
 
+
+  <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" />
+  <!-- Custom Loader CSS -->
   <link rel="stylesheet" href="<?= base_url('public/assets/css/component.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/nav_active.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/dropdown.css') ?>?v=<?= time(); ?>" />
@@ -62,37 +52,16 @@
       padding: 0;
     }
 
-    body {
+    /* body {
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       padding-top: 70px;
-    }
+    } */
 
-    #app-container {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      width: 100%;
-      margin: 0;
-    }
 
-    .content {
-      flex: 1;
-      
-      /* Makes the content section grow and take up available space */
-    }
-
-    .footer {
-      background-color: #f4f4f4;
-      text-align: center;
-      padding: 10px 0;
-      margin-top: auto;
-      /* Pushes the footer to the bottom */
-      width: 100%;
-      border-top: 1px solid #ddd;
-    }
+   
   </style>
 
 
@@ -150,36 +119,15 @@
     </form>
   </div>
 
-  <div id="app-container" class="row mt-4">
-    <div class="col-12">
-      <div class="content">
 
         <?= $layout['content'] ?>
         <?= $this->load->view('component/toast_alert', [], true); ?>
-      </div> <!-- Footer -->
-    </div>
-  </div>
+      
 
-  <footer class="footer mt-auto py-3 bg-light">
-    <div class="container text-center">
-      <p>ฝ่ายบริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
-      <p>สำนักวิทยบริการและเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครปฐม</p>
-      <p>&copy; 2019 ARIT LibraryNPRU</p>
-    </div>
-  </footer>
-
+  
 
   <?= $layout['notice'] ? $layout['notice'] : '' ?>
-  <!-- jQuery -->
-  <script src="<?= base_url('public/cdn/jQuery/jquery-3.6.0.min.js') ?>"></script>
-
-  <script src="<?= base_url('public/assets/js/dropdown.js') ?>"></script>
-
-
-
-
-
-  <!-- Custom Scripts -->
+    <?= $layout['footer'] ?>
 
   <script>
     // Page loading animation

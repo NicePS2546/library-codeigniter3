@@ -135,6 +135,52 @@ class CI_Controller
 
 		return $this->view("Template/main/Layout", $data);
 	}
+
+	public function AdminRender($view, $data)
+	{
+		$type = $this->get_type();
+		$this->check_expire_music(); // check expire for music
+		$this->check_expire_vdo(); // check expire for music
+		$this->check_expire_mini(); // check expire for music
+
+		// Layout structure
+		$layout = [
+			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
+			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
+			'content' => $this->view($view, $data,true), // Return content as string
+		];
+
+		$current_url = $this->getCurrentUrl();
+		$current_date = date("Y-m-d H:i");
+		$page = [
+			'music' => $current_url == base_url('index.php/music'),
+			'vdo' => $current_url == base_url('index.php/vdo'),
+			'mini' => $current_url == base_url('index.php/mini'),
+			'index'=> $current_url == base_url()
+		];
+		
+		$stage = $this->config->item('stage');
+		if($stage == "Development"){
+			$currentTime = $this->config->item('fixed_time');
+		}else{
+			$currentTime = date("H:i");
+		}
+		
+		$day = getDay($current_date);
+		if($day == "Saturday"){
+			$layout['notice'] = $this->view('component/holiday', [], true);
+		}else if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', [], true);
+		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', [], true);
+		}
+		// Merge the layout data with the original data
+		$data['layout'] = $layout;
+
+		return $this->view("Template/Admin/Layout", $data);
+	}
+
+
 	public function TestRender($view, $data)
 	{
 		$type = $this->get_type();
