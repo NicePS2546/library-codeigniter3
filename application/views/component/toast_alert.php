@@ -19,8 +19,8 @@ if ($this->session->flashdata('error')) {
   $status = 'success';
   $message = $this->session->flashdata('success');
 }
-$message = "ข้อความการแจ้งเตือน";
-$status = 'error';
+// $message = "ข้อความการแจ้งเตือน";
+// $status = 'error';
 ?>
 
 <!-- <div id="toast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; ">

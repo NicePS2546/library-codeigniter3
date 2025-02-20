@@ -13,11 +13,11 @@
       data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
       aria-label="Toggle navigation">
       <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
 
     </button>
 
@@ -59,7 +59,7 @@
               href="<?= base_url() ?>index.php/admin/debug">Admin Panel</a>
 
           <?php } ?>
-          <div class="dropdown custom-dropdown">
+          <!-- <div class="dropdown custom-dropdown">
             <a href="#" data-toggle="dropdown" class="align-items-center d-flex  dropdown-link " aria-haspopup="true"
               aria-expanded="false" data-offset="-70, 20">
               Menu
@@ -78,8 +78,20 @@
               <a class="dropdown-item" href="#"><span class="icon icon-security"></span>Security</a>
               <a class="dropdown-item" href="#"><span class="icon icon-featured_play_list"></span>Terms of service</a>
             </div>
+          </div> -->
+          <div class="dropdown show">
+            <a class="btn  dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <?= $userinfo['fullname'] ?>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <?php if($admin_info){
+              echo '<a class="dropdown-item btn btn-primary" href="'.base_url('index.php/admin').'">หน้า Admin</a>';
+              } ?>  
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="<?= base_url('index.php/sso/logout') ?>">ออกจากระบบ</a>
+            </div>
           </div>
-
 
         <?php } else { ?>
           <button class="btn my-auto btn-primary btn-login" style="width:100px" data-bs-toggle="modal"

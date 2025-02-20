@@ -97,6 +97,9 @@ $route['sso/logout'] = 'SSO/logout';
 $route['test/sweet'] = 'test/testSweet';
 $route['test/sweet2'] = 'Test/sweet2';
 
+//Admin
+$route['admin'] = 'Admin/index';
+$route['admin/test'] = 'Admin/test';
 
     
 

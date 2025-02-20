@@ -57,16 +57,20 @@ class SSO extends CI_Controller
                 ldap_close($ds);
                 $this->session->set_flashdata('error', 'LDAP search failed.');
                 redirect('/');
+                return;
             }
 
             // Get LDAP entries
             $info = ldap_get_entries($ds, $sr);
             ldap_close($ds);
 
-            if ($info['count'] === 0) {
-                $this->session->set_flashdata('error', 'รหัสผู้ใช้งานหรือรหัสผ่านผิด');
-                redirect('/');
-            }
+            if ($info['count'] == 1 ) {
+                if(ldap_bind($ds,$info[0]['dn'],$password)){
+                    $this->session->set_flashdata('error', 'รหัสผู้ใช้งานหรือรหัสผ่านผิด');
+                    redirect('/');
+            }else{
+
+            
 
             // Extract user information
             $fullname = isset($info[0]['cn'][0]) ? $info[0]['cn'][0] : 'Unknown';
@@ -126,7 +130,8 @@ class SSO extends CI_Controller
 
 
             redirect(base_url());
-
+        }
+    }
         } else {
             $this->session->set_userdata([
                 'userData' => [
@@ -153,7 +158,7 @@ class SSO extends CI_Controller
     {
         // Clear all session data
         $this->session->sess_destroy();
-
+        $this->session->set_flashdata('success', "ออกจากระบบสำเร็จ");
         // Redirect to the login or home page
         redirect('/'); // Replace 'login' with your desired route
     }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2025 at 07:31 PM
+-- Generation Time: Feb 20, 2025 at 10:13 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 5.6.33
 
@@ -43,6 +43,26 @@ INSERT INTO `tbn_admin` (`admin_id`, `user_id`, `admin_status`, `admin_desc`) VA
 (1, '654230003', 1, NULL),
 (2, 'keng_milkcafe', 1, NULL),
 (3, '654230015', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbn_mini_reserv`
+--
+
+CREATE TABLE `tbn_mini_reserv` (
+  `reserv_id` int(11) NOT NULL,
+  `st_id` varchar(100) NOT NULL,
+  `r_id` int(11) NOT NULL,
+  `total_pp` int(3) NOT NULL,
+  `start_time` time NOT NULL,
+  `exp_time` time NOT NULL,
+  `r_date` date NOT NULL,
+  `r_status` enum('actived','expired') NOT NULL DEFAULT 'actived',
+  `r_verify` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -114,7 +134,24 @@ INSERT INTO `tbn_music_reserv` (`reserv_id`, `st_id`, `r_id`, `total_pp`, `start
 (43, '654230003', 2, 5, '10:00:00', '11:00:00', '2025-01-20', 'expired', 0, '2025-01-20 21:16:16', '2025-01-20 21:16:16'),
 (44, '654230015', 2, 6, '10:00:00', '11:00:00', '2025-01-27', 'expired', 0, '2025-01-27 20:13:47', '2025-01-27 20:13:47'),
 (45, '654230015', 2, 5, '10:00:00', '11:00:00', '2025-01-31', 'expired', 0, '2025-01-31 12:16:36', '2025-01-31 12:16:36'),
-(46, '654230015', 2, 4, '11:00:00', '12:00:00', '2025-02-02', 'actived', 0, '2025-02-02 00:51:59', '2025-02-02 00:51:59');
+(46, '654230015', 2, 4, '11:00:00', '12:00:00', '2025-02-02', 'expired', 0, '2025-02-02 00:51:59', '2025-02-02 00:51:59'),
+(47, '654230015', 2, 6, '13:00:00', '14:00:00', '2025-02-03', 'expired', 0, '2025-02-03 13:19:11', '2025-02-03 13:19:11'),
+(48, '654230015', 2, 5, '13:00:00', '14:00:00', '2025-02-03', 'expired', 0, '2025-02-03 13:25:23', '2025-02-03 13:25:23'),
+(49, '654230015', 2, 5, '15:00:00', '16:00:00', '2025-02-03', 'expired', 0, '2025-02-03 15:47:17', '2025-02-03 15:47:17'),
+(50, '654230015', 2, 5, '15:00:00', '16:00:00', '2025-02-03', 'expired', 0, '2025-02-03 15:59:35', '2025-02-03 15:59:35'),
+(51, '654230003', 2, 4, '13:00:00', '14:00:00', '2025-02-03', 'expired', 0, '2025-02-03 16:01:22', '2025-02-03 16:01:22'),
+(52, '654230015', 2, 5, '09:00:00', '10:00:00', '2025-02-06', 'expired', 0, '2025-02-06 09:35:03', '2025-02-06 09:35:03'),
+(53, '654230001', 2, 4, '10:00:00', '11:00:00', '2025-02-06', 'expired', 0, '2025-02-06 09:38:23', '2025-02-06 09:38:23'),
+(54, '654230003', 5, 5, '09:00:00', '10:00:00', '2025-02-06', 'expired', 0, '2025-02-06 09:39:03', '2025-02-06 09:39:03'),
+(55, '654230044', 2, 4, '11:00:00', '12:00:00', '2025-02-06', 'expired', 0, '2025-02-06 09:47:37', '2025-02-06 09:47:37'),
+(56, '654230015', 2, 5, '10:00:00', '11:00:00', '2025-02-06', 'expired', 0, '2025-02-06 10:04:51', '2025-02-06 10:04:51'),
+(57, '654230003', 5, 6, '10:00:00', '11:00:00', '2025-02-06', 'expired', 0, '2025-02-06 10:05:06', '2025-02-06 10:05:06'),
+(58, '654230003', 2, 4, '15:00:00', '16:00:00', '2025-02-06', 'expired', 0, '2025-02-06 15:02:12', '2025-02-06 15:02:12'),
+(59, '654230015', 2, 5, '09:00:00', '10:00:00', '2025-02-13', 'expired', 0, '2025-02-13 08:53:51', '2025-02-13 08:53:51'),
+(60, '654230041', 2, 5, '10:00:00', '11:00:00', '2025-02-13', 'expired', 0, '2025-02-13 10:11:36', '2025-02-13 10:11:36'),
+(61, '654230015', 2, 5, '10:00:00', '11:00:00', '2025-02-13', 'expired', 0, '2025-02-13 10:24:35', '2025-02-13 10:24:35'),
+(62, '654230015', 2, 5, '11:00:00', '12:00:00', '2025-02-13', 'expired', 0, '2025-02-13 11:11:37', '2025-02-13 11:11:37'),
+(63, '654230015', 2, 4, '14:00:00', '15:00:00', '2025-02-13', 'expired', 0, '2025-02-13 14:03:22', '2025-02-13 14:03:22');
 
 -- --------------------------------------------------------
 
@@ -145,6 +182,13 @@ CREATE TABLE `tbn_room_mini` (
   `r_type` int(3) NOT NULL DEFAULT '3',
   `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbn_room_mini`
+--
+
+INSERT INTO `tbn_room_mini` (`r_id`, `r_number`, `r_status`, `r_desc`, `r_close_desc`, `r_img`, `r_type`, `created_at`) VALUES
+(1, 1, 1, 'ลงทะเบียนเข้าใช้งาน 10 คนขึ้นไป', '', 0, 3, '2025-02-06 09:51:05');
 
 -- --------------------------------------------------------
 
@@ -186,7 +230,7 @@ CREATE TABLE `tbn_room_vdo` (
   `r_status` tinyint(1) NOT NULL,
   `r_desc` varchar(100) NOT NULL,
   `r_close_desc` text NOT NULL,
-  `r_img` text NOT NULL,
+  `r_img` varchar(100) NOT NULL DEFAULT 'vdo/default.png',
   `r_type` int(3) NOT NULL DEFAULT '2',
   `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -196,10 +240,35 @@ CREATE TABLE `tbn_room_vdo` (
 --
 
 INSERT INTO `tbn_room_vdo` (`r_id`, `r_number`, `r_status`, `r_desc`, `r_close_desc`, `r_img`, `r_type`, `created_at`) VALUES
-(1, 11, 1, '1', '', '', 2, '2025-01-09 09:29:31'),
-(2, 1, 1, 'test', '', '', 2, '2025-01-15 01:19:17'),
-(3, 114, 1, '4', '', '', 2, '2025-01-18 21:47:00'),
-(4, 47, 1, '4', '', '', 2, '2025-01-18 21:47:09');
+(1, 5, 1, '1', '', 'vdo/default.png	', 2, '2025-01-09 09:29:31'),
+(2, 1, 1, 'test', '', 'vdo/default.png	', 2, '2025-01-15 01:19:17'),
+(3, 7, 1, '4', '', 'vdo/default.png	', 2, '2025-01-18 21:47:00'),
+(4, 8, 1, '4', '', 'vdo/default.png	', 2, '2025-01-18 21:47:09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbn_statistic`
+--
+
+CREATE TABLE `tbn_statistic` (
+  `id` int(11) NOT NULL,
+  `stat_date` date NOT NULL,
+  `total_users` int(11) NOT NULL DEFAULT '0',
+  `total_reservations` int(11) NOT NULL DEFAULT '0',
+  `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `service_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbn_statistic`
+--
+
+INSERT INTO `tbn_statistic` (`id`, `stat_date`, `total_users`, `total_reservations`, `last_update`, `service_id`) VALUES
+(1, '2025-02-06', 10, 2, '2025-02-06 08:46:21', 2),
+(2, '2025-02-06', 4, 1, '2025-02-06 08:02:12', 1),
+(3, '2025-02-13', 24, 5, '2025-02-13 07:03:22', 1),
+(4, '2025-02-13', 10, 2, '2025-02-13 04:55:33', 2);
 
 -- --------------------------------------------------------
 
@@ -221,7 +290,8 @@ CREATE TABLE `tbn_time_slot_settings` (
 
 INSERT INTO `tbn_time_slot_settings` (`t_id`, `s_id`, `start_time`, `end_time`, `interval_hours`) VALUES
 (1, 2, '09:00:00', '16:00:00', 3),
-(2, 1, '09:00:00', '16:00:00', 1);
+(2, 1, '09:00:00', '16:00:00', 1),
+(3, 3, '09:00:00', '16:00:00', 3);
 
 -- --------------------------------------------------------
 
@@ -269,7 +339,11 @@ CREATE TABLE `tbn_vdo_reserv` (
 --
 
 INSERT INTO `tbn_vdo_reserv` (`reserv_id`, `st_id`, `r_id`, `s_id`, `total_pp`, `start_time`, `exp_time`, `r_date`, `r_status`, `r_verify`, `created_at`, `update_at`) VALUES
-(1, '654230015', 1, 9997, 1, '09:00:00', '12:00:00', '2025-02-02', 'actived', 0, '2025-02-02 00:39:59', '2025-02-02 00:39:59');
+(1, '654230015', 1, 9997, 1, '09:00:00', '12:00:00', '2025-02-02', 'expired', 0, '2025-02-02 00:39:59', '2025-02-02 00:39:59'),
+(3, '654230015', 2, 9997, 5, '15:00:00', '16:00:00', '2025-02-06', 'expired', 0, '2025-02-06 15:00:51', '2025-02-06 15:00:51'),
+(4, '654230044', 3, 9998, 5, '15:00:00', '16:00:00', '2025-02-06', 'expired', 0, '2025-02-06 15:46:21', '2025-02-06 15:46:21'),
+(5, '654230041', 2, 9997, 5, '09:00:00', '12:00:00', '2025-02-13', 'expired', 0, '2025-02-13 11:13:48', '2025-02-13 11:13:48'),
+(6, '654230053', 1, 9999, 5, '09:00:00', '12:00:00', '2025-02-13', 'expired', 0, '2025-02-13 11:55:33', '2025-02-13 11:55:33');
 
 -- --------------------------------------------------------
 
@@ -291,8 +365,8 @@ CREATE TABLE `tbn_vdo_services` (
 --
 
 INSERT INTO `tbn_vdo_services` (`service_id`, `s_type`, `name_TH`, `name_EN`, `s_picture`, `s_desc`) VALUES
-(9997, 'DVD', 'สตรีมมิ่งออนไลน์', 'Disney+', 'default_picture.png', NULL),
-(9998, 'DVD', 'ดิสนีย์+', 'Sreaming Online', 'default_picture.png', NULL),
+(9997, 'DVD', 'สตรีมมิ่งออนไลน์', 'Sreaming Online', 'default_picture.png', NULL),
+(9998, 'DVD', 'ดิสนีย์+', 'Disney+', 'default_picture.png', NULL),
 (9999, 'DVD', 'เน็ตฟลิกซ์', 'Netflix', 'default_picture.png', NULL);
 
 --
@@ -330,6 +404,12 @@ ALTER TABLE `tbn_room_vdo`
   ADD PRIMARY KEY (`r_id`);
 
 --
+-- Indexes for table `tbn_statistic`
+--
+ALTER TABLE `tbn_statistic`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbn_time_slot_settings`
 --
 ALTER TABLE `tbn_time_slot_settings`
@@ -348,6 +428,12 @@ ALTER TABLE `tbn_vdo_reserv`
   ADD PRIMARY KEY (`reserv_id`);
 
 --
+-- Indexes for table `tbn_vdo_services`
+--
+ALTER TABLE `tbn_vdo_services`
+  ADD PRIMARY KEY (`service_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -361,13 +447,13 @@ ALTER TABLE `tbn_admin`
 -- AUTO_INCREMENT for table `tbn_music_reserv`
 --
 ALTER TABLE `tbn_music_reserv`
-  MODIFY `reserv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `reserv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `tbn_room_mini`
 --
 ALTER TABLE `tbn_room_mini`
-  MODIFY `r_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `r_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbn_room_music`
@@ -382,10 +468,16 @@ ALTER TABLE `tbn_room_vdo`
   MODIFY `r_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `tbn_statistic`
+--
+ALTER TABLE `tbn_statistic`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `tbn_time_slot_settings`
 --
 ALTER TABLE `tbn_time_slot_settings`
-  MODIFY `t_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `t_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbn_type`
@@ -397,7 +489,7 @@ ALTER TABLE `tbn_type`
 -- AUTO_INCREMENT for table `tbn_vdo_reserv`
 --
 ALTER TABLE `tbn_vdo_reserv`
-  MODIFY `reserv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `reserv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

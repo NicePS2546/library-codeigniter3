@@ -146,18 +146,23 @@ class CI_Controller
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
-			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
-			'content' => $this->view($view, $data,true), // Return content as string
+
+			'header' => $this->view('Template/admin/Header', [],true), // Return navbar as string
+			'navbar' => $this->view('Template/admin/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
+			'sidebar' => $this->view('Template/admin/Sidebar', [],true), // Return content as string,
+			'content' => $this->view($view, $data,true), // Return content as string,
+			'footer'=>$this->view('Template/admin/Footer',[],true)
 		];
 
 		$current_url = $this->getCurrentUrl();
-		$current_date = date("Y-m-d H:i");
-		$page = [
-			'music' => $current_url == base_url('index.php/music'),
-			'vdo' => $current_url == base_url('index.php/vdo'),
-			'mini' => $current_url == base_url('index.php/mini'),
-			'index'=> $current_url == base_url()
-		];
+		// $current_date = date("Y-m-d H:i");
+
+		// $page = [
+		// 	'music' => $current_url == base_url('index.php/music'),
+		// 	'vdo' => $current_url == base_url('index.php/vdo'),
+		// 	'mini' => $current_url == base_url('index.php/mini'),
+		// 	'index'=> $current_url == base_url()
+		// ];
 		
 		$stage = $this->config->item('stage');
 		if($stage == "Development"){
@@ -166,14 +171,14 @@ class CI_Controller
 			$currentTime = date("H:i");
 		}
 		
-		$day = getDay($current_date);
-		if($day == "Saturday"){
-			$layout['notice'] = $this->view('component/holiday', [], true);
-		}else if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
-			$layout['notice'] = $this->view('component/not_in_time', [], true);
-		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
-			$layout['notice'] = $this->view('component/not_in_time', [], true);
-		}
+		// $day = getDay($current_date);
+		// if($day == "Saturday"){
+		// 	$layout['notice'] = $this->view('component/holiday', [], true);
+		// }else if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+		// 	$layout['notice'] = $this->view('component/not_in_time', [], true);
+		// } else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+		// 	$layout['notice'] = $this->view('component/not_in_time', [], true);
+		// }
 		// Merge the layout data with the original data
 		$data['layout'] = $layout;
 
@@ -280,8 +285,8 @@ public function get_all_time($s_id){
 	$this->load->model('Time_Setting_Model');
 	$time_setting_Model = $this->Time_Setting_Model;
 	$time_data = $time_setting_Model->getTimeByS_Id($s_id);
-	$allSlots = generateTimeSlots($time_data['start_time'],$time_data['end_time'],$time_data['interval_hours']);
-	return $allSlots;
+	return generateTimeSlots($time_data['start_time'],$time_data['end_time'],$time_data['interval_hours']);
+	 
 }
 public function get_user_sso_by_id($id)
 {

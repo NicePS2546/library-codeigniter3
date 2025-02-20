@@ -34,21 +34,12 @@
   <!--- offline CDN --->
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="<?= base_url('public/cdn/boostrap5_3_0/css/bootstrap.min.css') ?>">
-  <!-- Bootstrap JS -->
-  <script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js') ?>"></script>
-
-
-
-
-
   <!--- offline CDN --->
 
   <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" /> <!-- Custom Loader CSS -->
-  
-
+  <script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js') ?>"></script>
   <link rel="stylesheet" href="<?= base_url('public/assets/css/component.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/nav_active.css') ?>?v=<?= time(); ?>" />
-  <link rel="stylesheet" href="<?= base_url('public/assets/css/dropdown.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/fonts/icomoon/style.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/cdn/animated.css') ?>" />
   <script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
@@ -172,8 +163,11 @@
   <?= $layout['notice'] ? $layout['notice'] : '' ?>
   <!-- jQuery -->
   <script src="<?= base_url('public/cdn/jQuery/jquery-3.6.0.min.js') ?>"></script>
+  <script src="<?= base_url('public/cdn/popper.min.js') ?>"></script>
+  <script src="<?= base_url('public/cdn/boostrap5_3_0/js/boostrap.min.js') ?>"></script>
 
-  <script src="<?= base_url('public/assets/js/dropdown.js') ?>"></script>
+
+
 
 
 
