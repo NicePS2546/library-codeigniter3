@@ -109,8 +109,8 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 <div class="info-box">
     <div class="info-box-content title-container">
         <span class="info-box-text font-title"><?= $title ?></span>
-        <button class="btn my-auto btn-primary" style="width:100px" data-bs-toggle="modal"
-            data-bs-target="#exampleModal">เข้าสู่ระบบ</button>
+        <button class="btn my-auto btn-primary" style="width:120px" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">เพิ่มแอดมิน</button>
 
     </div>
 </div>
@@ -155,7 +155,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
                         </div>
                         <div>
                             <label for="st_id">รหัสผู้ใช้</label>
-                            <input type="text" placeholder="โปรดใส่รหัสนักศึกษา" name="uid" class="form-control my-2"
+                            <input type="text" placeholder="โปรดใส่รหัสผู้ใช้" name="uid" class="form-control my-2"
                                 id="st_id1">
                         </div>
                         <div id="results" class="mt-3">
@@ -368,10 +368,10 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
                         // Check the message from the API response
                         if (data.message == "Success") {
                             // Display the full name if successful
-                            output = `<p class="card border-success py-2 px-2 w-50 d-flex align-items-center text-center">${results.fullname}</p>`;
+                            output = `<p class="card border-success py-2 px-2 w-75 d-flex align-items-center text-center">${results.fullname}</p>`;
                         } else if (data.message == "fail") {
                             // Show message if no results
-                            output = '<div class="card border-danger text-center py-2 px-2 w-50"><div>ไม่เจอผู้ใช้ในระบบ <a href="https://sso.npru.ac.th/">สมัครตรงนี้</a></div></div>';
+                            output = '<div class="card border-danger text-center py-2 px-2 w-75"><div>ไม่เจอผู้ใช้ในระบบ <a href="https://sso.npru.ac.th/">สมัครตรงนี้</a></div></div>';
                         }
 
                         // Display the results in the result div

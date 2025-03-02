@@ -3,7 +3,7 @@
 ?>
 
 <div class="d-flex  justify-content-center align-items-center gap-2 ">
-            <button href="<?= base_url("index.php/admin/edit/admin_data/". $row['user_id'] ) ?>" class="btn custom-btn btn-primary">
+            <button data-admin-id="<?= $row['admin_id']; ?>" class="btn custom-btn btn-primary">
                 แก้ไข
             </button>
 

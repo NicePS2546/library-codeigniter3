@@ -69,7 +69,7 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>
-                    Widgets
+                    สถิติ
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>

@@ -338,6 +338,22 @@ class Admin extends CI_Controller
             'admin_status'=>1,
             'role'=>'ผู้ดูแล'
         ];
+        $existing_admin = $model->get_admin($uid);
+        if($existing_admin) {
+            $sweet = '<script>
+                setTimeout(function() {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "มีผู้ดูแลอยู่แล้ว",
+                        showConfirmButton: true,
+                    }).then(function(){
+                        window.location = "' . base_url() . $extension . 'admin/admin_data"; 
+                    });
+                }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'Admin Data', 'admin');
+        }
 
         $result = $model->insert_data($data);
         if($result){
@@ -353,7 +369,6 @@ class Admin extends CI_Controller
                 });
             }, 1000);
             </script>';
-           
         }else{
             $sweet = '<script>
             setTimeout(function() {
