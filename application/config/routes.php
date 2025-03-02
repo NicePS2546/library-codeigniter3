@@ -87,8 +87,10 @@ $route['vdo/check/(:num)'] = 'vdo/checkReserv/$1';
 $route['mini'] = 'mini/index';
 $route['mini/reserv/(:num)'] = 'mini/reserv_page/$1';
 $route['mini/check/(:num)'] = 'mini/checkReserv/$1';
+$route['mini/join/(:num)'] = 'mini/join_page/$1';
+$route['mini/join/submit'] = 'mini/join';
 $route['mini/time/(:num)'] = 'mini/get_availible_slots/$1';
-$route['music/reserv/submit'] = 'mini/reserv';
+
 
 
 // SSO
@@ -116,6 +118,14 @@ $route['admin/edit/reserv/music/(:num)'] = 'Admin/edit_reserv_music/$1';
 $route['admin/edit/reserv/vdo/(:num)'] = 'Admin/edit_reserv_vdo/$1';
 $route['admin/edit/reserv/mini/(:num)'] = 'Admin/edit_reserv_mini/$1';
 
+$route['admin/view/music'] = 'Admin/view_music';
+$route['admin/view/vdo'] = 'Admin/view_vdo';
+$route['admin/view/mini'] = 'Admin/view_mini';
+
+$route['admin/data'] = 'Admin/admin_data';
+$route['admin/add/submit'] = 'Admin/add_admin';
+$route['admin/suspend/(:any)'] = 'Admin/suspend_admin/$1';
+$route['admin/active/(:any)'] = 'Admin/active_admin/$1';
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';
 $route['online/remove/user'] = 'OnlineUser/remove';

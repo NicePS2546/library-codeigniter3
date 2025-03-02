@@ -24,17 +24,41 @@ class MiniModel extends CI_Model
         // Return the reserved slots as an array
         return $query->result_array();
     }
-    public function get_reserved($id,$status){
-        $this->db->select('tbn_room_music.r_number, tbn_mini_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_mini_reserv', 'tbn_room_music.r_id = tbn_mini_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
-        $this->db->where('tbn_mini_reserv.r_status',$status);
-        $this->db->where('tbn_room_music.r_id', $id);
+    public function get_reserved($id, $status)
+    {
+        $this->db->select('tbn_room_mini.r_number, tbn_mini_reserv.*');
+        $this->db->from('tbn_room_mini');
+        $this->db->join('tbn_mini_reserv', 'tbn_room_mini.r_id = tbn_mini_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_mini_reserv.r_status', $status);
+        $this->db->where('tbn_room_mini.r_id', $id);
         $query = $this->db->get();
 
-    return $query->result_array(); // Returns the result as an array
-    
+        return $query->result_array(); // Returns the result as an array
+
     }
+    
+
+    public function get_reserved_row_view($id,$reserved_id)
+    {
+        $this->db->select('tbn_room_mini.r_number, tbn_mini_reserv.*');
+        $this->db->from('tbn_room_mini');
+        $this->db->join('tbn_mini_reserv', 'tbn_room_mini.r_id = tbn_mini_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_mini_reserv.reserv_id', $reserved_id);
+        $this->db->where('tbn_room_mini.r_id', $id);
+        $query = $this->db->get();
+        return $query->row_array(); // Returns the result as an array
+
+    }
+
+    
+    
+    public function get_reserved_sole($id){
+        $this->db->where('reserv_id', $id);
+        $query = $this->db->get($this->table);
+        return $query->row_array(); // Returns the result as an array
+
+    }
+
     public function check_duplicate($st_id)
     {
         $this->db->select('*');
@@ -74,7 +98,7 @@ class MiniModel extends CI_Model
         // Set the timezone to Bangkok, Thailand
         // Extract the current date from the datetime
         $currentDate = date('Y-m-d', strtotime($currentDateTime));
-        
+
         // Hardcoded current time for testing
         $currentTime = date('H:i');
 
@@ -82,9 +106,9 @@ class MiniModel extends CI_Model
 
         if ($stage == "Development") {
             $currentTime = $this->config->item('fixed_time');
-        } 
-           
-        
+        }
+
+
 
 
 
@@ -147,7 +171,7 @@ class MiniModel extends CI_Model
             'r_status' => 'expired',
         ];
         $this->db->where('reserv_id', $reservationId);  // Use the correct column name
-       return $this->db->update('tbn_mini_reserv', $data);  // Update the status to expired
+        return $this->db->update('tbn_mini_reserv', $data);  // Update the status to expired
     }
 
     public function expire_reserv($rows)
@@ -161,20 +185,21 @@ class MiniModel extends CI_Model
     }
 
 
-    protected function get_closest_available_slot($allSlots,  $currentTime) {
+    protected function get_closest_available_slot($allSlots, $currentTime)
+    {
         $closestSlot = null;
         $smallestDiff = PHP_INT_MAX;
-    
+
         $currentTimestamp = strtotime($currentTime);
-    
+
         foreach ($allSlots as $slot) {
             list($startTime, $endTime) = explode('-', $slot);
             $slotStartTimestamp = strtotime($startTime);
-    
+
             // Check if the slot is in the future
             if ($slotStartTimestamp >= $currentTimestamp) {
                 $timeDiff = $slotStartTimestamp - $currentTimestamp;
-    
+
                 // Update if this slot is closer than the previously found closest
                 if ($timeDiff < $smallestDiff) {
                     $smallestDiff = $timeDiff;
@@ -182,34 +207,34 @@ class MiniModel extends CI_Model
                 }
             }
         }
-    
-        return $closestSlot ;
+
+        return $closestSlot;
     }
-    
+
 
     // protected function get_closest_available_slot($allSlots, $reservedSlots, $currentTime)
     // {
     //     $closestSlot = null;
     //     $smallestDiff = PHP_INT_MAX; // Initialize with a large number
-    
+
     //     // Loop through all available slots
     //     foreach ($allSlots as $slot) {
     //         list($startTime, $endTime) = explode('-', $slot); // Split the time range
-    
+
     //         $currentTimestamp = strtotime($currentTime);
     //         $slotStartTimestamp = strtotime($startTime);
-    
+
     //         // Check if the available slot is in the future
     //         if ($currentTimestamp < $slotStartTimestamp) {
     //             // Check if the end time of any reserved slot matches the start time of this slot
     //             foreach ($reservedSlots as $reserved) {
     //                 $reservedEndTime = date('H:i', strtotime($reserved['exp_time']));
     //                 $reservedEndTimestamp = strtotime($reservedEndTime);
-    
+
     //                 // Calculate the time difference between reserved slot end and available slot start
     //                 if ($reservedEndTimestamp == $slotStartTimestamp) {
     //                     $timeDiff = abs($reservedEndTimestamp - $currentTimestamp); // Time difference in seconds
-    
+
     //                     // Update the closest slot if the time difference is smaller
     //                     if ($timeDiff < $smallestDiff) {
     //                         $smallestDiff = $timeDiff;
@@ -219,25 +244,26 @@ class MiniModel extends CI_Model
     //             }
     //         }
     //     }
-    
+
     //     return $closestSlot;
     // }
 
 
 
 
-    public function get_closest_time($r_id) {
+    public function get_closest_time($r_id)
+    {
         try {
-            $current_date = date('Y-m-d'); 
+            $current_date = date('Y-m-d');
             $stage = $this->config->item('stage');
-		if($stage == "Development"){
-			$current_time = $this->config->item('fixed_time');
-		}else{
-			$current_time = date("H:i");
-		}
+            if ($stage == "Development") {
+                $current_time = $this->config->item('fixed_time');
+            } else {
+                $current_time = date("H:i");
+            }
             // Get the reserved slots from the model
             $reservedSlots = $this->get_reserved_slots($current_date, $r_id);
-            
+
 
             // Define all possible slots
             // $allSlots = [
@@ -250,9 +276,9 @@ class MiniModel extends CI_Model
             //     '15:00-16:00',
             // ];
             $allSlots = $this->get_all_time(3);
-            
-            
-           
+
+
+
             $validSlots = array_filter($allSlots, function ($slot) use ($current_time) {
                 // Extract the end time of the slot
                 $parts = explode('-', $slot);
@@ -260,26 +286,46 @@ class MiniModel extends CI_Model
                 $end = $parts[1];
                 return $end > $current_time; // Keep only slots where the end time is in the future
             });
-            
+
             // Filter out the reserved slots from the valid slots
             $reservedSlotRanges = [];
             foreach ($reservedSlots as $slot) {
                 $reservedSlotRanges[] = date('H:i', strtotime($slot['start_time'])) . '-' . date('H:i', strtotime($slot['exp_time']));
             }
-            
+
             // Find available slots
             $availableSlots = array_diff($validSlots, $reservedSlotRanges);
-            
+
             // Find Closest time aviliable
-            $closest_time = $this->get_closest_available_slot($availableSlots,$current_time);
-            
-          return $closest_time;
+            $closest_time = $this->get_closest_available_slot($availableSlots, $current_time);
+
+            return $closest_time;
         } catch (Exception $e) {
             // Log the error message
             log_message('error', 'Error in fetch_available_slots: ' . $e->getMessage());
             // Return a JSON response with an error message
             echo $e->getMessage();
         }
+    }
+
+    public function get_all_reserved($status)
+    {
+        $this->db->select('tbn_room_mini.r_number, tbn_mini_reserv.*');
+        $this->db->from('tbn_room_mini');
+        $this->db->join('tbn_mini_reserv', 'tbn_room_mini.r_id = tbn_mini_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_mini_reserv.r_status', $status);
+        $query = $this->db->get();
+        return $query->result_array(); // Returns the result as an array
+    }
+
+    public function join_room($id)
+    {
+        $user = 1;
+        // Update the existing record
+        $this->db->set('total_pp', 'total_pp + ' . (int) $user, FALSE);
+        $this->db->where('reserv_id', $id);
+        return $this->db->update($this->table);
+
     }
 }
 

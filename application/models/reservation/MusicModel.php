@@ -43,6 +43,17 @@ class MusicModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }
+    public function get_reserved_row_view($id,$reserved_id)
+    {
+        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
+        $this->db->from('tbn_room_music');
+        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv.reserv_id', $reserved_id);
+        $this->db->where('tbn_room_music.r_id', $id);
+        $query = $this->db->get();
+        return $query->row_array(); // Returns the result as an array
+
+    }
 
     public function check_duplicate($st_id)
     {

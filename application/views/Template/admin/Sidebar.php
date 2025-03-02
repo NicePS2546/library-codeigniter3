@@ -30,11 +30,12 @@
             >
             <li class="nav-item">
                 <a href="<?= base_url('index.php/admin') ?>" class="nav-link <?= $page == "home" ? "active" :"" ?>">
-                <i class="bi bi-bar-chart"></i>
+               
+                <?= $page == "home" ? '<i class="bi bi-bar-chart-fill"></i>' : '<i class="bi bi-bar-chart"></i>' ?>  
                   <p>สถิติประจำวัน</p>
                 </a>
               </li>
-              <li class="nav-item <?= $page == "reserv_data" ? "menu-open" :"" ?>  ">
+              <li class="nav-item <?= $page == "reserv_data"  || $page == "admin_data"  ? "menu-open" :"" ?>  ">
                 <a href="#" class="nav-link ">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>
@@ -46,14 +47,14 @@
                   
                   <li class="nav-item">
                     <a href="<?= base_url('index.php/admin/check/reserv/music') ?>" class="nav-link <?= $page == "reserv_data" ? "active" :"" ?>">
-                      <i class="nav-icon bi bi-circle"></i>
+                    <?= $page == "reserv_data" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>  
                       <p>ข้อมูลการจอง</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="./index3.html" class="nav-link <?= $page == "" ? "active" :"" ?>">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v3</p>
+                    <a href="<?= base_url('index.php/admin/admin_data') ?>" class="nav-link <?= $page == "admin_data" ? "active" :"" ?>">
+                    <?= $page == "admin_data" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ข้อมูลผู้ดูแล</p>
                     </a>
                   </li>
                 </ul>

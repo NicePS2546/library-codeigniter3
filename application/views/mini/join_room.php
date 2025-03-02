@@ -37,8 +37,9 @@
 
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
-        <h1>จองห้อง</h1>
-        <form class="text-end" action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
+        <h1>เข้าร่วมห้อง</h1>
+       
+        <form class="text-end" action="<?php echo base_url('index.php/mini/join/submit'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
             <div class="card card-shadow">
@@ -118,7 +119,7 @@
                     data: { uid: query, reserv: 1 },
                     success: function (response) {
                         // Parse the JSON response
-                        const data = JSON.parse(response);
+                        const data = response;
                         console.log(data);
                         const results = data.userdata;
                         let output = '';

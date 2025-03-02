@@ -15,15 +15,25 @@ class AdminModel extends CI_Model
     public function get_all()
     {
         $query = $this->db->get($this->table);
-        return $query->result();
+        return $query->result_array();
     }
+    public function update_admin($id, $data)
+{
+    return $this->db->where('user_id', $id) // Find the record by ID
+                    ->update($this->table, $data); // Update the record with new data
+}
     public function get_admin($uid)
     {
-        return $this->db->where('user_id', $uid)->get($this->table)->row_array();
+       
+            return $this->db->where('user_id', $uid)
+                            ->where('admin_status', 1) // Add the second condition
+                            ->get($this->table)
+                            ->row_array();
+        
     }
+
     public function insert_data($data)
     {
-        $data['created'] = date('T-m-d H:i:s');
         return $this->db->insert($this->table, $data);
     }
 

@@ -226,6 +226,7 @@
 
 
   </script>
+
   <script>
 
     $(document).ready(function () {
@@ -300,6 +301,55 @@
     }</script>
    
 
+   <!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdown = document.querySelector('.dropdown-toggle');
+        const dropdownMenu = document.querySelector('#dropdownMenu');
+        const dropdownItems = dropdownMenu.querySelectorAll('.ani-dropdown');
+
+        // Remove the data-toggle attribute to stop Bootstrap's dropdown behavior
+        dropdown.removeAttribute('data-toggle');
+
+        // Toggle the dropdown manually
+        dropdown.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const isVisible = dropdownMenu.classList.contains('show');
+
+            // Close dropdown if already visible
+            if (isVisible) {
+                dropdownMenu.classList.remove('show');
+                dropdownItems.forEach((el) => {
+                    el.classList.remove('animate__animated', 'animate__fadeInUp', 'visible');
+                });
+            } else {
+                dropdownMenu.classList.add('show');
+                dropdownItems.forEach((el) => {
+                    el.classList.remove('animate__animated', 'animate__fadeInUp', 'visible');
+                    el.style.opacity = '0'; // Reset opacity before animation
+                });
+
+                // Animate each item with a delay
+                dropdownItems.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('animate__animated', 'animate__fadeInUp', 'visible');
+                    }, index * 300); // 300ms delay per item based on index
+                });
+            }
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', function (e) {
+            const target = e.target;
+            if (!dropdown.contains(target) && !dropdownMenu.contains(target)) {
+                dropdownMenu.classList.remove('show');
+                dropdownItems.forEach((el) => {
+                    el.classList.remove('animate__animated', 'animate__fadeInUp', 'visible');
+                });
+            }
+        });
+    });
+</script> -->
 </body>
 
 </html>

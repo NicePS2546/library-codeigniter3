@@ -194,7 +194,7 @@ class Mini extends CI_Controller
                     title: "จองห้องสำเร็จ!",
                     showConfirmButton: true,
                 }).then(function() {
-                    window.location = "' . base_url() . $extension . 'music/"; 
+                    window.location = "' . base_url() . $extension . 'mini/"; 
                 });
             }, 1000);
             </script>';
@@ -207,12 +207,12 @@ class Mini extends CI_Controller
                     title: "จองห้องไม่สำเร็จ",
                     showConfirmButton: true,
                 }).then(function() {
-                    window.location = "' . base_url() . $extension . 'music/reserv/' . $r_id . '"; 
+                    window.location = "' . base_url() . $extension . 'mini/reserv/' . $r_id . '"; 
                 });
             }, 1000);
             </script>';
         }
-        return $this->sweet($sweet, 'Music Reservation', 'music');
+        return $this->sweet($sweet, 'Mini-Theater Reservation', 'mini');
 
     }
     public function checkReserv($r_id)
@@ -354,5 +354,55 @@ class Mini extends CI_Controller
 
         return $closestSlot;
     }
+    public function join_page($id){
+        
+        $this->load->model('reservation/MiniModel');
+        $model = $this->MiniModel;
+        $row = $model->get_reserved_row($id);
+        return $this->Render('mini/join_room',[
+            'title'=>'Join Room',
+            'page'=>'mini',
+            'row' => $row,
+            'r_id'=>$id
+        ]);
+    }
 
+    public function join(){
+        $r_id = $this->input->post('r_id');
+        $extension = "index.php/";
+        $this->load->model('reservation/MiniModel');
+        $this->load->model('statistic/StatisticModel');
+        $statistic = $this->StatisticModel;
+        $model = $this->MiniModel;
+        $result = transaction($this->db,$model->join_room($r_id),$statistic->updateDailyStatistics(3 , 1, 0));
+        
+        if ($result) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "จองห้องสำเร็จ!",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'mini/"; 
+                });
+            }, 1000);
+            </script>';
+        } else {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "จองห้องไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'mini/join/' . $r_id . '"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Mini-Theater Reservation', 'mini');
+    }
 }

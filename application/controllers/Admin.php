@@ -50,7 +50,8 @@ class Admin extends CI_Controller
             'title'=>'ข้อมูลการจอง',
             'page'=>'reserv_data',
             'table'=>'music',
-            'rows'=>$rows
+            'rows'=>$rows,
+           
         ]);
     }
     public function reserv_vdo(){
@@ -71,12 +72,13 @@ class Admin extends CI_Controller
             'title'=>'ข้อมูลการจอง',
             'page'=>'reserv_data',
             'table'=>'vdo',
-            'rows'=>$rows
+            'rows'=>$rows,
+            
         ]);
     }
     public function reserv_mini(){
-        $this->load->model('reservation/VdoModel');
-        $model = $this->VdoModel;
+        $this->load->model('reservation/MiniModel');
+        $model = $this->MiniModel;
         $rows = $model->get_all_reserved('actived');
         foreach ($rows as $key => $reserved) {
             $u_data = $this->get_user_sso_by_id($reserved['st_id']);
@@ -92,7 +94,8 @@ class Admin extends CI_Controller
             'title'=>'ข้อมูลการจอง',
             'page'=>'reserv_data',
             'table'=>'mini',
-            'rows'=>$rows
+            'rows'=>$rows,
+            
         ]);
     }
     
@@ -210,4 +213,239 @@ class Admin extends CI_Controller
         
         echo $this->load->view('Template/admin/test',[],true);
     }
+
+    
+   
+    public function view_mini() {
+        $id = $this->input->post('id');
+        $reserv_id = $this->input->post('reserved_id');
+        
+        header('Content-Type: application/json'); // Ensure JSON response
+        
+        try {
+            $this->load->model('reservation/MiniModel');
+            $model = $this->MiniModel;
+            $row = $model->get_reserved_row_view($id,$reserv_id);
+
+            $u_data = $this->get_user_sso_by_id($row['st_id']);
+            // Ensure $u_data exists and has the expected structure
+            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+            // Store fullname in the correct entry inside the array
+            $row['fullname'] = $fullname;
+
+            
+            
+            if ($row) {
+                echo json_encode($row);
+            } else {
+                echo json_encode(['message' => "fail"]);
+            }
+        } catch (Exception $e) {
+            log_message('error', 'Error in view_mini: ' . $e->getMessage());
+            echo json_encode(['error' => 'An error occurred while fetching data.']);
+        }
+    
+        exit(); // Stop execution to prevent extra HTML output
+    }
+    public function view_vdo() {
+        $id = $this->input->post('id');
+        $reserv_id = $this->input->post('reserved_id');
+        
+        header('Content-Type: application/json'); // Ensure JSON response
+        
+        try {
+            $this->load->model('reservation/VdoModel');
+            $model = $this->VdoModel;
+            $row = $model->get_reserved_row_view($id,$reserv_id);
+
+            $u_data = $this->get_user_sso_by_id($row['st_id']);
+            // Ensure $u_data exists and has the expected structure
+            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+            // Store fullname in the correct entry inside the array
+            $row['fullname'] = $fullname;
+
+            if ($row) {
+                echo json_encode($row);
+            } else {
+                echo json_encode(['message' => "fail"]);
+            }
+        } catch (Exception $e) {
+            log_message('error', 'Error in view_mini: ' . $e->getMessage());
+            echo json_encode(['error' => 'An error occurred while fetching data.']);
+        }
+    
+        exit(); // Stop execution to prevent extra HTML output
+    }
+    public function view_music() {
+        $id = $this->input->post('id');
+        $reserv_id = $this->input->post('reserved_id');
+        
+        header('Content-Type: application/json'); // Ensure JSON response
+        
+        try {
+            $this->load->model('reservation/MusicModel');
+            $model = $this->MusicModel;
+            $row = $model->get_reserved_row_view($id,$reserv_id);
+
+            $u_data = $this->get_user_sso_by_id($row['st_id']);
+            // Ensure $u_data exists and has the expected structure
+            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+            // Store fullname in the correct entry inside the array
+            $row['fullname'] = $fullname;
+
+            
+            
+            if ($row) {
+                echo json_encode($row);
+            } else {
+                echo json_encode(['message' => "fail"]);
+            }
+        } catch (Exception $e) {
+            log_message('error', 'Error in view_mini: ' . $e->getMessage());
+            echo json_encode(['error' => 'An error occurred while fetching data.']);
+        }
+    
+        exit(); // Stop execution to prevent extra HTML output
+    }
+
+
+    public function admin_data (){
+        $model = $this->Model('','AdminModel',false);
+        $rows = $model->get_all();
+        foreach ($rows as $key => $reserved) {
+            $u_data = $this->get_user_sso_by_id($reserved['user_id']);
+            
+            // Ensure $u_data exists and has the expected structure
+            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+        
+            // Store fullname in the correct entry inside the array
+            $rows[$key]['fullname'] = $fullname;
+        }
+        return $this->AdminRender('admin/admin_data/page',[
+            'title'=>'ข้อมูลผู้ดูแล',
+            'page'=>'admin_data',
+            'table'=>'admin_data',
+            'rows'=>$rows,
+            
+        ]);
+    }
+    public function add_admin(){
+        $extension = 'index.php/';
+        $uid =  $this->post('uid');
+        $model = $this->Model('','AdminModel',false);
+        $data = [
+            'user_id'=>$uid,
+            'admin_status'=>1,
+            'role'=>'ผู้ดูแล'
+        ];
+
+        $result = $model->insert_data($data);
+        if($result){
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "เพิ่มผู้ดูแลสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/admin_data"; 
+                });
+            }, 1000);
+            </script>';
+           
+        }else{
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "เพิ่มผู้ดูแลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/admin_data"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Admin Data', 'admin');
+    }
+
+    public function suspend_admin($id){
+        $extension = 'index.php/';
+        $model = $this->Model('','AdminModel',false);
+        $data = [
+            'admin_status'=>0
+        ];
+        $result = $model->update_admin($id,$data);
+        if($result){
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "ปิดใช้งานผู้ดูแลสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/admin_data"; 
+                });
+            }, 1000);
+            </script>';
+           
+        }else{
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ปิดใช้งานผู้ดูแลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/admin_data"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Admin Data', 'admin');
+    
+    }
+    public function active_admin($id){
+        $extension = 'index.php/';
+        $model = $this->Model('','AdminModel',false);
+        $data = [
+            'admin_status'=>1
+        ];
+        $result = $model->update_admin($id,$data);
+        if($result){
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "เปิดใช้งานผู้ดูแลสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/admin_data"; 
+                });
+            }, 1000);
+            </script>';
+           
+        }else{
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "เปิดใช้งานผู้ดูแลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/admin_data"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Admin Data', 'admin');
+    
+    }
+    
 }

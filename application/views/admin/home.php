@@ -6,10 +6,7 @@ $mini = $statistic['mini'];
 
 ?>
 <style>
-  .font-title {
-    font-size: 32px;
-  }
-
+ 
   .fixed-height {
     min-height: 100vh;
   }
@@ -40,10 +37,12 @@ $mini = $statistic['mini'];
 <div class="col-md-12">
   <div class="info-box">
     <div class="info-box-content">
+      
       <span class="info-box-text font-title">สถิติประจำวัน</span>
     </div>
   </div>
 </div>
+
 <div class="row">
   <div class="<?= $card_res ?>">
     <div class="info-box">
@@ -188,7 +187,6 @@ $mini = $statistic['mini'];
 
  
 </script>
-
 
 
 

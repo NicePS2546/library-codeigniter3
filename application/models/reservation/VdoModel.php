@@ -45,6 +45,17 @@ class VdoModel extends CI_Model
 
         return $query->result_array();
     }
+    public function get_reserved_row_view($id,$reserved_id)
+    {
+        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
+        $this->db->from('tbn_room_vdo');
+        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
+        $this->db->where('tbn_vdo_reserv.reserv_id', $reserved_id);
+        $this->db->where('tbn_room_vdo.r_id', $id);
+        $query = $this->db->get();
+        return $query->row_array(); // Returns the result as an array
+
+    }
 
     public function check_duplicate($st_id)
     {

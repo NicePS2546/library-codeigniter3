@@ -287,6 +287,18 @@ public function get_all_time($s_id){
 	return generateTimeSlots($time_data['start_time'],$time_data['end_time'],$time_data['interval_hours']);
 	 
 }
+public function post($post){
+	return $this->input->post($post);
+}
+public function Model($path,$name,$usePath){
+	if($usePath){
+		$this->load->model("$path/$name");
+	}else{
+		$this->load->model($name);
+	}
+	
+	return $this->$name;
+}
 public function get_user_sso_by_id($id)
 {
 	// $this->db->where('u_stuid',$id);

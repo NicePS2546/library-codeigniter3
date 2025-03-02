@@ -80,13 +80,14 @@
             </div>
           </div> -->
           <div class="dropdown show">
-            <a class="btn  dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+            <a class="btn dropdown-toggle"  role="button" id="dropdownMenuLink"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <?= $userinfo['fullname'] ?>
             </a>
+
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <?php if($admin_info){
-              echo '<a class="dropdown-item btn btn-primary" href="'.base_url('index.php/admin').'">หน้า Admin</a>';
+              echo '<a class="dropdown-item " href="'.base_url('index.php/admin').'">หน้า Admin</a>';
               } ?>  
               <a class="dropdown-item" href="<?= base_url('index.php/user/history') ?>">ประวัติการจอง</a>
               <a class="dropdown-item" href="<?= base_url('index.php/sso/logout') ?>">ออกจากระบบ</a>
@@ -102,3 +103,4 @@
 </nav>
 
 <div class="margin-nav"></div>
+

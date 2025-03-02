@@ -9,3 +9,29 @@
 .btn-shadow {
     transition: all 250ms ease-in-out !important;
 }
+
+.custom-btn {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    transition: all 250ms ease-in-out !important; /* Unified transition duration */
+}
+
+.custom-btn:hover {
+    transform: translateY(-4px) !important; /* Moves card upwards */
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1) !important; /* Stronger shadow */
+}
+
+.title-container {
+    display: flex !important;
+    align-items: center !important;
+    /* Aligns items vertically */
+    justify-content: space-between !important;
+    /* Spaces title and button apart */
+    width: 100% !important;
+    /* Ensures full width */
+    flex-direction: row !important;
+    gap: 10px !important;
+    /* Adds spacing between title and button */
+}
+.font-title {
+    font-size: 32px;
+  }

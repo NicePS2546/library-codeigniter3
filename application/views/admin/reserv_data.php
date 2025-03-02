@@ -6,11 +6,10 @@ $mini = $statistic['mini'];
 $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 ?>
 
+
+
+
 <style>
-    .font-title {
-        font-size: 32px;
-        text-align: start;
-    }
 
     .fixed-height {
         min-height: 100vh;
@@ -72,16 +71,15 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 
     .info-box-icon {
         position: relative;
-        /* Needed for absolute positioning */
+        transition: all 0.5s ease-in-out;
     }
 
-    /* Tooltip text (hidden by default) */
+    
     .info-box-icon::after {
         content: attr(data-label);
-        /* Get text from data-label */
         position: absolute;
         bottom: 120%;
-        /* Position above button */
+       
         left: 50%;
         transform: translateX(-50%);
         background: rgba(0, 0, 0, 0.75);
@@ -95,10 +93,11 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
         transition: opacity 0.3s ease-in-out;
     }
 
-    /* Show tooltip on hover */
+   
     .info-box-icon:hover::after {
         opacity: 1;
         visibility: visible;
+        transition: all 0.5s ease-in-out;
     }
 </style>
 
@@ -156,7 +155,8 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
                     
                 </div> -->
 
-
+                <!-- Tooltip Example -->
+                
                 <a href="<?= base_url('index.php/admin/check/reserv/music') ?>" class="<?= $card_res ?> text-center">
                     <span class="info-box-icon text-bg-primary shadow-sm btn-shadow" data-label="Music-Relax">
                         <i class="bi bi-music-note-beamed"></i>
