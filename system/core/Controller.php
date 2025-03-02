@@ -145,11 +145,10 @@ class CI_Controller
 
 		// Layout structure
 		$layout = [
-			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
-
-			'header' => $this->view('Template/admin/Header', [],true), // Return navbar as string
+			  // Default title if not provided
+			'header' => $this->view('Template/admin/Header', ['title'=>$data['title']],true), // Return navbar as string
 			'navbar' => $this->view('Template/admin/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
-			'sidebar' => $this->view('Template/admin/Sidebar', [],true), // Return content as string,
+			'sidebar' => $this->view('Template/admin/Sidebar', ['title'=>$data['title']],true), // Return content as string,
 			'content' => $this->view($view, $data,true), // Return content as string,
 			'footer'=>$this->view('Template/admin/Footer',[],true)
 		];

@@ -4,91 +4,21 @@
 
 <style>
 
-.nav-link {
-    transition: transform ease-in-out 0.5s !important;
-  }
+  @media (min-width: 992px) and (max-width: 1199px) {
+    .col-lg-3 {
+        flex: 0 0 50%; /* 50% width for 2 cards in a row */
+        max-width: 50%;
+    }
+}
 
-  .nav-link:hover {
-    transform: scale(1.08) !important;
-    color: black !important;
-
-  }
-
-  .btn#modal {
-    transition: all 250ms ease-in-out !important;
-
-  }
-
-  .btn#modal:hover {
-    transform: scale(1.12) !important;
-    transition: all 250ms ease-in-out !important;
-  }
-
-  .navbar-nav {
-    margin: 0 auto !important;
+.info-box {
     display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-  }
-
-  .navbar-toggler {
-    margin-left: auto !important;
-    /* Push the hamburger icon to the right */
-  }
-
-  /* Optional: Custom styles if you want to tweak the appearance */
-  .modal-header {
-    background-color: #007bff !important;
-    color: white !important;
-  }
-
-  /* Adjust Login button spacing */
-  .btn-login {
-    margin-left: auto !important;
-    transition: transform 0.4s ease-in-out !important;
-  }
-
-  .btn-login:hover {
-    transform: scale(1.04) !important;
-
-  }
-
-  .btn-admin {
-    margin-left: auto !important;
-    transition: transform 0.4s ease-in-out !important;
-  }
-
-  .btn-admin:hover {
-    transform: scale(1.04) !important;
-
-  }
-
-  .shadow {
-    box-shadow: 20px !important;
-
-  }
-
-  .fixed-nav {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0;
-    z-index: 1030 !important;
-    /* Higher z-index to ensure it stays on top */
-    width: 100% !important;
-    /* Make sure the navbar spans the width of the viewport */
-    z-index: 1020 !important;
-    /* Ensures the navbar stays above other elements */
-    background-color: #f8f9fa !important;
-    /* Set a background color */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
-    /* Optional: Add a shadow for better visibility */
-  }
-
-
-
-
-  
+    align-items: center !important;
+    text-align: center !important;
+}
+.info-box-content {
+    flex-grow: 1 !important;
+}
     table#Table {
         border-collapse: separate;
         /* Separate borders for proper rounding */
@@ -99,7 +29,7 @@
         overflow: hidden;
         /* Ensures content respects the border-radius */
     }
-
+  
     table#Table thead th {
         text-align: center;
     }
@@ -129,38 +59,35 @@
         border-bottom-right-radius: 6px !important;
     }
 </style>
-<div class="container">
-    <?php if (!empty($rows)) {
-        ?>
 
+<div class="container">
         <div class="">
             <table class="table table-striped nowrap" style="width:100%" id="Table">
+                
                 <!-- <table class="table table-bordered" id="Table"> -->
-
                 <?php
+                echo $table;
                 if ($table === "music") {
-                    echo $this->load->view('component/table/music', ['rows' => $rows], true);
+                    echo $this->load->view('admin/reservation/music', ['rows' => $rows], true);
                 }else if($table === "vdo"){
-                  echo $this->load->view('component/table/vdo', ['rows' => $rows], true);
+                  echo $this->load->view('admin/reservation/vdo', ['rows' => $rows], true);
                 }else if($table === "mini"){
-                  echo $this->load->view('component/table/mini', ['rows' => $rows], true);
+                    echo $this->load->view('admin/reservation/mini', ['rows' => $rows], true);
                 } ?>
             </table>
         </div>
 
     </div>
-    <?php
-    } else {
-        echo $this->load->view('component/table/no_data', ['page' => 'music'], true);
-    } ?>
+   
+   
 
 <script src="<?= base_url('public/cdn/jQuery/jquery-3.7.1.js') ?>"></script>
 <script src="<?= base_url('public/cdn/dataTables.min.js') ?>"></script>
 <script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.bootstrap5.js')?>"></script>
 <script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.responsive.js')?>"></script>
 <script src="<?= base_url('public/cdn/dataTable/js/responsive/responsive.bootstrap5.js')?>"></script>
-
-
+<script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
+<link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
 
 <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
@@ -199,3 +126,39 @@
         location.reload();
     }, 60000);
 </script>
+<script>
+        // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2
+        function showDeleteConfirmation(id,name) {
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: 'คุณแน่ใจใช่ใหมว่าจะปิดห้องของ ' + name + '?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ปืด',
+                cancelButtonText: 'ยกเลิก',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '<?= base_url("index.php/admin/expire/reserv/$table/") ?>'+id;
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'id';
+                    input.value = id;
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+        // แนบตัวตรวจจับเหตุการณ์คลิกกับองค์ปุ่ มลบทั้งหมดที่มีคลาส delete-button
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const get_id = button.getAttribute('data-user-id');
+                const name = button.getAttribute('data-user-fullname');
+                showDeleteConfirmation(get_id,name);
+            });
+        });
+    </script>

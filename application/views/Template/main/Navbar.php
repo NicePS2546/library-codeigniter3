@@ -39,10 +39,10 @@
           <a class="nav-link <?= $page == "mini" ? "active" : '' ?>"
             href="<?= base_url() ?>index.php/mini"><?= $type['mini'] ?></a>
         </li>
-        <li class="nav-item <?= $page == "Debug" ? "active5" : '' ?>">
+        <!-- <li class="nav-item <?= $page == "Debug" ? "active5" : '' ?>">
           <a class="nav-link <?= $page == "Debug" ? "active" : '' ?>"
             href="<?= base_url() ?>index.php/admin/debug">Debugging</a>
-        </li>
+        </li> -->
         <div id="marker"></div>
       </ul>
       <!-- Login Button -->
@@ -55,8 +55,8 @@
 
             ?>
 
-            <a style="color:white; text-decoration: none; width: 150px;" class="btn btn-success"
-              href="<?= base_url() ?>index.php/admin/debug">Admin Panel</a>
+            <!-- <a style="color:white; text-decoration: none; width: 150px;" class="btn btn-success"
+              href="<?= base_url() ?>index.php/admin/debug">Admin Panel</a> -->
 
           <?php } ?>
           <!-- <div class="dropdown custom-dropdown">
@@ -88,7 +88,7 @@
             <?php if($admin_info){
               echo '<a class="dropdown-item btn btn-primary" href="'.base_url('index.php/admin').'">หน้า Admin</a>';
               } ?>  
-              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="<?= base_url('index.php/user/history') ?>">ประวัติการจอง</a>
               <a class="dropdown-item" href="<?= base_url('index.php/sso/logout') ?>">ออกจากระบบ</a>
             </div>
           </div>

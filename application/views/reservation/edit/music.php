@@ -36,7 +36,7 @@
         <form class="text-end" action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
-            <?= $this->load->view('reservation/form_content',[],true) ?>
+            <?= $this->load->view('reservation/edit/form_content',['row'=>$row],true) ?>
 
           
            

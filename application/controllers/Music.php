@@ -75,10 +75,11 @@ class Music extends CI_Controller
             'exp_time' => $exp_time,
             'r_date' => $currentDate,
             'r_status' => 'actived', // Status of the reservation
-            'r_verify' => 0,  // Verification flag (0 for unverified)
+            'r_verify' => 1,  // Verification flag (0 for unverified)
             'created_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s')
         ];
+        
         $sweet = '';
         $day = getDay(date("Y-m-d H:i"));
         if ($day == "Saturday") {
@@ -297,6 +298,7 @@ class Music extends CI_Controller
             $reservedSlots = $this->MusicModel->get_reserved_slots($current_date, $r_id);
 
 
+
             // Define all possible slots
             // $allSlots = [
             //     '09:00-10:00',
@@ -331,12 +333,27 @@ class Music extends CI_Controller
             $availableSlots = array_diff($validSlots, $reservedSlotRanges);
             $closest_time = $this->get_closest_available_slot($availableSlots, $reservedSlots, $current_time);
             // Return available slots as JSON
-            echo json_encode([
-                'availableSlots' => array_values($availableSlots), // Available slots
-                'rows_fromtable' => $reservedSlotRanges, // Reserved slots
-                'date' => $current_date,
-                'closest_time' => $closest_time
-            ]);
+
+            $day = getDay(date("Y-m-d H:i"));
+
+            if($day == "Saturday"){
+                echo json_encode([
+                    'availableSlots' => [], // Available slots
+                    'rows_fromtable' => $reservedSlotRanges, // Reserved slots
+                    'date' => $current_date,
+                    'closest_time' => $closest_time
+                ]);
+            }else{
+                echo json_encode([
+                    'availableSlots' => array_values($availableSlots), // Available slots
+                    'rows_fromtable' => $reservedSlotRanges, // Reserved slots
+                    'date' => $current_date,
+                    'closest_time' => $closest_time
+                ]);
+            }
+
+
+            
         } catch (Exception $e) {
             // Log the error message
             log_message('error', 'Error in fetch_available_slots: ' . $e->getMessage());
@@ -345,11 +362,7 @@ class Music extends CI_Controller
         }
     }
 
-    public function test()
-    {
-        $time = $this->input->post('time_slot');
-        echo $time;
-    }
+    
     public function check_availability()
     {
         $model = $this->RoomMusic;
@@ -381,10 +394,10 @@ class Music extends CI_Controller
         $currentTime = date('H:i'); // Current time (e.g., 11:37)
 
         // Load the model
-        $this->load->model('reservation/MusicModel');
+        $this->load->model('reservation/MiniModel');
 
         // Get the reserved slots for today where r_verify is true
-        $reservedSlots = $this->MusicModel->get_reserved_slots($currentDate, $r_id);
+        $reservedSlots = $this->MiniModel->get_reserved_slots($currentDate, $r_id);
 
         // Check if the current time falls within any reserved slot
         foreach ($reservedSlots as $slot) {

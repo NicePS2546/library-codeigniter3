@@ -1,9 +1,11 @@
+
+
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE | Dashboard v2</title>
+    <title><?= $title ? $title : "My Admin" ?></title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
@@ -37,12 +39,14 @@
     
     <!--end::Required Plugin(AdminLTE)-->
     <!-- apexcharts -->
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css"
       integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0="
       crossorigin="anonymous"
-    />
+    /> -->
+    <link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
+    <link rel="stylesheet" href="<?= base_url("public/assets/css/admin_page.css") ?>">
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->

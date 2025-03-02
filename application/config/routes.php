@@ -85,8 +85,10 @@ $route['vdo/time/(:num)'] = 'vdo/get_availible_slots/$1';
 $route['vdo/check/(:num)'] = 'vdo/checkReserv/$1';
 // Room Mini
 $route['mini'] = 'mini/index';
-$route['mini/reserv/(:num)'] = 'mini/reserv/$1';
+$route['mini/reserv/(:num)'] = 'mini/reserv_page/$1';
 $route['mini/check/(:num)'] = 'mini/checkReserv/$1';
+$route['mini/time/(:num)'] = 'mini/get_availible_slots/$1';
+$route['music/reserv/submit'] = 'mini/reserv';
 
 
 // SSO
@@ -100,9 +102,25 @@ $route['test/sweet2'] = 'Test/sweet2';
 //Admin
 $route['admin'] = 'Admin/index';
 $route['admin/test'] = 'Admin/test';
+$route['admin/check/reserv_data'] = 'Admin/reserv_data';
 
-    
+$route['admin/check/reserv/music'] = 'Admin/reserv_music';
+$route['admin/check/reserv/vdo'] = 'Admin/reserv_vdo';
+$route['admin/check/reserv/mini'] = 'Admin/reserv_mini';
 
+$route['admin/expire/reserv/music/(:num)'] = 'Admin/expire_music/$1';
+$route['admin/expire/reserv/vdo/(:num)'] = 'Admin/expire_vdo/$1';
+$route['admin/expire/reserv/mini/(:num)'] = 'Admin/expire_mini/$1';
+
+$route['admin/edit/reserv/music/(:num)'] = 'Admin/edit_reserv_music/$1';
+$route['admin/edit/reserv/vdo/(:num)'] = 'Admin/edit_reserv_vdo/$1';
+$route['admin/edit/reserv/mini/(:num)'] = 'Admin/edit_reserv_mini/$1';
+
+//online user management
+$route['online/append/user'] = 'OnlineUser/add';
+$route['online/remove/user'] = 'OnlineUser/remove';
+$route['online/count/user'] = 'OnlineUser/count';
+$route['online/test'] = 'OnlineUser/test';
 
 
 

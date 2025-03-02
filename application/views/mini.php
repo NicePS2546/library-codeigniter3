@@ -34,7 +34,7 @@ if (!empty($rooms)) {
             foreach ($rooms as $room):
                 
                 $row = $model->get_reserved_slots($date, $room['r_id']);
-                
+                // print_r($row);
                 $room['isFree'] = $model->get_reserv_in_Time_range($room['r_id']);
                 $closest = $model->get_closest_time($room['r_id']);
                 list($closestStartTime, $closestEndTime) = explode('-', $closest);
@@ -42,7 +42,7 @@ if (!empty($rooms)) {
                 <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-5">
                     <?= $this->load->view('component/mini/card_room', [
                         'room' => $room,
-                        'url' => "music",
+                        'url' => "mini",
                         'desc' => $room['r_desc'],
                         'exp_time' => $closestStartTime
                     ], true) ?>

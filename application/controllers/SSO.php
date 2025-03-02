@@ -62,14 +62,15 @@ class SSO extends CI_Controller
 
             // Get LDAP entries
             $info = ldap_get_entries($ds, $sr);
-            ldap_close($ds);
+            
 
             if ($info['count'] == 1 ) {
-                if(ldap_bind($ds,$info[0]['dn'],$password)){
+                if(!ldap_bind($ds,$info[0]['dn'],$password)){
                     $this->session->set_flashdata('error', 'รหัสผู้ใช้งานหรือรหัสผ่านผิด');
+                    ldap_close($ds);
                     redirect('/');
             }else{
-
+            
             
 
             // Extract user information
@@ -82,18 +83,6 @@ class SSO extends CI_Controller
             $is_friend = in_array($u_id, $friend_ids);
 
             list($firstName, $lastName) = explode(" ", $fullname);
-
-            if ($admin) {
-                $admin_id = $admin['user_id'];
-                $admin_fname = $firstName;
-                $admin_lname = $lastName;
-                // print_r($admin);
-                // echo "<br>";
-                // echo "<br>";
-                // echo "<br>";
-            }
-
-
 
             // Set session data
             $this->session->set_userdata([
@@ -116,6 +105,10 @@ class SSO extends CI_Controller
 
             // Redirect to the index method or another page
             if ($admin) {
+                $admin_id = $admin['user_id'];
+                $admin_fname = $firstName;
+                $admin_lname = $lastName;
+                
                 $this->session->set_userdata([
                     'admin_data' => [
                         'uid' => $admin_id,
@@ -128,7 +121,7 @@ class SSO extends CI_Controller
                 $this->session->set_flashdata('success', "ยินดีต้อนรับ $fullname");
             }
 
-
+            ldap_close($ds);
             redirect(base_url());
         }
     }
@@ -150,7 +143,7 @@ class SSO extends CI_Controller
             $this->session->set_flashdata('success', "ยินดีต้อนรับผู้พัฒนา Nice Pasit");
             redirect(base_url());
         }
-
+        
 
     }
 

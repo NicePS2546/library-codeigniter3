@@ -46,4 +46,13 @@ class StatisticModel extends CI_Model
             return $this->db->insert($this->table, $data);
         }
     }
+  
+
+    public function get_by_service($service){
+        $today = date('Y-m-d');
+        $this->db->where('service_id',$service);
+        $this->db->where('stat_date', $today);
+
+        return $this->db->get($this->table)->row_array();
+    }
 }

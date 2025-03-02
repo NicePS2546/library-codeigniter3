@@ -26,39 +26,19 @@
     transition: opacity 1s ease-in;
 }
 
+
 </style>
 
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
-        <h1>Reserve a Time Slot</h1>
-        <form action="<?php echo base_url('index.php/vdo/reserv/submit'); ?>" id="formId"
-            onsubmit="return Submit(event)" method="POST">
+        <h1>จองห้อง</h1>
+        <form class="text-end" action="<?php echo base_url('index.php/vdo/reserv/submit'); ?>" id="formId"
+            onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
             <input type="hidden" name="s_id" value="<?= $s_id ?>">
-            <div>
-                <label class="form-label" for="st_id">รหัสนักศึกษา</label>
-                <input type="text" class="form-control" name="st_id" id="st_id1">
-                <div id="result" class="mt-4 mb-2">
-                </div>
-            </div>
-            <div>
-                <label class="form-label" for="total">จำนวนคนเข้าใช้</label>
-                <input type="number" class="form-control" name="total" id="total">
-            </div>
-            <div id="results" class="mt-3">
-                <!-- Fetched results will appear here -->
-            </div>
-            <div>
-                <label class="form-label" for="time_slot">Select Time Slot:</label>
-                <select name="time_slot" class="form-control" id="time_slot">
-                    <!-- Available time slots will be populated here -->
-                </select>
-            </div>
+            <?= $this->load->view('reservation/form_content',[],true) ?>
 
-            <button class="btn mt-4 btn-primary" id="reservBtn" type="submit">Reserve</button>
-            <div id="roomData">
-                <!-- Room data will be displayed here after selection -->
-            </div>
+          
         </form>
     </div>
 </div>
@@ -85,7 +65,8 @@
 
 
 <script>
-     $(document).ready(async () => {
+
+    $(document).ready(async () => {
     try {
         const timeUrl = "<?= site_url("vdo/time/$r_id") ?>"; // Ensure this is a valid URL string
         const res = await fetch(timeUrl);
@@ -115,18 +96,18 @@
 });
 
     document.addEventListener("DOMContentLoaded", function () {
-            setInterval(() => {
-                const className = '.ani-element';
-                const elements = document.querySelectorAll(className);
-                
+        setInterval(() => {
+            const className = '.ani-element';
+            const elements = document.querySelectorAll(className);
+
             elements.forEach((el, index) => {
-              // Delay each element by a factor of its index (300ms = 0.3 second per element)
-              setTimeout(() => {
-                el.classList.add('visible');
-              }, index * 300); // The delay increases for each element
+                // Delay each element by a factor of its index (300ms = 0.3 second per element)
+                setTimeout(() => {
+                    el.classList.add('visible');
+                }, index * 300); // The delay increases for each element
             });
-          }, 500);
-        });
+        }, 500);
+    });
 
     let typingTimer; // Timer identifier
     const doneTypingInterval = 500; // Set the time delay for detecting stop typing (500ms)
@@ -147,17 +128,18 @@
                 $.ajax({
                     url: '<?= site_url('music/get/user') ?>',  // Mock API endpoint
                     type: 'POST',
-                    data: { uid: query , reserv:1},
+                    data: { uid: query, reserv: 1 },
                     success: function (response) {
                         // Parse the JSON response
                         const data = JSON.parse(response);
+                        console.log(data);
                         const results = data.userdata;
                         let output = '';
 
                         // Check the message from the API response
                         if (data.message == "Success") {
                             // Display the full name if successful
-                            output = `<p class="card border-success py-2 px-2 w-50 text-center">${results.fullname}</p>`;
+                            output = `<p class="card border-success py-2 px-2 w-50 d-flex align-items-center text-center">${results.fullname}</p>`;
                         } else if (data.message == "fail") {
                             // Show message if no results
                             output = '<div class="card border-danger text-center py-2 px-2 w-50"><div>ไม่เจอผู้ใช้ในระบบ <a href="https://sso.npru.ac.th/">สมัครตรงนี้</a></div></div>';
@@ -177,18 +159,54 @@
     });
 
 
-    function Submit(event) {
+    function reserv(event) {
         event.preventDefault(); // Prevent default form submission
 
         const query = $('#st_id1').val(); // Get input value
         const total = $('#total').val();
+
+        console.log(query)
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+
+        // if (!query) {
+        //     showToast('โปรดใส่รหัสผู้ใช้', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(!total){
+        //     showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(total <= 4){
+        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(total >= 6){
+        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 6 คน', 'error');
+        //     return false; // Stop execution if input is empty
+        // }
+
         if (!query) {
-            showToast('โปรดใส่รหัสผู้ใช้', 'error');
+            showSweet('warn','โปรดใส่รหัสผู้ใช้')
             return false; // Stop execution if input is empty
-        }else if(!total){
-            showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
+        } else if (!total) {
+            showSweet('warn','โปรดใส่จำนวนผู้เข้าจอง')
+            return false; // Stop execution if input is empty
+        } else if (total < 1) {
+            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 1 คน')
+            return false; // Stop execution if input is empty
+        } else if (total > 6) {
+            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 6 คน')
             return false; // Stop execution if input is empty
         }
+
 
         // AJAX call
         $.ajax({
@@ -200,19 +218,20 @@
 
                 if (data.message === "fail" || !data.userdata) {
 
-                    showToast('ไม่พบผู้ใช้งาน', 'error'); // Show error toast
+                    showSweet('warn', 'ไม่พบผู้ใช้งาน') // Show error toast
                     return false; // Stop execution if validation fails
                 }
-                
-                showToast('กำลังดำเนินการ....', 'success');
+
+                Toast.fire({
+                    icon: "success",
+                    title: "กำลังดำเนินการ"
+                });
                 setTimeout(function () {
                     document.getElementById('formId').submit(); // Submit the form
                 }, 800); // Wait 2 seconds (2000ms)
             },
             error: function () {
-
-
-                showToast('เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่', 'error');
+                showSweet('error', 'เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่')
                 return false; // Stop execution on error
             }
         });
@@ -221,8 +240,32 @@
     }
 
 </script>
-<script>
 
+<script>
+    function showSweet(status, msg, title) {
+        if (status == 'success') {
+            Swal.fire({
+                title: title ? title : "สำเร็จ",
+                text: msg,
+                icon: 'success',
+                confirmButtonText: 'โอเค'
+            });
+        }else if(status == 'warn') {
+            Swal.fire({
+                title: title ? title : "แจ้งเตือน",
+                text: msg,
+                icon: 'warning',
+                confirmButtonText: 'โอเค'
+            });
+        }else {
+            Swal.fire({
+                title: title ? title : "ผิดพลาด",
+                text: msg,
+                icon: 'error',
+                confirmButtonText: 'โอเค'
+            });
+        }
+    }
     function showToast(message, type = 'success') {
         const toast = document.getElementById('liveToast');
         const toastBody = toast.querySelector('.toast-body');
@@ -236,7 +279,7 @@
             toast.classList.remove('text-danger');
         } else if (type === 'error') {
             toast.classList.add('text-danger');
-            
+
         }
 
         // Use Bootstrap's Toast functionality

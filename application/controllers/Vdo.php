@@ -84,7 +84,7 @@ class Vdo extends CI_Controller
             'exp_time' => $exp_time,
             'r_date' => $currentDate,
             'r_status' => 'actived', // Status of the reservation
-            'r_verify' => 0,  // Verification flag (0 for unverified)
+            'r_verify' => 1,  // Verification flag (0 for unverified)
             'created_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s')
         ];
@@ -274,12 +274,31 @@ class Vdo extends CI_Controller
             $availableSlots = array_diff($validSlots, $reservedSlotRanges);
             $closest_time = $this->get_closest_available_slot($availableSlots,$reservedSlots,$current_time);
             // Return available slots as JSON
-            echo json_encode([
-                'availableSlots' => array_values($availableSlots), // Available slots
-                'rows_fromtable' => $reservedSlotRanges, // Reserved slots
-                'date' => $current_date,
-                'closest_time'=>$closest_time
-            ]);
+
+            // echo json_encode([
+            //     'availableSlots' => array_values($availableSlots), // Available slots
+            //     'rows_fromtable' => $reservedSlotRanges, // Reserved slots
+            //     'date' => $current_date,
+            //     'closest_time'=>$closest_time
+            // ]);
+
+            $day = getDay(date("Y-m-d H:i"));
+
+            if($day == "Saturday"){
+                echo json_encode([
+                    'availableSlots' => [], // Available slots
+                    'rows_fromtable' => $reservedSlotRanges, // Reserved slots
+                    'date' => $current_date,
+                    'closest_time' => $closest_time
+                ]);
+            }else{
+                echo json_encode([
+                    'availableSlots' => array_values($availableSlots), // Available slots
+                    'rows_fromtable' => $reservedSlotRanges, // Reserved slots
+                    'date' => $current_date,
+                    'closest_time' => $closest_time
+                ]);
+            }
         } catch (Exception $e) {
             // Log the error message
             log_message('error', 'Error in fetch_available_slots: ' . $e->getMessage());

@@ -147,7 +147,7 @@ class MiniModel extends CI_Model
             'r_status' => 'expired',
         ];
         $this->db->where('reserv_id', $reservationId);  // Use the correct column name
-        $this->db->update('tbn_mini_reserv', $data);  // Update the status to expired
+       return $this->db->update('tbn_mini_reserv', $data);  // Update the status to expired
     }
 
     public function expire_reserv($rows)
@@ -249,7 +249,7 @@ class MiniModel extends CI_Model
             //     '14:00-15:00',
             //     '15:00-16:00',
             // ];
-            $allSlots = $this->get_all_time(1);
+            $allSlots = $this->get_all_time(3);
             
             
            

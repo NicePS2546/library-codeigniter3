@@ -28,6 +28,11 @@
         opacity: 1;
         transition: opacity 1s ease-in;
     }
+
+
+    .card-body {
+        border: 1px solid rgb(214, 214, 214) !important;
+    }
 </style>
 
 <div class="container">
@@ -36,10 +41,21 @@
         <form class="text-end" action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
-            <?= $this->load->view('reservation/form_content',[],true) ?>
+            <div class="card card-shadow">
+                <div class="card-body">
+                    <div class="text-start">
+                        <label class="form-label pl-1" for="st_id1">รหัสนักศึกษา</label>
+                        <input type="text" class="form-control" name="st_id" id="st_id1">
+                        <div id="result" class="mt-4 mb-2">
+                        </div>
+                    </div>
+                    <a href="<?= base_url("index.php/mini/check/$r_id") ?>" class="btn mt-4 btn-secondary">กลับ</a>
+                    <button class="btn mt-4 btn-primary" id="reservBtn" type="submit">เข้าร่วม</button>
+                </div>
+            </div>
 
-          
-           
+
+
         </form>
     </div>
 </div>
@@ -65,35 +81,6 @@
 
 
 <script>
-
-    $(document).ready(async () => {
-    try {
-        const timeUrl = "<?= site_url("music/time/$r_id") ?>"; // Ensure this is a valid URL string
-        const res = await fetch(timeUrl);
-
-        if (!res.ok) throw new Error("Failed to fetch data");
-
-        const data = await res.json(); // Parse JSON response
-        console.log(data);
-
-        const timeSlotSelect = document.getElementById("time_slot");
-        const reservBtn = document.getElementById("reservBtn");
-
-        if (data.availableSlots.length > 0) {
-            // Populate dropdown with available time slots
-            timeSlotSelect.innerHTML = data.availableSlots
-                .map(slot => `<option value="${slot}">${slot}</option>`)
-                .join("");
-        } else {
-            reservBtn.disabled = true;
-            timeSlotSelect.disabled = true;
-            timeSlotSelect.innerHTML = '<option>ไม่เหลือช่วงเวลาให้จองแล้ว</option>';
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Error: Unable to fetch data.");
-    }
-});
 
     document.addEventListener("DOMContentLoaded", function () {
         setInterval(() => {
@@ -163,7 +150,7 @@
         event.preventDefault(); // Prevent default form submission
 
         const query = $('#st_id1').val(); // Get input value
-        const total = $('#total').val();
+
 
         console.log(query)
         const Toast = Swal.mixin({
@@ -178,32 +165,8 @@
             }
         });
 
-
-        // if (!query) {
-        //     showToast('โปรดใส่รหัสผู้ใช้', 'error');
-        //     return false; // Stop execution if input is empty
-        // }else if(!total){
-        //     showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
-        //     return false; // Stop execution if input is empty
-        // }else if(total <= 4){
-        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน', 'error');
-        //     return false; // Stop execution if input is empty
-        // }else if(total >= 6){
-        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 6 คน', 'error');
-        //     return false; // Stop execution if input is empty
-        // }
-
         if (!query) {
-            showSweet('warn','โปรดใส่รหัสผู้ใช้')
-            return false; // Stop execution if input is empty
-        } else if (!total) {
-            showSweet('warn','โปรดใส่จำนวนผู้เข้าจอง')
-            return false; // Stop execution if input is empty
-        } else if (total < 4) {
-            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน')
-            return false; // Stop execution if input is empty
-        } else if (total > 7) {
-            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 7 คน')
+            showSweet('warn', 'โปรดใส่รหัสผู้ใช้')
             return false; // Stop execution if input is empty
         }
 
@@ -250,14 +213,14 @@
                 icon: 'success',
                 confirmButtonText: 'โอเค'
             });
-        }else if(status == 'warn') {
+        } else if (status == 'warn') {
             Swal.fire({
                 title: title ? title : "แจ้งเตือน",
                 text: msg,
                 icon: 'warning',
                 confirmButtonText: 'โอเค'
             });
-        }else {
+        } else {
             Swal.fire({
                 title: title ? title : "ผิดพลาด",
                 text: msg,

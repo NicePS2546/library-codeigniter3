@@ -6,13 +6,13 @@
           <a href="./index.html" class="brand-link">
             <!--begin::Brand Image-->
             <img
-              src="../../dist/assets/img/AdminLTELogo.png"
-              alt="AdminLTE Logo"
+              src="<?= base_url("public/assets/img/logo.png") ?>"
+              alt=""
               class="brand-image opacity-75 shadow"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">ศูนย์ผุ้ดูแล</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -28,41 +28,42 @@
               role="menu"
               data-accordion="false"
             >
-              <li class="nav-item menu-open">
-                <a href="#" class="nav-link active">
+            <li class="nav-item">
+                <a href="<?= base_url('index.php/admin') ?>" class="nav-link <?= $page == "home" ? "active" :"" ?>">
+                <i class="bi bi-bar-chart"></i>
+                  <p>สถิติประจำวัน</p>
+                </a>
+              </li>
+              <li class="nav-item <?= $page == "reserv_data" ? "menu-open" :"" ?>  ">
+                <a href="#" class="nav-link ">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>
-                    Dashboard
+                    แผงควบคุม
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
+                  
                   <li class="nav-item">
-                    <a href="./index.html" class="nav-link">
+                    <a href="<?= base_url('index.php/admin/check/reserv/music') ?>" class="nav-link <?= $page == "reserv_data" ? "active" :"" ?>">
                       <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v1</p>
+                      <p>ข้อมูลการจอง</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="./index2.html" class="nav-link active">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./index3.html" class="nav-link">
+                    <a href="./index3.html" class="nav-link <?= $page == "" ? "active" :"" ?>">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Dashboard v3</p>
                     </a>
                   </li>
                 </ul>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="./generate/theme.html" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
                   <p>Theme Generate</p>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>

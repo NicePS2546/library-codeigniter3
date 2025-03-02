@@ -166,14 +166,38 @@
   <script src="<?= base_url('public/cdn/popper.min.js') ?>"></script>
   <script src="<?= base_url('public/cdn/boostrap5_3_0/js/boostrap.min.js') ?>"></script>
 
-
-
-
-
-
-
-
   <!-- Custom Scripts -->
+  <script>
+    function addUser() {
+        fetch("<?php echo base_url('index.php/online/append/user'); ?>", { method: "POST" });
+    }
+
+    // Notify the server when user leaves the page
+    function removeUser() {
+        fetch("<?php echo base_url('index.php/online/remove/user'); ?>", { method: "POST" });
+    }
+
+    // Run when page loads
+    window.onload = function () {
+        addUser();
+        updateOnlineUsers();
+    };
+
+    // Run when page is closed or refreshed
+    window.onbeforeunload = function () {
+        removeUser();
+    };
+
+    // Run when user switches tabs or minimizes
+    document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+            removeUser();
+        } else {
+            addUser();
+        }
+    });
+
+</script>
 
   <script>
     // Page loading animation
@@ -274,6 +298,8 @@
         });
       }
     }</script>
+   
+
 </body>
 
 </html>

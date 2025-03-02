@@ -30,35 +30,14 @@
 
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
-        <h1>Reserve a Time Slot</h1>
-        <form action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
-            onsubmit="return Submit(event)" method="POST">
+        <h1>จองห้อง</h1>
+        <form class="text-end" action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
+            onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
-            <div>
-                <label class="form-label" for="st_id">รหัสนักศึกษา</label>
-                <input type="text" class="form-control" name="st_id" id="st_id1">
-                <div id="result" class="mt-4 mb-2">
-                </div>
+            <?= $this->load->view('reservation/form_content',[],true) ?>
 
-            </div>
-            <div>
-                <label class="form-label" for="total">จำนวนคนเข้าใช้</label>
-                <input type="number" class="form-control" name="total" id="total">
-            </div>
-            <div id="results" class="mt-3">
-                <!-- Fetched results will appear here -->
-            </div>
-            <div>
-                <label class="form-label" for="time_slot">Select Time Slot:</label>
-                <select name="time_slot" class="form-control" id="time_slot">
-                    <!-- Available time slots will be populated here -->
-                </select>
-            </div>
-
-            <button class="btn mt-4 btn-primary" id="reservBtn" type="submit">Reserve</button>
-            <div id="roomData">
-                <!-- Room data will be displayed here after selection -->
-            </div>
+           
+            
         </form>
     </div>
 </div>
@@ -178,7 +157,7 @@
     });
 
 
-    function Submit(event) {
+    function reserv(event) {
         event.preventDefault(); // Prevent default form submission
 
         const query = $('#st_id1').val(); // Get input value

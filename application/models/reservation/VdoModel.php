@@ -34,6 +34,17 @@ class VdoModel extends CI_Model
 
         return $query->result_array();
     }
+    public function get_all_reserved($status)
+    {
+        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
+        $this->db->from('tbn_room_vdo');
+        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
+        $this->db->where('tbn_vdo_reserv.r_status', $status);
+        
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
 
     public function check_duplicate($st_id)
     {
@@ -88,7 +99,7 @@ class VdoModel extends CI_Model
     {
         $data = ['r_status' => 'expired'];
         $this->db->where('reserv_id', $reservationId);
-        $this->db->update('tbn_vdo_reserv', $data);
+        return $this->db->update('tbn_vdo_reserv', $data);
     }
 
     public function expire_reserv($rows)
