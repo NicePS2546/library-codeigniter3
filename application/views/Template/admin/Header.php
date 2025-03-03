@@ -33,7 +33,8 @@
       integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0="
       crossorigin="anonymous"
     /> -->
-  <link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
+    <script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
+    <link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
   <link rel="stylesheet" href="<?= base_url('public/assets/css/admin_page.css') ?>?v=<?= time(); ?>" />
 </head>
 

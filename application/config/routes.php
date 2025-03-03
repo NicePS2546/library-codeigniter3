@@ -118,6 +118,11 @@ $route['admin/edit/reserv/music/(:num)'] = 'Admin/edit_reserv_music/$1';
 $route['admin/edit/reserv/vdo/(:num)'] = 'Admin/edit_reserv_vdo/$1';
 $route['admin/edit/reserv/mini/(:num)'] = 'Admin/edit_reserv_mini/$1';
 
+$route['admin/update/music'] = 'Admin/update_music';
+$route['admin/update/vdo'] = 'Admin/update_vdo';
+$route['admin/update/mini'] = 'Admin/update_mini';
+
+
 $route['admin/view/music'] = 'Admin/view_music';
 $route['admin/view/vdo'] = 'Admin/view_vdo';
 $route['admin/view/mini'] = 'Admin/view_mini';

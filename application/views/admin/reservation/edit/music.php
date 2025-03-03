@@ -33,10 +33,10 @@
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
         <h1>จองห้อง</h1>
-        <form class="text-end" action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
+        <form class="text-end" action="<?php echo base_url('index.php/admin/update/music'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
-            <input type="hidden" name="r_id" value="<?= $r_id ?>">
-            <?= $this->load->view('reservation/edit/form_content',['row'=>$row],true) ?>
+            <input type="hidden" name="reserv_id" value="<?= $row['reserv_id'] ?>">
+            <?= $this->load->view('admin/reservation/edit/form_content',['row'=>$row],true) ?>
 
           
            
@@ -44,20 +44,6 @@
     </div>
 </div>
 
-<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11;">
-    <div id="liveToast" class="toast hide custom-toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="<?= base_url('public/assets/img/logo.png') ?>" width="50" height="50" class="rounded me-2"
-                alt="...">
-            <strong class="me-auto">แจ้งเตือน</strong>
-            <small>ณ ขณะนี้</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            <!-- Flash data message will be dynamically inserted -->
-        </div>
-    </div>
-</div>
 
 <script src="<?= base_url('public/cdn/jQuery/jquery-3.6.0.min.js') ?>"></script>
 
@@ -68,7 +54,7 @@
 
     $(document).ready(async () => {
     try {
-        const timeUrl = "<?= site_url("music/time/$r_id") ?>"; // Ensure this is a valid URL string
+        const timeUrl = "<?= site_url("music/time/".$row['r_id']) ?>"; // Ensure this is a valid URL string
         const res = await fetch(timeUrl);
 
         if (!res.ok) throw new Error("Failed to fetch data");
@@ -80,7 +66,13 @@
         const reservBtn = document.getElementById("reservBtn");
 
         if (data.availableSlots.length > 0) {
+            <?php 
+            $startTime = date("H:i", strtotime($row['start_time']));
+            $expTime = date("H:i", strtotime($row['exp_time']));FF ?>
+           
+           data.availableSlots.unshift("<?= $startTime .'-'.$expTime ?>");
             // Populate dropdown with available time slots
+            console.log(data.availableSlots);
             timeSlotSelect.innerHTML = data.availableSlots
                 .map(slot => `<option value="${slot}">${slot}</option>`)
                 .join("");

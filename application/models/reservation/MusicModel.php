@@ -54,6 +54,17 @@ class MusicModel extends CI_Model
         return $query->row_array(); // Returns the result as an array
 
     }
+    public function get_reserved_row($id,$reserved_id)
+    {
+        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
+        $this->db->from('tbn_room_music');
+        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv.reserv_id', $reserved_id);
+        
+        $query = $this->db->get();
+        return $query->row_array(); // Returns the result as an array
+
+    }
     public function get_reserved_sole($id){
         $this->db->where('reserv_id', $id);
         $query = $this->db->get($this->table);
@@ -93,7 +104,7 @@ class MusicModel extends CI_Model
 
         return $this->db->insert('tbn_music_reserv', $data);
     }
-
+    
     public function get_past_reservations($currentDateTime)
     {
         // Set the timezone to Bangkok, Thailand
@@ -170,7 +181,10 @@ class MusicModel extends CI_Model
         $this->db->where('reserv_id', $reservationId);  // Use the correct column name
         return $this->db->update('tbn_music_reserv', $data);  // Update the status to expired
     }
-    
+    public function update_data($reservationId, $data){
+        $this->db->where('reserv_id',$reservationId);
+        return $this->db->update($this->table, $data);
+    }
     public function expire_reserv($rows)
     {
         if ($rows) {

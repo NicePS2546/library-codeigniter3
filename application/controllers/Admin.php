@@ -225,7 +225,122 @@ class Admin extends CI_Controller
             '$url'=>'music'
         ]);
     }
+    public function edit_reserv_vdo($id){
+        $model = $this->Model('reservation','VdoModel',true);
+        $row = $model->get_reserved_sole($id);
+        
+        return $this->AdminRender('admin/reservation/edit/music',[
+            'title'=>'แก้ไขรายละเอียดข้อมูลการจอง',
+            'page'=>'reserv_data',
+            'row'=>$row,
+            '$url'=>'music'
+        ]);
+    }
+    public function edit_reserv_mini($id){
+        $model = $this->Model('reservation','MiniModel',true);
+        $row = $model->get_reserved_sole($id);
+        
+        return $this->AdminRender('admin/reservation/edit/music',[
+            'title'=>'แก้ไขรายละเอียดข้อมูลการจอง',
+            'page'=>'reserv_data',
+            'row'=>$row,
+            '$url'=>'music',
+            
+        ]);
+    }
    
+    public function update_vdo(){
+        $extension = 'index.php/';
+        $reserv_id = $this->post('reserv_id');
+        $u_id = $this->post('u_id');
+        $total = $this->post('total');
+        $time = $this->post('time_slot');
+        list($start_time, $exp_time) = explode('-', $time);
+        $data = [
+            'st_id'=>$u_id,
+            'total_pp'=>$total,
+            'start_time'=>$start_time,
+            'exp_time'=>$exp_time,
+        ];
+
+        $model = $this->Model('reservation','MusicModel',true);
+        $result = $model->update_data($reserv_id,$data); 
+        if($result){
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "แก้ไขข้อมูลสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+           
+        }else{
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "แก้ไขข้อมูลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');   
+    }
+    public function update_mini(){
+        $extension = 'index.php/';
+        $reserv_id = $this->post('reserv_id');
+        $u_id = $this->post('u_id');
+        $total = $this->post('total');
+        $time = $this->post('time_slot');
+        list($start_time, $exp_time) = explode('-', $time);
+        $data = [
+            'st_id'=>$u_id,
+            'total_pp'=>$total,
+            'start_time'=>$start_time,
+            'exp_time'=>$exp_time,
+        ];
+
+        $model = $this->Model('reservation','MusicModel',true);
+        $result = $model->update_data($reserv_id,$data); 
+        if($result){
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "แก้ไขข้อมูลสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+           
+        }else{
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "แก้ไขข้อมูลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');   
+    }
     public function view_mini() {
         $id = $this->input->post('id');
         $reserv_id = $this->input->post('reserved_id');
