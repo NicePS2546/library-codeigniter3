@@ -54,7 +54,12 @@ class MusicModel extends CI_Model
         return $query->row_array(); // Returns the result as an array
 
     }
+    public function get_reserved_sole($id){
+        $this->db->where('reserv_id', $id);
+        $query = $this->db->get($this->table);
+        return $query->row_array(); // Returns the result as an array
 
+    }
     public function check_duplicate($st_id)
     {
         $this->db->select('*');

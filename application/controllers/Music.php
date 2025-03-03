@@ -43,6 +43,7 @@ class Music extends CI_Controller
         $model = $this->MusicModel;
         $this->load->model('reservation/VdoModel');
         $vdoModel = $this->VdoModel;
+        $mini = $this->Model('reservation','MiniModel',true);
         $this->load->model('statistic/StatisticModel');
         $statistic = $this->StatisticModel;
 
@@ -67,6 +68,7 @@ class Music extends CI_Controller
         list($start_time, $exp_time) = explode('-', $time_slot);
         $music_dupl = $model->check_duplicate($st_id, $r_id);
         $vdo_dupl = $vdoModel->check_duplicate($st_id, $r_id);
+        $mini_dupl = $mini->check_duplicate($st_id, $r_id);
         $data = [
             'st_id' => $st_id,  // Example: Replace with actual student/user ID
             'r_id' => $r_id, // Room number
@@ -172,7 +174,7 @@ class Music extends CI_Controller
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
         }
 
-        if ($music_dupl || $vdo_dupl) {
+        if ($music_dupl || $vdo_dupl || $mini_dupl) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({

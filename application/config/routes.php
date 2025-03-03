@@ -90,7 +90,7 @@ $route['mini/check/(:num)'] = 'mini/checkReserv/$1';
 $route['mini/join/(:num)'] = 'mini/join_page/$1';
 $route['mini/join/submit'] = 'mini/join';
 $route['mini/time/(:num)'] = 'mini/get_availible_slots/$1';
-
+$route['mini/reserv/submit'] = 'mini/reserv';
 
 
 // SSO
@@ -126,6 +126,8 @@ $route['admin/data'] = 'Admin/admin_data';
 $route['admin/add/submit'] = 'Admin/add_admin';
 $route['admin/suspend/(:any)'] = 'Admin/suspend_admin/$1';
 $route['admin/active/(:any)'] = 'Admin/active_admin/$1';
+
+
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';
 $route['online/remove/user'] = 'OnlineUser/remove';

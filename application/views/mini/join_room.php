@@ -47,7 +47,7 @@
                     <div class="text-start">
                         <label class="form-label pl-1" for="st_id1">รหัสนักศึกษา</label>
                         <input type="text" class="form-control" name="st_id" id="st_id1">
-                        <div id="result" class="mt-4 mb-2">
+                        <div id="results" class="mt-4 mb-2">
                         </div>
                     </div>
                     <a href="<?= base_url("index.php/mini/check/$r_id") ?>" class="btn mt-4 btn-secondary">กลับ</a>
@@ -82,7 +82,6 @@
 
 
 <script>
-
     document.addEventListener("DOMContentLoaded", function () {
         setInterval(() => {
             const className = '.ani-element';
@@ -102,7 +101,7 @@
 
     $('#st_id1').on('input', function () {
         const query = $(this).val();  // Get the input value
-        const result = $('#result');
+        const result = $('#results');
 
         result.html('<p class="card py-2 px-2 w-50 text-center">กำลังโหลดผู้ใช้....</p>'); // Show loading message
 
@@ -119,7 +118,7 @@
                     data: { uid: query, reserv: 1 },
                     success: function (response) {
                         // Parse the JSON response
-                        const data = response;
+                        const data = JSON.parse(response);
                         console.log(data);
                         const results = data.userdata;
                         let output = '';

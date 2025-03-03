@@ -49,6 +49,17 @@ class MiniModel extends CI_Model
         return $query->row_array(); // Returns the result as an array
 
     }
+    public function get_reserved_row($reserved_id)
+    {
+        $this->db->select('tbn_room_mini.r_number, tbn_mini_reserv.*');
+        $this->db->from('tbn_room_mini');
+        $this->db->join('tbn_mini_reserv', 'tbn_room_mini.r_id = tbn_mini_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_mini_reserv.reserv_id', $reserved_id);
+        
+        $query = $this->db->get();
+        return $query->row_array(); // Returns the result as an array
+
+    }
 
     
     

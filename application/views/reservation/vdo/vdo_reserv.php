@@ -30,7 +30,7 @@
 </style>
 
 <div class="container">
-    <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
+    <div class="col-12 col-sm-10 pb-4 col-md-8 col-lg-6 mt-4 mx-auto ani-element">
         <h1>จองห้อง</h1>
         <form class="text-end" action="<?php echo base_url('index.php/vdo/reserv/submit'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">

@@ -3,10 +3,6 @@
 ?>
 
 <div class="d-flex  justify-content-center align-items-center gap-2 ">
-            <button data-admin-id="<?= $row['admin_id']; ?>" class="btn custom-btn btn-primary">
-                แก้ไข
-            </button>
-
             <div style="display:inline;">
                 <input type="hidden" name="id" value="<?= $row['reserv_id']; ?>">
                 <button type="button" class="btn  <?= $row['admin_status'] == 1 ? 'btn-secondary' : 'btn-success' ?> custom-btn delete-button"

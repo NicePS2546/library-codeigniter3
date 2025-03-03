@@ -214,7 +214,17 @@ class Admin extends CI_Controller
         echo $this->load->view('Template/admin/test',[],true);
     }
 
-    
+    public function edit_reserv_music($id){
+        $model = $this->Model('reservation','MusicModel',true);
+        $row = $model->get_reserved_sole($id);
+        
+        return $this->AdminRender('admin/reservation/edit/music',[
+            'title'=>'แก้ไขรายละเอียดข้อมูลการจอง',
+            'page'=>'reserv_data',
+            'row'=>$row,
+            '$url'=>'music'
+        ]);
+    }
    
     public function view_mini() {
         $id = $this->input->post('id');

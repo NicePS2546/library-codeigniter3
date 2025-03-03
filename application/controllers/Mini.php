@@ -382,7 +382,7 @@ class Mini extends CI_Controller
                 Swal.fire({
                     position: "center",
                     icon: "success",
-                    title: "จองห้องสำเร็จ!",
+                    title: "เข้าร่วมห้องสำเร็จ!",
                     showConfirmButton: true,
                 }).then(function() {
                     window.location = "' . base_url() . $extension . 'mini/"; 
@@ -395,7 +395,7 @@ class Mini extends CI_Controller
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "จองห้องไม่สำเร็จ",
+                    title: "เข้าร่วมห้องไม่สำเร็จ!",
                     showConfirmButton: true,
                 }).then(function() {
                     window.location = "' . base_url() . $extension . 'mini/join/' . $r_id . '"; 

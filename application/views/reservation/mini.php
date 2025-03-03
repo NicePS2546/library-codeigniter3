@@ -29,9 +29,9 @@
 </style>
 
 <div class="container">
-    <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
+    <div class="col-12 col-sm-10 pb-4 col-md-8 col-lg-6 mt-4 mx-auto ani-element">
         <h1>จองห้อง</h1>
-        <form class="text-end" action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
+        <form class="text-end" action="<?php echo base_url('index.php/mini/reserv/submit'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
             <?= $this->load->view('reservation/form_content',[],true) ?>
@@ -162,18 +162,50 @@
 
         const query = $('#st_id1').val(); // Get input value
         const total = $('#total').val();
+
+        console.log(query)
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+
+        // if (!query) {
+        //     showToast('โปรดใส่รหัสผู้ใช้', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(!total){
+        //     showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(total <= 4){
+        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน', 'error');
+        //     return false; // Stop execution if input is empty
+        // }else if(total >= 6){
+        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 6 คน', 'error');
+        //     return false; // Stop execution if input is empty
+        // }
+
         if (!query) {
-            showToast('โปรดใส่รหัสผู้ใช้', 'error');
+            showSweet('warn','โปรดใส่รหัสผู้ใช้')
             return false; // Stop execution if input is empty
-        }else if(!total){
-            showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
+        } else if (!total) {
+            showSweet('warn','โปรดใส่จำนวนผู้เข้าจอง')
             return false; // Stop execution if input is empty
-        }else if(total < 10){
-            showToast('จำนวนผู้ใช้งานขั้นต่ำ 10 คนขึ้นไป', 'error');
+        } else if (total < 10) {
+            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 10 คน')
+            return false; // Stop execution if input is empty
+        } else if (total > 45) {
+            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 45 คน')
             return false; // Stop execution if input is empty
         }
 
-        
+
         // AJAX call
         $.ajax({
             url: '<?= site_url("music/get/user") ?>', // API endpoint
@@ -184,19 +216,20 @@
 
                 if (data.message === "fail" || !data.userdata) {
 
-                    showToast('ไม่พบผู้ใช้งาน', 'error'); // Show error toast
+                    showSweet('warn', 'ไม่พบผู้ใช้งาน') // Show error toast
                     return false; // Stop execution if validation fails
                 }
-                
-                showToast('กำลังดำเนินการ....', 'success');
+
+                Toast.fire({
+                    icon: "success",
+                    title: "กำลังดำเนินการ"
+                });
                 setTimeout(function () {
                     document.getElementById('formId').submit(); // Submit the form
                 }, 800); // Wait 2 seconds (2000ms)
             },
             error: function () {
-
-
-                showToast('เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่', 'error');
+                showSweet('error', 'เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่')
                 return false; // Stop execution on error
             }
         });
@@ -205,6 +238,7 @@
     }
 
 </script>
+
 <script>
 
     function showToast(message, type = 'success') {
@@ -226,5 +260,33 @@
         // Use Bootstrap's Toast functionality
         const bootstrapToast = new bootstrap.Toast(toast);
         bootstrapToast.show();
+    }
+</script>
+<script>
+
+
+function showSweet(status, msg, title) {
+        if (status == 'success') {
+            Swal.fire({
+                title: title ? title : "สำเร็จ",
+                text: msg,
+                icon: 'success',
+                confirmButtonText: 'โอเค'
+            });
+        }else if(status == 'warn') {
+            Swal.fire({
+                title: title ? title : "แจ้งเตือน",
+                text: msg,
+                icon: 'warning',
+                confirmButtonText: 'โอเค'
+            });
+        }else {
+            Swal.fire({
+                title: title ? title : "ผิดพลาด",
+                text: msg,
+                icon: 'error',
+                confirmButtonText: 'โอเค'
+            });
+        }
     }
 </script>
