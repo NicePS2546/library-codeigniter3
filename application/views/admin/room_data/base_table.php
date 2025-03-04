@@ -70,17 +70,16 @@
             <?php
 
             if ($table === "music") {
-                echo $this->load->view('admin/reservation/music', [
+                echo $this->load->view('admin/room_data/room/music', [
                     'rows' => $rows,
                     'url' => 'music'
                 ], true);
             } else if ($table == "vdo") {
-                echo $this->load->view('admin/reservation/vdo', ['rows' => $rows, 'url' => 'vdo'], true);
+                echo $this->load->view('admin/room_data/room/vdo', ['rows' => $rows, 'url' => 'vdo'], true);
             } else if ($table == "mini") {
-                echo $this->load->view('admin/reservation/mini', ['rows' => $rows, 'url' => 'mini'], true);
-            } else if($table == 'admin_data'){
-                echo $this->load->view('admin/admin_data/table', ['rows' => $rows, 'url' => 'admin_data'], true);
-            } ?>   
+                echo $this->load->view('admin/room_data/room/mini', ['rows' => $rows, 'url' => 'mini'], true);
+            }
+            ?>   
         </table>
     </div>
 
@@ -148,7 +147,7 @@
                 // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= base_url("index.php/admin/expire/reserv/$table/") ?>' + id;
+                form.action = '<?= base_url("index.php/admin/remove/room/$table/") ?>' + id;
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = 'id';
@@ -202,18 +201,17 @@
 
 <script>
     $(document).ready(function () {
-        <?php $post_url = base_url("index.php/admin/view/$table"); ?>
+        <?php $post_url = base_url("index.php/admin/room/view/$table"); ?>
         // เมื่อคลิกปุ่ ม View
         $('.view-reserved-button').on('click', function () {
-            const reserv_id = $(this).data('reserved-id');
+            
             const r_id = $(this).data('r-id');
             console.log('<?= $post_url ?>')
             $.ajax({ // ส่ง AJAX
                 url: '<?= $post_url ?>',
                 type: 'POST', // ใช้เมธอด POST
                 data: { // ส่งข้อมูลไปด้วย
-                    id: r_id,
-                    reserved_id: reserv_id
+                    r_id: r_id,
                 },
                 success: function (response) { // ถ้าสําเร็จ
                     // นําข้อมูลที่ได้มาแสดงใน Modal

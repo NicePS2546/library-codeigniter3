@@ -8,11 +8,11 @@
             <img
               src="<?= base_url("public/assets/img/logo.png") ?>"
               alt=""
-              class="brand-image opacity-75 shadow"
+              class="brand-image opacity-75 shadow mr-4"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">ศูนย์ผุ้ดูแล</span>
+            <span class="brand-text fw-light">ศูนย์ผู้ดูแล</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -57,6 +57,12 @@
                       <p>ข้อมูลผู้ดูแล</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="<?= base_url('index.php/admin/room_data') ?>" class="nav-link <?= $page == "room_data" ? "active" :"" ?>">
+                    <?= $page == "room_data" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ข้อมูลห้อง</p>
+                    </a>
+                  </li>
                 </ul>
               </li>
               <!-- <li class="nav-item">
@@ -94,7 +100,7 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-clipboard-fill"></i>
                   <p>
@@ -441,7 +447,7 @@
                   <i class="nav-icon bi bi-circle text-info"></i>
                   <p>Informational</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
             <!--end::Sidebar Menu-->
           </nav>

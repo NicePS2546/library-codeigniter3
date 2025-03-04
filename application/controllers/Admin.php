@@ -248,7 +248,18 @@ class Admin extends CI_Controller
             
         ]);
     }
-   
+   public function room_data(){
+    $model = $this->Model('','RoomMusic',false);
+    $rows = $model->getAllRoom();
+
+    return $this->AdminRender('admin/room_data/page',[
+        'rows'=>$rows,
+        'page'=>'room_data',
+        'title'=>'ข้อมูลห้อง',
+        'table'=>'music'
+
+    ]);
+   }
     public function update_vdo(){
         $extension = 'index.php/';
         $reserv_id = $this->post('reserv_id');
@@ -340,6 +351,36 @@ class Admin extends CI_Controller
             </script>';
         }
         return $this->sweet($sweet, 'Reservation Data', 'admin');   
+    }
+    public function room_music() {
+        $id = $this->input->post('r_id');
+        
+        header('Content-Type: application/json'); // Ensure JSON response
+        
+        try {
+            
+            $model = $this->Model('','RoomMusic',false);
+            $row = $model->s;
+
+            $u_data = $this->get_user_sso_by_id($row['st_id']);
+            // Ensure $u_data exists and has the expected structure
+            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+            // Store fullname in the correct entry inside the array
+            $row['fullname'] = $fullname;
+
+            
+            
+            if ($row) {
+                echo json_encode($row);
+            } else {
+                echo json_encode(['message' => "fail"]);
+            }
+        } catch (Exception $e) {
+            log_message('error', 'Error in view_mini: ' . $e->getMessage());
+            echo json_encode(['error' => 'An error occurred while fetching data.']);
+        }
+    
+        exit(); // Stop execution to prevent extra HTML output
     }
     public function view_mini() {
         $id = $this->input->post('id');
