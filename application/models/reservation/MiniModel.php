@@ -328,7 +328,34 @@ class MiniModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }
+    public function get_all_reserved_expired($status='expired')
+    {
+        $this->db->select('tbn_room_mini.r_number, tbn_mini_reserv.*');
+        $this->db->from('tbn_room_mini');
+        $this->db->join('tbn_mini_reserv', 'tbn_room_mini.r_id = tbn_mini_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_mini_reserv.r_status', $status);
+        $query = $this->db->get();
+        return $query->result_array(); // Returns the result as an array
+    }
 
+    public function get_all_by_reserv_id($st_id,$status = ['expired', 'deleted'])
+    {
+        $this->db->select('tbn_room_mini.r_number, tbn_mini_reserv.*');
+        $this->db->from('tbn_room_mini');
+        $this->db->join('tbn_mini_reserv', 'tbn_room_mini.r_id = tbn_mini_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where_in('tbn_mini_reserv.r_status', $status);
+        $this->db->where('tbn_mini_reserv.st_id', $st_id);
+        $query = $this->db->get();
+        return $query->result_array(); // Returns the result as an array
+    }
+    public function delete_by_id($reserv_id)
+    {
+        $this->db->where('reserv_id', $reserv_id);
+
+        // Deleting the record
+        return $this->db->delete($this->table); 
+       
+    }
     public function join_room($id)
     {
         $user = 1;

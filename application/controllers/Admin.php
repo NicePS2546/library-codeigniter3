@@ -29,10 +29,13 @@ class Admin extends CI_Controller
     public function reserv_data(){
         return $this->AdminRender('admin/reserv_data',[
             'title'=>'ข้อมูลการจอง',
-            'page'=>'reserv_data'
+            'page'=>'reserv_data',
+            
         ]);
     }
+
     public function reserv_music(){
+        $expired_rows = $this->get_expired();
         $this->load->model('reservation/MusicModel');
         $model = $this->MusicModel;
         $rows = $model->get_all_reserved('actived');
@@ -51,6 +54,7 @@ class Admin extends CI_Controller
             'page'=>'reserv_data',
             'table'=>'music',
             'rows'=>$rows,
+            'expired_rows'=>$expired_rows
            
         ]);
     }
@@ -252,11 +256,14 @@ class Admin extends CI_Controller
     $model = $this->Model('','RoomMusic',false);
     $rows = $model->getAllRoom();
 
+
+    
     return $this->AdminRender('admin/room_data/page',[
-        'rows'=>$rows,
+       'rows'=>$rows,
         'page'=>'room_data',
         'title'=>'ข้อมูลห้อง',
-        'table'=>'music'
+        'table'=>'music',
+        
 
     ]);
    }
@@ -627,6 +634,22 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'Admin Data', 'admin');
     
+    }
+
+    public function get_expired()
+    {
+        $music = $this->Model('reservation', 'MusicModel', true);
+        $vdo = $this->Model('reservation', 'VdoModel', true);
+        $mini = $this->Model('reservation', 'MiniModel', true);
+        
+
+        $music_expired = $music->get_all_reserved_expired('expired');
+        $vdo_expired = $vdo->get_all_reserved_expired('expired');
+        $mini_expired = $mini->get_all_reserved_expired('expired');
+
+        $rows = array_merge($music_expired, $vdo_expired, $mini_expired);
+
+        return $rows;
     }
     
 }

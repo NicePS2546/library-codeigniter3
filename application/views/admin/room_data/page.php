@@ -102,8 +102,11 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 </style>
 
 <div class="info-box">
-    <div class="info-box-content">
+<div class="info-box-content title-container">
         <span class="info-box-text font-title"><?= $title ?></span>
+        <button class="btn my-auto btn-primary" style="width:120px" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">เพิ่มแอดมิน</button>
+
     </div>
 </div>
 

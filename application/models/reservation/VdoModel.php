@@ -45,6 +45,37 @@ class VdoModel extends CI_Model
 
         return $query->result_array();
     }
+    public function get_all_reserved_expired($status='expired')
+    {
+        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
+        $this->db->from('tbn_room_vdo');
+        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
+        $this->db->where('tbn_vdo_reserv.r_status', $status);
+        
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+    public function get_all_by_reserv_id($st_id,$status = ['expired', 'deleted'])
+    {
+        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
+        $this->db->from('tbn_room_vdo');
+        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
+        $this->db->where_in('tbn_vdo_reserv.r_status', $status);
+        $this->db->where('tbn_vdo_reserv.st_id', $st_id);
+    
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+    public function delete_by_id($reserv_id)
+    {
+        $this->db->where('reserv_id', $reserv_id);
+        // Deleting the record
+        return $this->db->delete($this->table); 
+        
+       
+    }
     public function get_reserved_row_view($id,$reserved_id)
     {
         $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');

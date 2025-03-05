@@ -35,7 +35,7 @@
                   <p>สถิติประจำวัน</p>
                 </a>
               </li>
-              <li class="nav-item <?= $page == "reserv_data"  || $page == "admin_data"  ? "menu-open" :"" ?>  ">
+              <li class="nav-item <?= $page == "reserv_data"  || $page == "admin_data"  ? "menu-open" :"" || $page == "room_data" ? "menu-open" : '' ?>  ">
                 <a href="#" class="nav-link ">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>

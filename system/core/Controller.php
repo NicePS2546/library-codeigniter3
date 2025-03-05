@@ -343,6 +343,60 @@ public function get_user_sso_by_id($id)
 		return false;
 	}
 }
+public function get_sso_name($ids)
+{
+    // Ensure $ids is an array
+    if (!is_array($ids)) {
+        $ids = [$ids];
+    }
+
+    // Create a query filter to search for all the IDs at once
+    $accountFilter = [];
+    foreach ($ids as $id) {
+        $accountFilter[] = "( |(uid=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . ")(uidnumber=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . ")(gecos=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . "))";
+    }
+    $accountQuery = implode(' ', $accountFilter);
+
+    // LDAP configuration
+    $ldapconf["host"] = "ldap://202.29.9.109";
+    $ldapconf["port"] = NULL;
+    $ldapconf["basedn"] = "dc=npru,dc=ac,dc=th";
+    $ldapconf["LDAP_OPT_PROTOCOL_VERSION"] = 3;
+
+    // Connect to LDAP
+    $ds = ldap_connect($ldapconf["host"]);
+    if (!$ds) {
+        echo "Could not connect to LDAP Server.";
+        exit();
+    }
+
+    // Set the LDAP protocol version
+    $ls = ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldapconf["LDAP_OPT_PROTOCOL_VERSION"]);
+    if (!$ls) {
+        echo "Failed to set protocol version.";
+        ldap_close($ds);
+        exit();
+    }
+
+    // Construct the LDAP query
+    $query = "( & ( |$accountQuery)(accountStatus=TRUE)( | (gidNumber=10001)(gidNumber=10002)(gidNumber=10003)))";
+    $sr = ldap_search($ds, $ldapconf["basedn"], $query);
+    $info = ldap_get_entries($ds, $sr);
+
+    // Process the result
+    $results = [];
+    foreach ($info as $entry) {
+        if (isset($entry['uid'][0])) {
+            $results[$entry['uid'][0]] = isset($entry['cn'][0]) ? $entry['cn'][0] : 'Unknown';
+        }
+    }
+
+    ldap_close($ds);
+
+    return $results;
+}
+
+
 
 
 

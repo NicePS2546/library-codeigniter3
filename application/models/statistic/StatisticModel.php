@@ -27,7 +27,7 @@ class StatisticModel extends CI_Model
         $this->db->where('stat_date', $today);
         $this->db->where('service_id', $service_id);
         $query = $this->db->get($this->table);
-
+        
         if ($query->num_rows() > 0) {
             // Update the existing record
             $this->db->set('total_users', 'total_users + ' . (int) $new_users, FALSE);
@@ -46,6 +46,12 @@ class StatisticModel extends CI_Model
             return $this->db->insert($this->table, $data);
         }
     }
+    public function update_on_cancel($service_id, $canceled_users = 0, $canceled_reservations = 1)
+{
+    
+    return $this->updateDailyStatistics($service_id, -$canceled_users, -$canceled_reservations);
+}
+
   
 
     public function get_by_service($service){

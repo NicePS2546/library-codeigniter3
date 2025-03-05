@@ -190,9 +190,7 @@
     }</script>
 <script>
 
-    setInterval(() => {
-        location.reload();
-    }, 80000);
+  
 </script>
 <!--end::Script-->
 </body>

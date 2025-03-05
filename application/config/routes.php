@@ -96,6 +96,10 @@ $route['mini/reserv/submit'] = 'mini/reserv';
 // SSO
 $route['sso/login'] = 'SSO/index';
 $route['sso/logout'] = 'SSO/logout';
+$route['user/history'] = 'SSO/user_history';
+
+$route['history/delete/(:num)/(:num)'] = 'SSO/delete_reserv/$1/$2';
+
 
 // Test
 $route['test/sweet'] = 'test/testSweet';

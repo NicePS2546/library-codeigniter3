@@ -60,42 +60,31 @@
     table#Table tbody tr:last-child td:last-child {
         border-bottom-right-radius: 6px !important;
     }
-    /* Ensure modal backdrop and modal-dialog of Modal 1 are in the correct stack */
-#exampleModal .modal-backdrop {
-    z-index: 1040 !important;
-}
-
-#exampleModal .modal-dialog {
-    z-index: 1050 !important;
-}
-
-/* Set a higher z-index for Modal 2 to ensure it comes in front of Modal 1 */
-#CheckExpire .modal-dialog {
-    z-index: 9999 !important;
-    position: fixed !important;
-}
-
+    .table-title{
+        font-size: 24px;
+    }
+    th,td{
+        text-align: center;
+    }
 </style>
 
 <div class="container">
     <div class="">
-        <table class="table table-striped nowrap" style="width:100%" id="Table">
+    <div class="table-title"><?= $table == 'old_history' ? 'ประวัติการเข้าใช้บริการ' : 'ข้อมูลการจอง' ?></div>
+        <table class="table table-striped nowrap" style="width:100%" id="<?= $table ?>">
 
             <!-- <table class="table table-bordered" id="Table"> -->
             <?php
-
-            if ($table === "music") {
-                echo $this->load->view('admin/reservation/music', [
-                    'rows' => $rows,
+            
+            if ($table === "current_history") {
+                echo $this->load->view('history/section/current_history', [
+                    'rows' => $current_history,
                     'url' => 'music'
                 ], true);
-            } else if ($table == "vdo") {
-                echo $this->load->view('admin/reservation/vdo', ['rows' => $rows, 'url' => 'vdo'], true);
-            } else if ($table == "mini") {
-                echo $this->load->view('admin/reservation/mini', ['rows' => $rows, 'url' => 'mini'], true);
-            } else if($table == 'admin_data'){
-                echo $this->load->view('admin/admin_data/table', ['rows' => $rows, 'url' => 'admin_data'], true);
-            } ?>
+            } else if ($table == "old_history") {
+                echo $this->load->view('history/section/old_history', ['rows' => $old_history, 'url' => 'vdo'], true);
+            } 
+            ?>   
         </table>
     </div>
 
@@ -117,41 +106,15 @@
 <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
 <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.js"></script> -->
 
-<script>
-    // let table = new DataTable('#productTable');
-    function intializingDataTable(table) {
-        new DataTable(table, {
-            responsive: true
-        });
 
-    };
 
-    intializingDataTable('#Table');
 
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        setInterval(() => {
-            const className = <?= !empty($rooms) ? "'.ani-element'" : "'.notFound'" ?>;
-            const elements = document.querySelectorAll(className);
-
-            elements.forEach((el, index) => {
-                // Delay each element by a factor of its index (300ms = 0.3 second per element)
-                setTimeout(() => {
-                    el.classList.add('visible', 'animate__animated', 'animate__fadeInUp');
-                }, index * 300); // The delay increases for each element
-            });
-        }, 500);
-    });
-    // Reload the page every 60,000 milliseconds (1 minute)
-   
-</script>
 <script>
     // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2
-    function showDeleteConfirmation(id, name) {
+    function showDeleteConfirmation(id,s_id,total_pp, name) {
         Swal.fire({
             title: 'คุณแน่ใจหรือไม่?',
-            text: 'คุณแน่ใจใช่ใหมว่าจะปิดห้องของ ' + name + '?',
+            text: 'คุณแน่ใจใช่ใหมว่าจะยกเลิกการจอง ?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'ปืด',
@@ -161,11 +124,11 @@
                 // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= base_url("index.php/admin/expire/reserv/$table/") ?>' + id;
+                form.action = '<?= base_url("index.php/history/delete/") ?>'+s_id+'/'+ id;
                 const input = document.createElement('input');
                 input.type = 'hidden';
-                input.name = 'id';
-                input.value = id;
+                input.name = 'total_pp';
+                input.value = total_pp;
                 form.appendChild(input);
                 document.body.appendChild(form);
                 form.submit();
@@ -173,14 +136,54 @@
         });
     }
     // แนบตัวตรวจจับเหตุการณ์คลิกกับองค์ปุ่ มลบทั้งหมดที่มีคลาส delete-button
-    const deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const get_id = button.getAttribute('data-user-id');
+    // const deleteButtonsCurrent = document.querySelectorAll('.delete-button-current');
+    // deleteButtonsCurrent.forEach((button) => {
+    //     button.addEventListener('click', () => {
+    //         const get_id = button.getAttribute('data-user-id');
+    //         const name = button.getAttribute('data-user-fullname');
+    //         showDeleteConfirmation(get_id, name);
+    //     });
+    // });
+
+    // const deleteButtonsOld = document.querySelectorAll('.delete-button-old');
+    // deleteButtonsOld.forEach((button) => {
+    //     button.addEventListener('click', () => {
+    //         const get_id = button.getAttribute('data-user-id');
+    //         const name = button.getAttribute('data-user-fullname');
+    //         showDeleteConfirmation(get_id, name);
+    //     });
+    // });
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+    // Event delegation for both tables
+    const currentTable = document.querySelector('#current_history');
+    const oldTable = document.querySelector('#old_history');
+
+    // Listen for click events in the current table
+    currentTable.addEventListener('click', (event) => {
+        const button = event.target.closest('button');  // Find the nearest button if the icon is clicked
+        if (button && button.classList.contains('delete-button-current')) {
+            const get_id = button.getAttribute('data-reserv-id');
+            const get_s_id = button.getAttribute('data-s-id');
+            const get_total_pp = button.getAttribute('data-total-pp');
             const name = button.getAttribute('data-user-fullname');
-            showDeleteConfirmation(get_id, name);
-        });
+            showDeleteConfirmation(get_id,get_s_id,get_total_pp, name);
+        }
     });
+
+    // Listen for click events in the old table
+    oldTable.addEventListener('click', (event) => {
+        const button = event.target.closest('button');  // Find the nearest button if the icon is clicked
+        if (button && button.classList.contains('delete-button-old')) {
+            const get_id = button.getAttribute('data-user-id');
+            const get_s_id = button.getAttribute('data-s-id');
+            const name = button.getAttribute('data-user-fullname');
+            showDeleteConfirmation(get_id,get_s_id, name);
+        }
+    });
+});
 </script>
 
 <div class="modal fade" id="reservedModal" tabindex="-1" arialabelledby="memberModalLabel" aria-hidden="true">
@@ -213,33 +216,6 @@
     </div>
 </div>
 
-
-
-<!-- Modal Structure -->
-<div class="modal fade" id="exampleModal" tabindex="-200" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div id="modal-form">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">การจองที่หมดอายุ</h5>
-            <!-- Correctly add data-bs-dismiss="modal" to close the modal -->
-            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-          </div>
-          <div class="modal-body d-flex justify-content-center">
-            <div class="col-10 col-sm-10 pb-4 col-md-10 col-lg-10">
-            <?= $this->load->view('admin/component/outdate/base_modal_table',['rows'=>$rows],true) ?>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="modal" data-bs-dismiss="modal">ปิด</button>
-            
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
 <script>
     $(document).ready(function () {
         <?php $post_url = base_url("index.php/admin/view/$table"); ?>
@@ -283,8 +259,5 @@
                 }
             });
         });
-        
     });
-
-    
 </script>
