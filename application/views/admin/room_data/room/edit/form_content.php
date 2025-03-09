@@ -5,22 +5,21 @@
     }
 
 </style>
-<?php
-    $user_data = $this->session->userdata('userData');
-?>
+
 <div class="card card-shadow">
     <div class="card-body">
+    <input type="hidden" name="r_id" value="<?= $row['r_id'] ?>">
 <div class="text-start">
     <label class="form-label pl-1" for="st_id1">รหัสนักศึกษา</label>
-    <input type="text" class="form-control" value="<?= $user_data['uid'] ? $user_data['uid'] : ''  ?>" name="st_id" id="st_id1">
+    <input type="text" class="form-control" value="<?= $row['st_id'] ?>" name="u_id" id="st_id1">
     <div id="result" class="mt-4 mb-2">
-    <!-- <?= $user_data['uid'] ? 'disabled' : '' ?> -->
+
     </div>
 
 </div>
 <div class="text-start">
     <label class="form-label" for="total">จำนวนคนเข้าใช้</label>
-    <input type="number" class="form-control" name="total" id="total">
+    <input type="number" class="form-control" value="<?= $row['total_pp'] ?>" name="total" id="total">
 </div>
 <div id="results" class="mt-3">
     <!-- Fetched results will appear here -->
@@ -31,7 +30,6 @@
         <!-- Available time slots will be populated here -->
     </select>
 </div>
-<a href="<?= base_url("index.php/$page") ?>" class="btn mt-4 btn-secondary" >กลับ</a>
-<button class="btn mt-4 btn-primary" id="reservBtn" type="submit">จอง</button>
+<button class="btn mt-4 btn-primary" id="reservBtn" type="submit">แก้ไข</button>
 </div>
 </div>

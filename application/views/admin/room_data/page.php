@@ -103,9 +103,9 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 
 <div class="info-box">
 <div class="info-box-content title-container">
-        <span class="info-box-text font-title"><?= $title ?></span>
+        <span class="info-box-text font-title"><?= $title. " ".$room_title ?></span>
         <button class="btn my-auto btn-primary" style="width:120px" data-bs-toggle="modal"
-            data-bs-target="#exampleModal">เพิ่มแอดมิน</button>
+            data-bs-target="#exampleModal">เพิ่มห้อง</button>
 
     </div>
 </div>
@@ -160,18 +160,18 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 
                 <!-- Tooltip Example -->
                 
-                <a href="<?= base_url('index.php/admin/check/reserv/music') ?>" class="<?= $card_res ?> text-center">
+                <a href="<?= base_url('index.php/admin/room_data/music') ?>" class="<?= $card_res ?> text-center">
                     <span class="info-box-icon text-bg-primary shadow-sm btn-shadow" data-label="Music-Relax">
                         <i class="bi bi-music-note-beamed"></i>
                     </span>
                 </a>
 
-                <a href="<?= base_url('index.php/admin/check/reserv/vdo') ?>" class="<?= $card_res ?> text-center">
+                <a href="<?= base_url('index.php/admin/room_data/vdo') ?>" class="<?= $card_res ?> text-center">
                     <span class="info-box-icon text-bg-danger shadow-sm btn-shadow" data-label="Video On-Demand">
                         <i class="bi bi-camera-reels-fill"></i>
                     </span>
                 </a>
-                <a href="<?= base_url('index.php/admin/check/reserv/mini') ?>" class="<?= $card_res ?> text-center">
+                <a href="<?= base_url('index.php/admin/room_data/mini') ?>" class="<?= $card_res ?> text-center">
                     <span class="info-box-icon text-bg-success shadow-sm btn-shadow" data-label="Mini-Theater">
                         <i class="bi bi-film"></i>
                     </span>

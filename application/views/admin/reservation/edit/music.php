@@ -32,7 +32,7 @@
 
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
-        <h1>จองห้อง</h1>
+    <?= $this->load->view('admin/reservation/edit/component/title',[],true)?>
         <form class="text-end" action="<?php echo base_url('index.php/admin/update/music'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="reserv_id" value="<?= $row['reserv_id'] ?>">

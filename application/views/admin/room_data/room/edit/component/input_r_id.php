@@ -1,0 +1,1 @@
+<input type="hidden" name="reserv_id" value="<?= $row['reserv_id'] ?>">

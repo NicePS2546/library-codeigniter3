@@ -57,6 +57,46 @@ class Debug extends CI_Controller
         }
     }
 
+    
+    
+    
+    public function test_upload_page(){
+       return $this->Render('test_upload_page',[]);
+    }
+    public function test_upload() {
+       
+        $this->upload_image('vdo', 1);
+    }
+    
+    public function upload_img() {
+        $result = $this->upload_image('music',1);
+        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+        if ($result['status']){
+            echo '<script>
+                setTimeout(function() {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "เพิ่มข้อมูลสำเร็จ",
+                        showConfirmButton: true,
+                        // timer: 1500
+                    })}, 1000);
+                    </script>';
+        } else {
+           
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "เพิ่มข้อมูลไม่สำเร็จ",
+                    showConfirmButton: true,
+                    // timer: 1500
+                })}, 1000);
+                </script>';
+        }
+    }
+
     private function check_room($model, $value, $data)
     {
         $extension_url = "index.php/";

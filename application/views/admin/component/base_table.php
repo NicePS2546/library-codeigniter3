@@ -74,7 +74,11 @@
     z-index: 9999 !important;
     position: fixed !important;
 }
-
+.head-outdate{
+    display: flex !important;
+   justify-content: space-between !important;
+   align-items: center !important;
+}
 </style>
 
 <div class="container">
@@ -146,6 +150,7 @@
     // Reload the page every 60,000 milliseconds (1 minute)
    
 </script>
+
 <script>
     // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2
     function showDeleteConfirmation(id, name) {
@@ -172,13 +177,48 @@
             }
         });
     }
+
+    function showDeleteAllConfirmation(table) {
+        Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            text: 'คุณแน่ใจใช่ใหมว่าจะลบทั้งหมด ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ลบ',
+            cancelButtonText: 'ยกเลิก',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '<?= base_url("index.php/admin/update/deleteAll/reserv") ?>';
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'table';
+                input.value = table;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
     // แนบตัวตรวจจับเหตุการณ์คลิกกับองค์ปุ่ มลบทั้งหมดที่มีคลาส delete-button
     const deleteButtons = document.querySelectorAll('.delete-button');
+    
     deleteButtons.forEach((button) => {
         button.addEventListener('click', () => {
             const get_id = button.getAttribute('data-user-id');
             const name = button.getAttribute('data-user-fullname');
             showDeleteConfirmation(get_id, name);
+        });
+    });
+
+    const deleteAllBtn = document.querySelectorAll('.delete-all-btn');
+    console.log(deleteAllBtn);
+    deleteAllBtn.forEach((button) => {
+        button.addEventListener('click', () => {
+            const table = button.getAttribute('data-table');
+            showDeleteAllConfirmation(table);
         });
     });
 </script>
@@ -220,8 +260,8 @@
     <div id="modal-form">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">การจองที่หมดอายุ</h5>
+          <div class="modal-header" style="margin-left: 10px; margin-right: 10px;">
+          <h5 class="modal-title" id="exampleModalLabel">การจองที่หมดอายุ</h5> <button data-table="<?= $table ?>" class="btn delete-all-btn btn-danger">ลบทั้งหมด</button>
             <!-- Correctly add data-bs-dismiss="modal" to close the modal -->
             <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
           </div>

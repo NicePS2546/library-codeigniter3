@@ -350,7 +350,26 @@ class MusicModel extends CI_Model
             echo $e->getMessage();
         }
     }
+
+    public function batch_update_status($ids, $status)
+    {
+        if (empty($ids)) {
+            return false;
+        }
+    
+        // อัปเดตค่า r_status ในตาราง โดยใช้ WHERE IN()
+        $this->db->where_in('reserv_id', $ids)
+                 ->set('r_status', $status)
+                 ->update($this->table);
+    
+        return $this->db->affected_rows() > 0;
+    }
+    public function delete_outdate($reserv_id)
+    {
+        $this->db->where('reserv_id', $reserv_id);
+        $this->db->set('r_status', 'deleted');
+    
+        return $this->db->update($this->table);
+    }
 }
-
-
 

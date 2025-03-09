@@ -21,6 +21,10 @@ class NameModel extends CI_Model
     {
         return $this->db->where($column, $value)->get($this->table)->row();
     }
+    public function get_where_array($column, $value)
+    {
+        return $this->db->where($column, $value)->get($this->table)->row_array();
+    }
     public function get_by_id($id){
         return $this->db->where('t_id', $id)->get($this->table)->row_array();
     }

@@ -97,23 +97,8 @@
     </table>
 </div>
 
-
-
-
-
-<script src="<?= base_url('public/cdn/jQuery/jquery-3.7.1.js') ?>"></script>
-<script src="<?= base_url('public/cdn/dataTables.min.js') ?>"></script>
-<script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.bootstrap5.js') ?>"></script>
-<script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.responsive.js') ?>"></script>
-<script src="<?= base_url('public/cdn/dataTable/js/responsive/responsive.bootstrap5.js') ?>"></script>
-<script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
-<link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap5.js"></script>
-<script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
-<script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.js"></script> -->
 
 <script>
     // let table = new DataTable('#productTable');
@@ -147,10 +132,10 @@
 </script>
 <script>
     // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2
-    function showDeleteConfirmation(id, name) {
+    function showDeleteExpireConfirmation(id, name, s_id) {
         Swal.fire({
             title: 'คุณแน่ใจหรือไม่?',
-            text: 'คุณแน่ใจใช่ใหมว่าจะปิดห้องของ ' + name + '?',
+            text: 'คุณแน่ใจใช่ใหมว่าจะลบห้องของ ' + name + '?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'ปืด',
@@ -160,11 +145,11 @@
                 // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= base_url("index.php/admin/expire/reserv/$table/") ?>' + id;
+                form.action = '<?= base_url("index.php/admin/update/delete/") ?>' + id;
                 const input = document.createElement('input');
                 input.type = 'hidden';
-                input.name = 'id';
-                input.value = id;
+                input.name = 'service_id';
+                input.value = s_id;
                 form.appendChild(input);
                 document.body.appendChild(form);
                 form.submit();
@@ -172,12 +157,13 @@
         });
     }
     // แนบตัวตรวจจับเหตุการณ์คลิกกับองค์ปุ่ มลบทั้งหมดที่มีคลาส delete-button
-    const deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach((button) => {
+    const deleteExpireButtons = document.querySelectorAll('.delete-expire-button');
+    deleteExpireButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            const get_id = button.getAttribute('data-user-id');
+            const get_id = button.getAttribute('data-reserv-id');
             const name = button.getAttribute('data-user-fullname');
-            showDeleteConfirmation(get_id, name);
+            const service_id = button.getAttribute('data-r-s-id');
+            showDeleteExpireConfirmation(get_id, name,service_id);
         });
     });
 </script>
@@ -207,10 +193,9 @@
     </div>
 </div>
 
-
-
 <script>
-    $(document).ready(function () {
+
+$(document).ready(function () {
         // Get the base URL for AJAX requests
         $(".modal-dialog").draggable({
             handle: "#modal-header", // Only allow dragging from the header
@@ -280,3 +265,75 @@
        
     });
 </script>
+
+<!-- <script>
+    $(document).ready(function () {
+        // Get the base URL for AJAX requests
+        $(".modal-dialog").draggable({
+            handle: "#modal-header", // Only allow dragging from the header
+            containment: "body", // Prevent dragging outside the body
+            scroll: false, // Prevent scrolling while dragging
+            helper: "original", // Use the original modal
+            cursor: "move", // Change cursor to move during drag
+            drag: function (event, ui) {
+                ui.position.top = Math.max(0, ui.position.top); // Prevent dragging outside the viewport vertically
+                ui.position.left = Math.max(0, ui.position.left); // Prevent dragging outside the viewport horizontally
+            }
+        });
+        
+        <?php $post_url = base_url("index.php/admin/view/"); ?>
+        
+        // Event delegation for dynamic content to handle 'view-expire-button' click
+        $(document).on('click', '.view-expire-button', function () {
+            const reserv_id = $(this).data('reserved-id');
+            const r_id = $(this).data('r-id');
+            const table = $(this).data('r-table');
+
+            $.ajax({
+                url: '<?= $post_url ?>' + table,
+                type: 'POST',
+                data: {
+                    id: r_id,
+                    reserved_id: reserv_id
+                },
+                success: function (response) {
+                    const reserved = response; // Parse the JSON response to an object
+                    console.log(reserved);
+
+                    const status = reserved.r_verify == 1 ? 'ยืนยันแล้ว' : 'ยังไม่ยืนยัน';
+
+                    // Set data into the modal's HTML
+                    $('#expired-uid').text(reserved.st_id);
+                    $('#expired-name').text(reserved.fullname);
+                    $('#expired-r_numb').text(reserved.r_number);
+                    $('#expired-people').text(reserved.total_pp + " คน");
+                    $('#expired-start').text(reserved.start_time);
+                    $('#expired-exp').text(reserved.exp_time);
+                    $('#expired-date').text(reserved.r_date);
+                    $('#expired-status').text(status);
+
+                    // Show the 'CheckExpire' modal
+                    $('#CheckExpire').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    console.log("Response Text:", xhr.responseText);
+                    try {
+                        const jsonResponse = JSON.parse(xhr.responseText);
+                        console.log("Parsed JSON:", jsonResponse);
+                    } catch (e) {
+                        console.error("Invalid JSON Response:", xhr.responseText);
+                    }
+                }
+            });
+        });
+
+         // When #CheckExpire modal is closed, open #exampleModal modal
+         $('#CheckExpire').on('hidden.bs.modal', function () {
+            $('#exampleModal').modal('show');
+        });
+
+        // Make the modal draggable with smooth transitions
+       
+    });
+</script> -->

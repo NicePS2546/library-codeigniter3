@@ -135,13 +135,23 @@ class CI_Controller
 
 		return $this->view("Template/main/Layout", $data);
 	}
-
+	public function check_admin(){
+		$check_admin = $this->session->has_userdata('admin_data');
+		
+		return $check_admin;
+	}
 	public function AdminRender($view, $data)
 	{
 		$type = $this->get_type();
 		$this->check_expire_music(); // check expire for music
 		$this->check_expire_vdo(); // check expire for music
 		$this->check_expire_mini(); // check expire for music
+		
+		if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
 
 		// Layout structure
 		$layout = [
@@ -222,6 +232,73 @@ class CI_Controller
 
 		return $data;
 	}
+	
+	public function upload_image($type = 'vdo', $r_id = 1) {
+        // echo "Starting upload function...<br>";
+    
+        $upload_path = FCPATH . "public/assets/img/room_img/$type/";
+    
+        
+        if (!is_dir($upload_path)) {
+            if (!mkdir($upload_path, 0777, true)) {
+                die("Failed to create directory: " . $upload_path);
+            }
+            // echo "Directory created successfully.<br>";
+        }
+    
+        // Convert path to avoid OS issues
+        $resolved_path = realpath($upload_path);
+        if ($resolved_path === false) {
+            die("Resolved path is invalid.");
+        }
+        // echo "Resolved Upload Path: " . $resolved_path . "<br>";
+    
+        // Get the file extension from the uploaded file
+        $file_ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+        $file_name = $r_id . "." . $file_ext;
+        $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
+    
+        // **Step 1: Check if an existing image exists and delete it**
+        foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $r_id . ".*") as $existing_file) {
+            // echo "Deleting old file: " . $existing_file . "<br>";
+            unlink($existing_file);
+        }
+    
+        // **Step 2: Upload the new file with the same name**
+        $config['upload_path']   = $resolved_path;
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['max_size']      = 2048;
+        $config['file_name']     = $file_name;
+        $config['overwrite']     = true;  // Ensure it replaces the old file
+    
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+    
+        // Debugging $_FILES
+        // echo "<pre>"; print_r($_FILES); echo "</pre>";
+        
+        if ($this->upload->do_upload('img')) {
+            $data = $this->upload->data();
+            // echo print_r($data);
+            // echo "Success! File uploaded to: " . $data['full_path'] . "<br>";
+            return ['status' => true, 'data' => $data];
+        } else {
+            $error = $this->upload->display_errors();
+            // echo "Upload failed: " . $error . "<br>";
+            return ['status' => false, 'error' => $error];
+        }
+    }
+	public function get_type_byId($id)
+	{
+		$key = 't_id';
+		$this->load->model('NameModel');
+		$typeModel = $this->NameModel;
+
+		$data = $typeModel->get_where_array($key, $id);
+
+		return $data['type'];
+	}
+
 	public function json_output($data){
 		return $this->output
             ->set_content_type('application/json')

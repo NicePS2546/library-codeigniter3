@@ -62,6 +62,8 @@ $route['debug/delete'] = 'debug/delete';
 $route['debug/status'] = 'debug/status_modify';
 $route['debug/time'] = 'debug/timeTest';
 $route['debug/sweet'] = 'debug/testSweetAlert';
+$route['test/upload'] = 'debug/test_upload_page';
+$route['debug/test/upload/submit'] = 'debug/test_upload';
 
 /*-------------------*/
 
@@ -136,11 +138,11 @@ $route['admin/add/submit'] = 'Admin/add_admin';
 $route['admin/suspend/(:any)'] = 'Admin/suspend_admin/$1';
 $route['admin/active/(:any)'] = 'Admin/active_admin/$1';
 
-$route['admin/room_data'] = 'Admin/room_data';
-$route['admin/room/view/music'] = 'Admin/room_music';
-$route['admin/room/view/vdo'] = 'Admin/room_vdo';
-$route['admin/room/view/mini'] = 'Admin/room_mini';
+$route['admin/room_data/(:any)'] = 'Admin/room_data/$1';
+$route['admin/room/view/(:any)'] = 'Admin/room_view_data/$1';
 
+$route['admin/update/deleteAll/reserv'] = 'Admin/delete_all';
+$route['admin/update/delete/(:num)'] = 'Admin/delete_expire/$1';
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';
 $route['online/remove/user'] = 'OnlineUser/remove';

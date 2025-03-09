@@ -32,10 +32,12 @@
 
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
-        <?= $this->load->view('admin/reservation/edit/component/title',[],true)?>
+    <?= $this->load->view('admin/room_data/room/edit/component/title',[],true)?>
         <form class="text-end" action="<?= base_url('index.php/admin/update/mini'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
-            <input type="hidden" name="reserv_id" value="<?= $row['reserv_id'] ?>">
+            <?= $this->load->view('admin/room_data/room/edit/component/title',[
+                'row'=>$row
+            ],true)?>
             <?= $this->load->view('admin/reservation/edit/form_content',['row'=>$row],true) ?>
 
           

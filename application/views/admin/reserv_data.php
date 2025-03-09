@@ -108,11 +108,13 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
         <button type="button" class="btn btn-primary position-relative " data-bs-toggle="modal"
         data-bs-target="#exampleModal">
   หมดอายุ
+  <?php if ($expired_rows): ?>
   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
     <?= count($expired_rows) ?>
     <span class="visually-hidden">ห้องที่หมดอายุ</span>
   </span>
-
+  <?php endif ?>
+  </button>
 
 
     </div>

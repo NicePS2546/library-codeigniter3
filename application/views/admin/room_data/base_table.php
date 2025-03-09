@@ -130,7 +130,7 @@
     // Reload the page every 60,000 milliseconds (1 minute)
     setInterval(() => {
         location.reload();
-    }, 60000);
+    }, 180000);
 </script>
 <script>
     // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2

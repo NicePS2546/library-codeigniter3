@@ -4,24 +4,8 @@
 
 <?php
 
-// $data = [
-//     ['r_id'=>1,'r_number'=>1,'r_status'=>1,'r_desc'=> "" ,'r_reserved' =>1,'end_time'=>'14:30:33','close_desc'=>'ห้องถูกปิดเนื่องจากต้องซ่อมดูแล.... Lorem ipsum dolor sit amet consectetur adipisicing
-//                 elit. Doloribus.'],
-//     ['r_id'=>2,'r_number'=>2,'r_status'=>0,'r_desc'=> "" ,'r_reserved' =>0,'end_time'=>'14:30:33','close_desc'=>'ห้องถูกปิดเนื่องจากต้องซ่อมดูแล.... Lorem ipsum dolor sit amet consectetur adipisicing
-//     elit. Doloribus.'],
-//     ['r_id'=>3,'r_number'=>3,'r_status'=>1,'r_desc'=> "" ,'r_reserved' =>1,'end_time'=>'14:30:33','close_desc'=>'ห้องถูกปิดเนื่องจากต้องซ่อมดูแล.... Lorem ipsum dolor sit amet consectetur adipisicing
-//     elit. Doloribus.'],
-//     ['r_id'=>4,'r_number'=>4,'r_status'=>1,'r_desc'=> "" ,'r_reserved' =>0,'end_time'=>'14:30:33','close_desc'=>'ห้องถูกปิดเนื่องจากต้องซ่อมดูแล.... Lorem ipsum dolor sit amet consectetur adipisicing
-//     elit. Doloribus.'],
-//     ['r_id'=>5,'r_number'=>5,'r_status'=>1,'r_desc'=> "" ,'r_reserved' =>2,'end_time'=>'14:30:33','close_desc'=>'ห้องถูกปิดเนื่องจากต้องซ่อมดูแล.... Lorem ipsum dolor sit amet consectetur adipisicing
-//     elit. Doloribus.'],
-
-// ];
-//     $rooms = $data;
 
 if (!empty($rooms)) {
-    // $u_data = $this->session->userdata('userData');
-    // echo var_dump($u_data['uid'])
     ?>
     <section id="main" class="container">
         <div class="row justify-content-center">

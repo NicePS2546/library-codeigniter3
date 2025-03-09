@@ -27,13 +27,14 @@ class Admin extends CI_Controller
         ]);
     }
     public function reserv_data(){
+      
         return $this->AdminRender('admin/reserv_data',[
             'title'=>'ข้อมูลการจอง',
             'page'=>'reserv_data',
-            
+           
         ]);
     }
-
+    
     public function reserv_music(){
         $expired_rows = $this->get_expired();
         $this->load->model('reservation/MusicModel');
@@ -54,11 +55,15 @@ class Admin extends CI_Controller
             'page'=>'reserv_data',
             'table'=>'music',
             'rows'=>$rows,
-            'expired_rows'=>$expired_rows
+            'expired_rows'=>$expired_rows,
+            'get_type'=>function ($r_s_id){
+                return $this->get_type_byId($r_s_id);
+            }
            
         ]);
     }
     public function reserv_vdo(){
+        $expired_rows = $this->get_expired();
         $this->load->model('reservation/VdoModel');
         $model = $this->VdoModel;
         $rows = $model->get_all_reserved('actived');
@@ -77,10 +82,15 @@ class Admin extends CI_Controller
             'page'=>'reserv_data',
             'table'=>'vdo',
             'rows'=>$rows,
-            
+            'expired_rows'=>$expired_rows,
+            'get_type'=>function ($r_s_id){
+                return $this->get_type_byId($r_s_id);
+            }
         ]);
     }
+
     public function reserv_mini(){
+        $expired_rows = $this->get_expired();
         $this->load->model('reservation/MiniModel');
         $model = $this->MiniModel;
         $rows = $model->get_all_reserved('actived');
@@ -99,12 +109,20 @@ class Admin extends CI_Controller
             'page'=>'reserv_data',
             'table'=>'mini',
             'rows'=>$rows,
-            
+            'expired_rows'=>$expired_rows,
+            'get_type'=>function ($r_s_id){
+                return $this->get_type_byId($r_s_id);
+            }
         ]);
     }
     
 
     public function expire_music($id){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $extension = 'index.php/';
         $this->load->model('reservation/MusicModel');
         $model = $this->MusicModel;
@@ -141,6 +159,11 @@ class Admin extends CI_Controller
         return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
     public function expire_vdo($id){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $extension = 'index.php/';
         $this->load->model('reservation/VdoModel');
         $model = $this->VdoModel;
@@ -177,6 +200,11 @@ class Admin extends CI_Controller
         return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
     public function expire_mini($id){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $extension = 'index.php/';
         $this->load->model('reservation/MiniModel');
         $model = $this->MiniModel;
@@ -252,22 +280,42 @@ class Admin extends CI_Controller
             
         ]);
     }
-   public function room_data(){
-    $model = $this->Model('','RoomMusic',false);
+   public function room_data($type){
+    $model = null;
+    switch($type){
+        case 'music':
+            $model = $this->Model('','RoomMusic',false);
+            $room_title ='Music-Relax';
+            break;
+        case 'vdo':
+            $model = $this->Model('','RoomVdo',false);
+            $room_title ='Video On-Demand';
+            break;
+        case 'mini':
+            $model = $this->Model('','RoomMini',false);
+            $room_title ='Mini-Theater';
+            break;
+        default:
+        $model = $this->Model('','RoomMusic',false);
+            break;
+    }
     $rows = $model->getAllRoom();
-
-
-    
     return $this->AdminRender('admin/room_data/page',[
        'rows'=>$rows,
         'page'=>'room_data',
         'title'=>'ข้อมูลห้อง',
         'table'=>'music',
+        'room_title'=>$room_title
         
 
     ]);
    }
     public function update_vdo(){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $extension = 'index.php/';
         $reserv_id = $this->post('reserv_id');
         $u_id = $this->post('u_id');
@@ -314,6 +362,11 @@ class Admin extends CI_Controller
         return $this->sweet($sweet, 'Reservation Data', 'admin');   
     }
     public function update_mini(){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $extension = 'index.php/';
         $reserv_id = $this->post('reserv_id');
         $u_id = $this->post('u_id');
@@ -359,7 +412,66 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'Reservation Data', 'admin');   
     }
-    public function room_music() {
+
+    public function update_room(){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
+        $extension = 'index.php/';
+        $reserv_id = $this->post('reserv_id');
+        $u_id = $this->post('u_id');
+        $total = $this->post('total');
+        $time = $this->post('time_slot');
+        list($start_time, $exp_time) = explode('-', $time);
+        $data = [
+            'st_id'=>$u_id,
+            'total_pp'=>$total,
+            'start_time'=>$start_time,
+            'exp_time'=>$exp_time,
+        ];
+
+        $model = $this->Model('reservation','MusicModel',true);
+        $result = $model->update_data($reserv_id,$data); 
+        if($result){
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "แก้ไขข้อมูลสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+           
+        }else{
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "แก้ไขข้อมูลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');   
+    }
+   
+    public function room_view_data($type) {
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
+
         $id = $this->input->post('r_id');
         
         header('Content-Type: application/json'); // Ensure JSON response
@@ -390,6 +502,11 @@ class Admin extends CI_Controller
         exit(); // Stop execution to prevent extra HTML output
     }
     public function view_mini() {
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $id = $this->input->post('id');
         $reserv_id = $this->input->post('reserved_id');
         
@@ -421,6 +538,11 @@ class Admin extends CI_Controller
         exit(); // Stop execution to prevent extra HTML output
     }
     public function view_vdo() {
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $id = $this->input->post('id');
         $reserv_id = $this->input->post('reserved_id');
         
@@ -450,6 +572,7 @@ class Admin extends CI_Controller
         exit(); // Stop execution to prevent extra HTML output
     }
     public function view_music() {
+        
         $id = $this->input->post('id');
         $reserv_id = $this->input->post('reserved_id');
         
@@ -503,6 +626,11 @@ class Admin extends CI_Controller
         ]);
     }
     public function add_admin(){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $extension = 'index.php/';
         $uid =  $this->post('uid');
         $model = $this->Model('','AdminModel',false);
@@ -560,6 +688,11 @@ class Admin extends CI_Controller
     }
 
     public function suspend_admin($id){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $extension = 'index.php/';
         $model = $this->Model('','AdminModel',false);
         $data = [
@@ -597,7 +730,14 @@ class Admin extends CI_Controller
         return $this->sweet($sweet, 'Admin Data', 'admin');
     
     }
+
     public function active_admin($id){
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
+
         $extension = 'index.php/';
         $model = $this->Model('','AdminModel',false);
         $data = [
@@ -638,6 +778,11 @@ class Admin extends CI_Controller
 
     public function get_expired()
     {
+        if(!$this->check_admin()){
+			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+			redirect('/');
+			exit();
+		}
         $music = $this->Model('reservation', 'MusicModel', true);
         $vdo = $this->Model('reservation', 'VdoModel', true);
         $mini = $this->Model('reservation', 'MiniModel', true);
@@ -651,5 +796,156 @@ class Admin extends CI_Controller
 
         return $rows;
     }
+    public function update_expired_batch($rows)
+{
+    if(!$this->check_admin()){
+        $this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+        redirect('/');
+        exit();
+    }
+
+    if (empty($rows)) {
+        return false;
+    }
+
+    $music = $this->Model('reservation', 'MusicModel', true);
+    $vdo = $this->Model('reservation', 'VdoModel', true);
+    $mini = $this->Model('reservation', 'MiniModel', true);
+
+    $music_ids = [];
+    $vdo_ids = [];
+    $mini_ids = [];
+
+    foreach ($rows as $row) {
+        if ($row['r_s_id'] == '1') {
+            $music_ids[] = $row['reserv_id'];
+        } elseif ($row['r_s_id'] == '2') {
+            $vdo_ids[] = $row['reserv_id'];
+        } elseif ($row['r_s_id'] == '3') {
+            $mini_ids[] = $row['reserv_id'];
+        }
+    }
+
+    if (!empty($music_ids)) {
+        $music->batch_update_status($music_ids, 'deleted');
+    }
+    if (!empty($vdo_ids)) {
+        $vdo->batch_update_status($vdo_ids, 'deleted');
+    }
+    if (!empty($mini_ids)) {
+        $mini->batch_update_status($mini_ids, 'deleted');
+    }
+
+    return true;
+}
+
+public function delete_all(){
+    if(!$this->check_admin()){
+        $this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+        redirect('/');
+        exit();
+    }
+    $table = $this->post('table');
+    $extension = 'index.php/';
+    $expire_rows = $this->get_expired();
+    $result = $this->update_expired_batch($expire_rows);
     
+    if($result){
+        $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "ลบทั้งหมดสำเร็จ",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/check/reserv/'.$table.'"; 
+            });
+        }, 1000);
+        </script>';
+       
+    }else{
+        $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "ลบทั้งหมดไม่สำเร็จ",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/check/reserv/'.$table.'"; 
+            });
+        }, 1000);
+        </script>';
+    }
+    return $this->sweet($sweet, 'Reservation Data', 'admin');
+}
+
+    public function delete_expire($reserv_id){
+        $model = null;
+        $s_id = $this->post('service_id');
+        $result = null;
+        $extension = 'index.php/';
+        $table = null;
+        switch ($s_id) {
+            case 1:
+               $model = $this->Model('reservation','MusicModel',true);
+               $table = 'music';
+                break;
+            case 2:
+                $model = $this->Model('reservation','VdoModel',true);
+                $table = 'vdo';
+                break;
+            case 3:
+                $model = $this->Model('reservation','MiniModel',true);
+                $table = 'mini';
+                break;
+            default:
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "ผิดพลาดระบบขัดข้อง",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+                break;
+        }
+        $result = $model->delete_outdate($reserv_id);
+        
+        if($result){
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "ลบการจองสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/'.$table.'"; 
+                });
+            }, 1000);
+            </script>';
+           
+        }else{
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ลบการจองไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/'.$table.'"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');
+
+    }
 }

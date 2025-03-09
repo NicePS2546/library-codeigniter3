@@ -26,14 +26,14 @@
 
     .ani-element.visible {
         opacity: 1;
-        transition: opacity 0.5s ease-in;
+        transition: opacity 1s ease-in;
     }
 </style>
 
 <div class="container">
     <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
-        <?= $this->load->view('admin/reservation/edit/component/title',[],true)?>
-        <form class="text-end" action="<?= base_url('index.php/admin/update/mini'); ?>" id="formId"
+    <?= $this->load->view('admin/reservation/edit/component/title',[],true)?>
+        <form class="text-end" action="<?php echo base_url('index.php/admin/room/edit/music'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="reserv_id" value="<?= $row['reserv_id'] ?>">
             <?= $this->load->view('admin/reservation/edit/form_content',['row'=>$row],true) ?>
@@ -54,7 +54,7 @@
 
     $(document).ready(async () => {
     try {
-        const timeUrl = "<?= site_url("mini/time/".$row['r_id']) ?>"; // Ensure this is a valid URL string
+        const timeUrl = "<?= site_url("music/time/".$row['r_id']) ?>"; // Ensure this is a valid URL string
         const res = await fetch(timeUrl);
 
         if (!res.ok) throw new Error("Failed to fetch data");
@@ -96,7 +96,7 @@
                 // Delay each element by a factor of its index (300ms = 0.3 second per element)
                 setTimeout(() => {
                     el.classList.add('visible');
-                }, index * 100); // The delay increases for each element
+                }, index * 300); // The delay increases for each element
             });
         }, 500);
     });

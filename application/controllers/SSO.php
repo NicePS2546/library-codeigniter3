@@ -76,7 +76,7 @@ class SSO extends CI_Controller
                     // Extract user information
                     $fullname = isset($info[0]['cn'][0]) ? $info[0]['cn'][0] : 'Unknown';
                     $u_id = isset($info[0]['uid'][0]) ? $info[0]['uid'][0] : 'Unknown';
-                    $admin = $this->check_admin($u_id);
+                    $admin = $this->check_sso_admin($u_id);
 
                     $friend_ids = [654230003, 654230044, 654230053, 654230041, 654230029, 654230037]; // Replace with actual user IDs
 
@@ -155,7 +155,7 @@ class SSO extends CI_Controller
         // Redirect to the login or home page
         redirect('/'); // Replace 'login' with your desired route
     }
-    protected function check_admin($uid)
+    protected function check_sso_admin($uid)
     {
         $this->load->model('AdminModel');
         $model = $this->AdminModel;
