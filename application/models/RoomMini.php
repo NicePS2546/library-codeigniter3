@@ -16,7 +16,11 @@ class RoomMini extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-
+    public function getRowById($id)
+    {
+        $this->db->where($this->primaryKey, $id);
+        return $this->db->get($this->table)->row_array();
+    }
     // Insert hook method for created timestamp
     public function createdStamp($data)
     {
@@ -34,7 +38,7 @@ class RoomMini extends CI_Model {
     // Insert data into the table
     public function insertRoom($data)
     {
-        $data = $this->createdStamp($data);  // Apply created timestamp
+   
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();
     }
@@ -42,7 +46,6 @@ class RoomMini extends CI_Model {
     // Update data in the table
     public function updateRoom($data, $id)
     {
-        $data = $this->modifiedStamp($data);  // Apply updated timestamp
         $this->db->where($this->primaryKey, $id);
         return $this->db->update($this->table, $data);
     }

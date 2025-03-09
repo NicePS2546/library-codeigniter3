@@ -104,8 +104,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 <div class="info-box">
 <div class="info-box-content title-container">
         <span class="info-box-text font-title"><?= $title. " ".$room_title ?></span>
-        <button class="btn my-auto btn-primary" style="width:120px" data-bs-toggle="modal"
-            data-bs-target="#exampleModal">เพิ่มห้อง</button>
+        <a href="<?= base_url("index.php/admin/room/add/$table") ?>" class="btn my-auto btn-primary" style="width:120px" >เพิ่มห้อง</a>
 
     </div>
 </div>

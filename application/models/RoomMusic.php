@@ -42,7 +42,7 @@ class RoomMusic extends CI_Model {
     // Update data in the table
     public function updateRoom($data, $id)
     {
-        $data = $this->modifiedStamp($data);  // Apply updated timestamp
+       
         $this->db->where($this->primaryKey, $id);
         return $this->db->update($this->table, $data);
     }
@@ -52,6 +52,12 @@ class RoomMusic extends CI_Model {
     {
         $this->db->where($this->primaryKey, $id);
         return $this->db->get($this->table)->row();
+    }
+
+    public function getRowById($id)
+    {
+        $this->db->where($this->primaryKey, $id);
+        return $this->db->get($this->table)->row_array();
     }
     public function getRoomByNumber($n)
     {

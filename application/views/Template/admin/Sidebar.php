@@ -58,7 +58,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="<?= base_url('index.php/admin/room_data/music') ?>" class="nav-link <?= $page == "room_data" ? "active" :"" ?>">
+                    <a href="<?= base_url('index.php/admin/room_data/music') ?>" class="nav-link <?= $page == "room_data" ? "active" : "" ?>">
                     <?= $page == "room_data" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
                       <p>ข้อมูลห้อง</p>
                     </a>

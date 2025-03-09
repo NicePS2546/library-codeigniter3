@@ -34,7 +34,7 @@ class RoomVdo extends CI_Model {
     // Insert data into the table
     public function insertRoom($data)
     {
-        $data = $this->createdStamp($data);  // Apply created timestamp
+       
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();
     }
@@ -71,6 +71,10 @@ class RoomVdo extends CI_Model {
         $this->db->where($this->primaryKey, $id); // Replace 'id' with your table's primary key column
         return $this->db->delete($this->table); // Replace 'rooms' with your table name
     }
-    
+    public function getRowById($id)
+    {
+        $this->db->where($this->primaryKey, $id);
+        return $this->db->get($this->table)->row_array();
+    }
 }
 ?>

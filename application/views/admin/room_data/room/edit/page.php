@@ -26,22 +26,19 @@
 
     .ani-element.visible {
         opacity: 1;
-        transition: opacity 0.5s ease-in;
+        transition: opacity 0.3s ease-in;
     }
 </style>
 
 <div class="container">
-    <div class="col-12 col-sm-6 pb-4 col-md-4 col-lg-6 mt-4 mx-auto ani-element">
-    <?= $this->load->view('admin/room_data/room/edit/component/title',[],true)?>
-        <form class="text-end" action="<?= base_url('index.php/admin/update/mini'); ?>" id="formId"
-            onsubmit="return reserv(event)" method="POST">
-            <?= $this->load->view('admin/room_data/room/edit/component/title',[
-                'row'=>$row
-            ],true)?>
-            <?= $this->load->view('admin/reservation/edit/form_content',['row'=>$row],true) ?>
+    <div class="col-12 col-sm-8 pb-4 col-md-6 col-lg-10 mt-4 mx-auto ani-element">
+<?php print($r_id) ?>
+        <form class="text-end" action="<?php echo base_url('index.php/admin/room/edit/submit'); ?>"  id="formId"
+            onsubmit="return update_room(event)" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="r_id" value="<?= $r_id ?>">
+            <input type="hidden" name="type" value="<?= $type ?>">
+            <?= $this->load->view('admin/room_data/room/component/form_content', ['row' => $row], true) ?>
 
-          
-           
         </form>
     </div>
 </div>
@@ -54,41 +51,6 @@
 
 <script>
 
-    $(document).ready(async () => {
-    try {
-        const timeUrl = "<?= site_url("mini/time/".$row['r_id']) ?>"; // Ensure this is a valid URL string
-        const res = await fetch(timeUrl);
-
-        if (!res.ok) throw new Error("Failed to fetch data");
-
-        const data = await res.json(); // Parse JSON response
-        console.log(data);
-
-        const timeSlotSelect = document.getElementById("time_slot");
-        const reservBtn = document.getElementById("reservBtn");
-
-        if (data.availableSlots.length > 0) {
-            <?php 
-            $startTime = date("H:i", strtotime($row['start_time']));
-            $expTime = date("H:i", strtotime($row['exp_time']));FF ?>
-           
-           data.availableSlots.unshift("<?= $startTime .'-'.$expTime ?>");
-            // Populate dropdown with available time slots
-            console.log(data.availableSlots);
-            timeSlotSelect.innerHTML = data.availableSlots
-                .map(slot => `<option value="${slot}">${slot}</option>`)
-                .join("");
-        } else {
-            reservBtn.disabled = true;
-            timeSlotSelect.disabled = true;
-            timeSlotSelect.innerHTML = '<option>ไม่เหลือช่วงเวลาให้จองแล้ว</option>';
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Error: Unable to fetch data.");
-    }
-});
-
     document.addEventListener("DOMContentLoaded", function () {
         setInterval(() => {
             const className = '.ani-element';
@@ -98,7 +60,7 @@
                 // Delay each element by a factor of its index (300ms = 0.3 second per element)
                 setTimeout(() => {
                     el.classList.add('visible');
-                }, index * 100); // The delay increases for each element
+                }, index * 300); // The delay increases for each element
             });
         }, 500);
     });
@@ -152,14 +114,35 @@
         }, doneTypingInterval); // Set the delay time for the API request
     });
 
+    $(document).ready(function () {
+        // Initial check to set the class based on the selected option
+        updateClassBasedOnStatus();
 
-    function reserv(event) {
+        // Listen for change events on the select element
+        $('#status').change(function () {
+            updateClassBasedOnStatus();
+        });
+
+        // Function to update the class of the select element
+        function updateClassBasedOnStatus() {
+            var statusValue = $('#status').val(); // Get the current value of the select
+            if (statusValue == '1') {
+                $('#status').removeClass('text-danger').addClass('text-success');
+            } else {
+                $('#status').removeClass('text-success').addClass('text-danger');
+            }
+        }
+    });
+
+    function update_room(event) {
         event.preventDefault(); // Prevent default form submission
 
-        const query = $('#st_id1').val(); // Get input value
-        const total = $('#total').val();
+        const r_number = $('#r_numb').val(); // Get input value
+        const r_status = $('#status').val();
+        const r_desc = $('#r_desc').val();
+        const r_close_desc = $('#r_close_desc').val();
+        console.log(r_status)
 
-        console.log(query)
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -173,64 +156,57 @@
         });
 
 
-        // if (!query) {
-        //     showToast('โปรดใส่รหัสผู้ใช้', 'error');
-        //     return false; // Stop execution if input is empty
-        // }else if(!total){
-        //     showToast('โปรดใส่จำนวนผู้เข้าจอง', 'error');
-        //     return false; // Stop execution if input is empty
-        // }else if(total <= 4){
-        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน', 'error');
-        //     return false; // Stop execution if input is empty
-        // }else if(total >= 6){
-        //     showToast('จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 6 คน', 'error');
-        //     return false; // Stop execution if input is empty
-        // }
-
-        if (!query) {
-            showSweet('warn','โปรดใส่รหัสผู้ใช้')
+        if (!r_number) {
+            showSweet('warn', 'โปรดใส่หมายเลขห้อง')
             return false; // Stop execution if input is empty
-        } else if (!total) {
-            showSweet('warn','โปรดใส่จำนวนผู้เข้าจอง')
+        } else if (!r_desc) {
+            showSweet('warn', 'โปรดใส่คำอธิบายห้อง')
             return false; // Stop execution if input is empty
-        } else if (total < 4) {
-            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่น้อยกว่า 4 คน')
+        } else if (!r_status) {
+            showSweet('warn', 'โปรดเลือกสถานะห้อง')
             return false; // Stop execution if input is empty
-        } else if (total > 7) {
-            showSweet('warn','จำนวนผู้เข้าใช้งานต้องไม่มากกว่า 7 คน')
+        } else if (!r_close_desc && r_status == 0) {
+            showSweet('warn', 'โปรดใส่คำอธิบายการปิดห้อง')
             return false; // Stop execution if input is empty
         }
-
+        Toast.fire({
+            icon: "success",
+            title: "กำลังดำเนินการ"
+        });
+        setTimeout(function () {
+            document.getElementById('formId').submit(); // Submit the form
+        }, 800); // Wait 2 seconds (2000ms)
+        document.getElementById('formId').submit(); // Submit the form
 
         // AJAX call
-        $.ajax({
-            url: '<?= site_url("music/get/user") ?>', // API endpoint
-            type: 'POST',
-            data: { uid: query },
-            success: function (response) {
-                const data = JSON.parse(response);
+        // $.ajax({
+        //     url: '<?= site_url("music/get/user") ?>', // API endpoint
+        //     type: 'POST',
+        //     data: { uid: query },
+        //     success: function (response) {
+        //         const data = JSON.parse(response);
 
-                if (data.message === "fail" || !data.userdata) {
+        //         if (data.message === "fail" || !data.userdata) {
 
-                    showSweet('warn', 'ไม่พบผู้ใช้งาน') // Show error toast
-                    return false; // Stop execution if validation fails
-                }
+        //             showSweet('warn', 'ไม่พบผู้ใช้งาน') // Show error toast
+        //             return false; // Stop execution if validation fails
+        //         }
 
-                Toast.fire({
-                    icon: "success",
-                    title: "กำลังดำเนินการ"
-                });
-                setTimeout(function () {
-                    document.getElementById('formId').submit(); // Submit the form
-                }, 800); // Wait 2 seconds (2000ms)
-            },
-            error: function () {
-                showSweet('error', 'เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่')
-                return false; // Stop execution on error
-            }
-        });
+        //         Toast.fire({
+        //             icon: "success",
+        //             title: "กำลังดำเนินการ"
+        //         });
+        //         setTimeout(function () {
+        //             document.getElementById('formId').submit(); // Submit the form
+        //         }, 800); // Wait 2 seconds (2000ms)
+        //     },
+        //     error: function () {
+        //         showSweet('error', 'เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่')
+        //         return false; // Stop execution on error
+        //     }
+        // });
 
-        return false; // Prevent default submission until AJAX completes
+        // return false; 
     }
 
 </script>
@@ -244,14 +220,14 @@
                 icon: 'success',
                 confirmButtonText: 'โอเค'
             });
-        }else if(status == 'warn') {
+        } else if (status == 'warn') {
             Swal.fire({
                 title: title ? title : "แจ้งเตือน",
                 text: msg,
                 icon: 'warning',
                 confirmButtonText: 'โอเค'
             });
-        }else {
+        } else {
             Swal.fire({
                 title: title ? title : "ผิดพลาด",
                 text: msg,

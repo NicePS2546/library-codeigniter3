@@ -60,25 +60,27 @@
     table#Table tbody tr:last-child td:last-child {
         border-bottom-right-radius: 6px !important;
     }
+
     /* Ensure modal backdrop and modal-dialog of Modal 1 are in the correct stack */
-#exampleModal .modal-backdrop {
-    z-index: 1040 !important;
-}
+    #exampleModal .modal-backdrop {
+        z-index: 1040 !important;
+    }
 
-#exampleModal .modal-dialog {
-    z-index: 1050 !important;
-}
+    #exampleModal .modal-dialog {
+        z-index: 1050 !important;
+    }
 
-/* Set a higher z-index for Modal 2 to ensure it comes in front of Modal 1 */
-#CheckExpire .modal-dialog {
-    z-index: 9999 !important;
-    position: fixed !important;
-}
-.head-outdate{
-    display: flex !important;
-   justify-content: space-between !important;
-   align-items: center !important;
-}
+    /* Set a higher z-index for Modal 2 to ensure it comes in front of Modal 1 */
+    #CheckExpire .modal-dialog {
+        z-index: 9999 !important;
+        position: fixed !important;
+    }
+
+    .head-outdate {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
 </style>
 
 <div class="container">
@@ -97,7 +99,7 @@
                 echo $this->load->view('admin/reservation/vdo', ['rows' => $rows, 'url' => 'vdo'], true);
             } else if ($table == "mini") {
                 echo $this->load->view('admin/reservation/mini', ['rows' => $rows, 'url' => 'mini'], true);
-            } else if($table == 'admin_data'){
+            } else if ($table == 'admin_data') {
                 echo $this->load->view('admin/admin_data/table', ['rows' => $rows, 'url' => 'admin_data'], true);
             } ?>
         </table>
@@ -148,7 +150,7 @@
         }, 500);
     });
     // Reload the page every 60,000 milliseconds (1 minute)
-   
+
 </script>
 
 <script>
@@ -204,7 +206,7 @@
     }
     // แนบตัวตรวจจับเหตุการณ์คลิกกับองค์ปุ่ มลบทั้งหมดที่มีคลาส delete-button
     const deleteButtons = document.querySelectorAll('.delete-button');
-    
+
     deleteButtons.forEach((button) => {
         button.addEventListener('click', () => {
             const get_id = button.getAttribute('data-user-id');
@@ -232,16 +234,16 @@
             </div>
             <div class="modal-body d-flex flex-column">
                 <!-- แสดงรายละเอียดข้อมูลใน Modal -->
-                <p><strong>รหัสผู้ใช้:</strong> <span id="reserved-uid"></span>
+                <p><strong>รหัสผู้ใช้: </strong> <span id="reserved-uid"></span>
                 </p>
-                <p><strong>ชื่อ-นามสกุล:</strong> <span id="reserved-name"></span></p>
-                <p><strong>หมายเลขห้อง:</strong> <span id="reserved-r_numb"></span></p>
+                <p><strong>ชื่อ-นามสกุล: </strong> <span id="reserved-name"></span></p>
+                <p><strong>หมายเลขห้อง: </strong> <span id="reserved-r_numb"></span></p>
 
                 <p><strong>จำนวนผู้เข้าใช้งาน:</strong> <span id="reserved-people"></span></p>
-                <p><strong>เวลาที่เริ่ม:</strong> <span id="reserved-start"></span></p>
-                <p><strong>หมดเวลา:</strong> <span id="reserved-exp"></span></p>
-                <p><strong>วันที่จอง:</strong> <span id="reserved-date"></span></p>
-                <p><strong>สถานะ:</strong> <span class="text-success" id="reserved-status"></span></p>
+                <p><strong>เวลาที่เริ่ม: </strong> <span id="reserved-start"></span></p>
+                <p><strong>หมดเวลา: </strong> <span id="reserved-exp"></span></p>
+                <p><strong>วันที่จอง: </strong> <span id="reserved-date"></span></p>
+                <p><strong>สถานะ: </strong> <span class="" id="reserved-status"></span></p>
 
 
 
@@ -258,28 +260,29 @@
 <!-- Modal Structure -->
 <div class="modal fade" id="exampleModal" tabindex="-200" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div id="modal-form">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header" style="margin-left: 10px; margin-right: 10px;">
-          <h5 class="modal-title" id="exampleModalLabel">การจองที่หมดอายุ</h5> <button data-table="<?= $table ?>" class="btn delete-all-btn btn-danger">ลบทั้งหมด</button>
-            <!-- Correctly add data-bs-dismiss="modal" to close the modal -->
-            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-          </div>
-          <div class="modal-body d-flex justify-content-center">
-            <div class="col-10 col-sm-10 pb-4 col-md-10 col-lg-10">
-            <?= $this->load->view('admin/component/outdate/base_modal_table',['rows'=>$rows],true) ?>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="modal" data-bs-dismiss="modal">ปิด</button>
-            
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="margin-left: 10px; margin-right: 10px;">
+                    <h5 class="modal-title" id="exampleModalLabel">การจองที่หมดอายุ</h5> <button
+                        data-table="<?= $table ?>" class="btn delete-all-btn btn-danger">ลบทั้งหมด</button>
+                    <!-- Correctly add data-bs-dismiss="modal" to close the modal -->
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="col-10 col-sm-10 pb-4 col-md-10 col-lg-10">
+                        <?= $this->load->view('admin/component/outdate/base_modal_table', ['rows' => $rows], true) ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="modal" data-bs-dismiss="modal">ปิด</button>
 
-          </div>
+
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  
+</div>
+
 <script>
     $(document).ready(function () {
         <?php $post_url = base_url("index.php/admin/view/$table"); ?>
@@ -309,7 +312,13 @@
                     $('#reserved-date').text(reserved.r_date);
                     $('#reserved-status').text(status);
 
+                    if (reserved.r_verify == 1) {
+                        $('#reserved-status').removeClass('text-danger').addClass('text-success');
+                    } else {
+                        $('#reserved-status').removeClass('text-success').addClass('text-danger');
+                    }
                     $('#reservedModal').modal('show'); // แสดง Modal
+                    
                 },
                 error: function (xhr, status, error) {
                     console.error("AJAX Error:", status, error);
@@ -323,8 +332,8 @@
                 }
             });
         });
-        
+
     });
 
-    
+
 </script>

@@ -233,61 +233,53 @@ class CI_Controller
 		return $data;
 	}
 	
-	public function upload_image($type = 'vdo', $r_id = 1) {
-        // echo "Starting upload function...<br>";
-    
-        $upload_path = FCPATH . "public/assets/img/room_img/$type/";
-    
-        
-        if (!is_dir($upload_path)) {
-            if (!mkdir($upload_path, 0777, true)) {
-                die("Failed to create directory: " . $upload_path);
-            }
-            // echo "Directory created successfully.<br>";
-        }
-    
-        // Convert path to avoid OS issues
-        $resolved_path = realpath($upload_path);
-        if ($resolved_path === false) {
-            die("Resolved path is invalid.");
-        }
-        // echo "Resolved Upload Path: " . $resolved_path . "<br>";
-    
-        // Get the file extension from the uploaded file
-        $file_ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
-        $file_name = $r_id . "." . $file_ext;
-        $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
-    
-        // **Step 1: Check if an existing image exists and delete it**
-        foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $r_id . ".*") as $existing_file) {
-            // echo "Deleting old file: " . $existing_file . "<br>";
-            unlink($existing_file);
-        }
-    
-        // **Step 2: Upload the new file with the same name**
-        $config['upload_path']   = $resolved_path;
-        $config['allowed_types'] = 'jpg|jpeg|png|gif';
-        $config['max_size']      = 2048;
-        $config['file_name']     = $file_name;
-        $config['overwrite']     = true;  // Ensure it replaces the old file
-    
-        $this->load->library('upload', $config);
-        $this->upload->initialize($config);
-    
-        // Debugging $_FILES
-        // echo "<pre>"; print_r($_FILES); echo "</pre>";
-        
-        if ($this->upload->do_upload('img')) {
-            $data = $this->upload->data();
-            // echo print_r($data);
-            // echo "Success! File uploaded to: " . $data['full_path'] . "<br>";
-            return ['status' => true, 'data' => $data];
-        } else {
-            $error = $this->upload->display_errors();
-            // echo "Upload failed: " . $error . "<br>";
-            return ['status' => false, 'error' => $error];
+	public function upload_image($type = 'vdo', $r_number = 1, $name)
+{
+    // Check if a file is selected
+    if (empty($_FILES[$name]['name'])) {
+        return ['status' => false, 'error' => 'You did not select a file to upload.'];
+    }
+
+    $upload_path = FCPATH . "public/assets/img/room_img/$type/";
+
+    if (!is_dir($upload_path)) {
+        if (!mkdir($upload_path, 0777, true)) {
+            die("Failed to create directory: " . $upload_path);
         }
     }
+
+    $resolved_path = realpath($upload_path);
+    if ($resolved_path === false) {
+        die("Resolved path is invalid.");
+    }
+
+    $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
+    $file_name = $r_number . "." . $file_ext;
+    $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
+
+    // Delete old file if exists
+    foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $r_number . ".*") as $existing_file) {
+        unlink($existing_file);
+    }
+
+    // Set upload configuration
+    $config['upload_path']   = $resolved_path;
+    $config['allowed_types'] = 'jpg|jpeg|png|gif';
+    $config['max_size']      = 2048;
+    $config['file_name']     = $file_name;
+    $config['overwrite']     = true; // Overwrite the old file
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload($name)) {
+        $data = $this->upload->data();
+        return ['status' => true, 'data' => $data,'img_name'=>$type.'/'.$file_name];
+    } else {
+        $error = $this->upload->display_errors();
+        return ['status' => false, 'error' => $error];
+    }
+}
 	public function get_type_byId($id)
 	{
 		$key = 't_id';

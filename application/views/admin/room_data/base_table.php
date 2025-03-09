@@ -134,10 +134,10 @@
 </script>
 <script>
     // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2
-    function showDeleteConfirmation(id, name) {
+    function showDeleteConfirmation(id, r_id) {
         Swal.fire({
             title: 'คุณแน่ใจหรือไม่?',
-            text: 'คุณแน่ใจใช่ใหมว่าจะปิดห้องของ ' + name + '?',
+            text: 'คุณแน่ใจใช่ใหมว่าจะปิดห้องหมายเลขที่ ' + r_id + '?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'ปืด',
@@ -173,23 +173,20 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="memberModalLabel">รายละเอียดการจอง</h5>
+                <h5 class="modal-title" id="memberModalLabel">รายละเอียดข้อมูลห้อง</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex flex-column">
                 <!-- แสดงรายละเอียดข้อมูลใน Modal -->
-                <p><strong>รหัสผู้ใช้:</strong> <span id="reserved-uid"></span>
-                </p>
-                <p><strong>ชื่อ-นามสกุล:</strong> <span id="reserved-name"></span></p>
-                <p><strong>หมายเลขห้อง:</strong> <span id="reserved-r_numb"></span></p>
-
-                <p><strong>จำนวนผู้เข้าใช้งาน:</strong> <span id="reserved-people"></span></p>
-                <p><strong>เวลาที่เริ่ม:</strong> <span id="reserved-start"></span></p>
-                <p><strong>หมดเวลา:</strong> <span id="reserved-exp"></span></p>
-                <p><strong>วันที่จอง:</strong> <span id="reserved-date"></span></p>
-                <p><strong>สถานะ:</strong> <span class="text-success" id="reserved-status"></span></p>
-
-
+                <p><strong>หมายเลขห้อง:</strong> <span id="room-numb"></span></p>
+                <p><strong>คำอธิบายห้อง:</strong> <span id="room-desc"></span></p>
+                <p><strong>คำอธิบายตอนปิดห้อง: </strong> <span id="room-close-desc"></span></p>
+                <p><strong>สถานะ:</strong> <span id="room-status"></span></p>
+                <p><strong>วันที่สร้าง:</strong> <span id="room-date"></span></p>
+                <p><strong>รูปห้อง:</strong></p>
+                <!-- รูปถ่าย -->
+                <img class="" style="margin:auto;" id="room-img" width="200px"  src="" alt="รูปภาพสมาชิก" class="img-fluid">
+                
 
             </div>
             <div class="modal-footer">
@@ -201,14 +198,16 @@
 
 <script>
     $(document).ready(function () {
-        <?php $post_url = base_url("index.php/admin/room/view/$table"); ?>
+        <?php $post_url = base_url("index.php/admin/room/view/"); ?>
+        
         // เมื่อคลิกปุ่ ม View
-        $('.view-reserved-button').on('click', function () {
-            
+        $('.view-room-button').on('click', function () {
+
             const r_id = $(this).data('r-id');
+            const table = $(this).data('table');
             console.log('<?= $post_url ?>')
             $.ajax({ // ส่ง AJAX
-                url: '<?= $post_url ?>',
+                url: '<?= $post_url ?>'+table,
                 type: 'POST', // ใช้เมธอด POST
                 data: { // ส่งข้อมูลไปด้วย
                     r_id: r_id,
@@ -217,16 +216,22 @@
                     // นําข้อมูลที่ได้มาแสดงใน Modal
                     const reserved = response; // แปลงข้อความ JSON ให้กลายเป็นObject
                     console.log(reserved);
-                    const status = reserved.r_verify == 1 ? 'ยืนยันแล้ว' : 'ยังไม่ยืนยัน';
-                    $('#reserved-uid').text(reserved.st_id); // แสดงข้อมูลใน Modal โดยใช้ ID ของแต่ละข้อมูล
-                    $('#reserved-name').text(reserved.fullname);
-                    $('#reserved-r_numb').text(reserved.r_number);
-                    $('#reserved-people').text(reserved.total_pp + " คน");
-                    $('#reserved-start').text(reserved.start_time);
-                    $('#reserved-exp').text(reserved.exp_time);
-                    $('#reserved-date').text(reserved.r_date);
-                    $('#reserved-status').text(status);
-
+                    const img = '<?= base_url('public/assets/img/room_img/') ?>' + reserved.r_img;
+            
+                    const status = reserved.r_status == 1 ? ' เปิดใช้งาน' : ' ปิดใช้งาน';
+                    const close_desc = reserved.r_close_desc ? reserved.r_close_desc : 'ยังไม่ได้ตั้ง';
+                    $('#room-numb').text(reserved.r_number); // แสดงข้อมูลใน Modal โดยใช้ ID ของแต่ละข้อมูล
+                    $('#room-desc').text(reserved.r_desc);
+                    $('#room-close-desc').text(close_desc);
+                    $('#room-status').text(status);
+                    $('#room-date').text(reserved.created_at);
+                    $('#room-img').attr("src",img);
+                    
+                    if (reserved.r_status == 1) {
+                        $('#room-status').removeClass('text-danger').addClass('text-success');
+                    } else {
+                        $('#room-status').removeClass('text-success').addClass('text-danger');
+                    }
                     $('#reservedModal').modal('show'); // แสดง Modal
                 },
                 error: function (xhr, status, error) {

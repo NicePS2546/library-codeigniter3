@@ -1,9 +1,9 @@
 <div class="d-flex  justify-content-center align-items-center gap-2 ">
-            <button data-r-id="<?= $row['r_id']?>"  class="btn btn-success btn-action view-reserved-button">
+            <button data-r-id="<?= $row['r_id']?>" data-table="<?= $table ?>"  class="btn btn-success btn-action view-room-button">
             <i class="bi bi-search"></i>
             </button>
 
-            <a href="<?= base_url("index.php/admin/edit/room/$url/". $row['r_id'] ) ?>" class="btn btn-primary">
+            <a href="<?= base_url("index.php/admin/room/edit/$table/". $row['r_id'] ) ?>" class="btn btn-primary">
             <i class="bi bi-gear"></i>
             </a>
 

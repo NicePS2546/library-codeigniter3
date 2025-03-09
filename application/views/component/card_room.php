@@ -1,5 +1,5 @@
 <div class="card card-shadow text-center ani-element mx-auto mt-2">
-    <img class="card-img-top" src="<?= base_url('public/assets/img/room_img/').$room['r_img'] ?>" alt="image room no.<?= $room['r_number'] ?>">
+    <img class="card-img-top" width="150px" height="250px" src="<?= base_url('public/assets/img/room_img/').$room['r_img'] ?>" alt="image room no.<?= $room['r_number'] ?>">
     <div class="card-body">
         <h5 class="card-title">ห้องที่ <?= $room['r_number']; ?></h5>
 

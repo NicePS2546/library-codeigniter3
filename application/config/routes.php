@@ -140,6 +140,10 @@ $route['admin/active/(:any)'] = 'Admin/active_admin/$1';
 
 $route['admin/room_data/(:any)'] = 'Admin/room_data/$1';
 $route['admin/room/view/(:any)'] = 'Admin/room_view_data/$1';
+$route['admin/room/edit/(:any)/(:num)'] = 'Admin/edit_room_page/$1/$2';
+$route['admin/room/edit/submit'] = 'Admin/edit_room_submit';
+$route['admin/room/add/(:any)'] = 'Admin/add_room_page/$1';
+$route['admin/room/add/submit/ok'] = 'Admin/add_room_submit';
 
 $route['admin/update/deleteAll/reserv'] = 'Admin/delete_all';
 $route['admin/update/delete/(:num)'] = 'Admin/delete_expire/$1';
