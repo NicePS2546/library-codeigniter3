@@ -100,6 +100,35 @@
                   </li>
                 </ul>
               </li>
+              <li class="nav-item <?= $page == "time_setting"  ? "menu-open" : "" ?>">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-box-seam-fill"></i>
+                  <p>
+                    ตั้งค่า
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="<?= base_url('index.php/admin/time/setting') ?>" class="nav-link <?= $page == "time_setting" ? "active" :"" ?>">
+                    <?= $page == "time_setting" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ตั้งค่าข้อมูลเวลา</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="./widgets/info-box.html" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>info Box</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="./widgets/cards.html" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Cards</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
               <!-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-clipboard-fill"></i>

@@ -147,6 +147,10 @@ $route['admin/room/add/submit/ok'] = 'Admin/add_room_submit';
 
 $route['admin/update/deleteAll/reserv'] = 'Admin/delete_all';
 $route['admin/update/delete/(:num)'] = 'Admin/delete_expire/$1';
+
+$route['admin/time/setting'] = 'Admin/time_setting_page';
+$route['admin/time/setting/submit'] = 'Admin/time_setting_submit';
+
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';
 $route['online/remove/user'] = 'OnlineUser/remove';

@@ -387,6 +387,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
         }, doneTypingInterval); // Set the delay time for the API request
     });
 </script>
+
 <script>
     function add_admin(event) {
         event.preventDefault(); // Prevent default form submission
@@ -446,7 +447,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
     }
 
 </script>
-</script>
+
 <script>
     function showSweet(status, msg, title) {
         if (status == 'success') {

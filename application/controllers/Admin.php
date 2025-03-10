@@ -471,8 +471,6 @@ class Admin extends CI_Controller
         ]);
     }
     public function add_room_page($type){
-        
-       
         return $this->AdminRender('admin/room_data/room/add/page',[
             'title'=>'เพิ่มข้อมูลห้อง',
             'type'=>$type,
@@ -1148,5 +1146,63 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'Reservation Data', 'admin');
 
+    }
+
+    public function time_setting_page(){
+        $model = $this->Model('','Time_Setting_Model',false);
+        $rows = $model->getAllTime();
+
+        return $this->AdminRender('admin/time_setting/page',[
+            'title'=>'ข้อมูลเวลาห้อง',
+            'page'=>'time_setting',
+            'rows'=>$rows,
+            'get_type' => function ($r_s_id) {
+                return $this->get_type_byId($r_s_id);
+            }
+        ]);
+    }
+    public function time_setting_submit(){
+        $extension = 'index.php/';
+        $model = $this->Model('','Time_Setting_Model',false);
+        $s_id = $this->post('s_id');
+        $t_start = $this->post('t_start');
+        $t_end = $this->post('t_end');
+        $interval = $this->post('interval_time');
+        $data= [
+            'start_time'=>$t_start,
+            'end_time'=>$t_end,
+            'interval_hours'=>$interval
+        ];
+        $result = $model->updateTime($data,$s_id);
+
+        if ($result) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "ตั้งค่าเวลาห้องสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . '/admin/time/setting"; 
+                });
+            }, 1000);
+            </script>';
+
+        } else {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ตั้งค่าเวลาห้องไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                    window.location = "' . base_url() . $extension . '/admin/time/setting"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'TimeSetting', 'admin');
     }
 }

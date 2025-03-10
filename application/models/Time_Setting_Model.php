@@ -61,7 +61,7 @@ class Time_Setting_Model extends CI_Model {
     // Get all data
     public function getAllTime()
     {
-        return $this->db->get($this->table)->row_array();
+        return $this->db->order_by('s_id', 'ASC')->get($this->table)->result_array();
     }
 
     public function deletetime($id)
