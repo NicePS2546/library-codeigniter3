@@ -4,6 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="UTF-8">
   <title><?= $title ? $title : "My Admin" ?></title>
   <!--begin::Primary Meta Tags-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,7 +37,11 @@
     <script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
     <link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
   <link rel="stylesheet" href="<?= base_url('public/assets/css/admin_page.css') ?>?v=<?= time(); ?>" />
-  
+  <style>
+    /* Box shadow and hover effect for card */
+
+
+  </style>
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">

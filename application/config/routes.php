@@ -151,6 +151,9 @@ $route['admin/update/delete/(:num)'] = 'Admin/delete_expire/$1';
 $route['admin/time/setting'] = 'Admin/time_setting_page';
 $route['admin/time/setting/submit'] = 'Admin/time_setting_submit';
 
+$route['admin/statistic/home'] = 'Admin/statistic_page';
+
+
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';
 $route['online/remove/user'] = 'OnlineUser/remove';

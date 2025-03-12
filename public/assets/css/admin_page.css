@@ -10,6 +10,18 @@
     transition: all 250ms ease-in-out !important;
 }
 
+.btn{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.btn:hover {
+    transform: translateY(-4px) !important; /* Moves card upwards */
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1) !important; /* Stronger shadow */
+}
+.btn{
+    transition: all 250ms ease-in-out !important;
+}
+
 .custom-btn {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
     transition: all 250ms ease-in-out !important; /* Unified transition duration */

@@ -71,7 +71,7 @@
                   <p>Theme Generate</p>
                 </a>
               </li> -->
-              <li class="nav-item">
+              <li class="nav-item <?= $page == "statistic"  ? "menu-open" : '' ?>  ">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>
@@ -80,10 +80,10 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./widgets/small-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Small Box</p>
+                  <li class="nav-item ">
+                    <a href="<?= base_url('index.php/index.php/admin/statistic/home') ?>" class="nav-link <?= $page == "statistic"  ? "active" : '' ?>  ">
+                    <?= $page == "statistic" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ข้อมูลสถิติ</p>
                     </a>
                   </li>
                   <li class="nav-item">

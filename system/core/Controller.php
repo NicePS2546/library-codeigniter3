@@ -164,14 +164,9 @@ class CI_Controller
 		];
 
 		$current_url = $this->getCurrentUrl();
-		// $current_date = date("Y-m-d H:i");
+		// $current_date = date("Y-m-d");
 
-		// $page = [
-		// 	'music' => $current_url == base_url('index.php/music'),
-		// 	'vdo' => $current_url == base_url('index.php/vdo'),
-		// 	'mini' => $current_url == base_url('index.php/mini'),
-		// 	'index'=> $current_url == base_url()
-		// ];
+		
 		
 		$stage = $this->config->item('stage');
 		if($stage == "Development"){

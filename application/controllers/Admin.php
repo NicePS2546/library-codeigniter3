@@ -1078,7 +1078,71 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
+    public function statistic_page(){
+        $current_year = date('Y'); 
+        $model = $this->Model('statistic','StatisticModel',true);
+        $data = $model->get_month_satatistic($current_year);
+        
 
+        $music = $model->get_by_service(1);
+        $vdo = $model->get_by_service(2);
+        $mini = $model->get_by_service(3);
+
+        $statistic = [
+            'music' => $music,
+            'vdo' => $vdo,
+            'mini' => $mini,
+        ];
+        
+        $chartData = [
+            1 => array_fill(0, 12, 0), // Service 1
+            2 => array_fill(0, 12, 0), // Service 2
+            3 => array_fill(0, 12, 0)  // Service 3
+        ];
+
+        // Loop through the data and sum up `total_users` for each month
+        foreach ($data as $row) {
+            $monthIndex = (int) $row['month'] - 1; // Convert to 0-based index
+            $serviceId = (int) $row['service_id']; // Extract service_id
+
+            if (isset($chartData[$serviceId])) {
+                $chartData[$serviceId][$monthIndex] += $row['total_users']; // Sum total_users
+            }
+        }
+
+        // Convert associative array to indexed array for Chart.js
+        $finalChartData = array_values($chartData);
+        // echo "<pre>";
+        // print_r($finalChartData);
+        // echo "</pre>";
+        // $this->get_total_user_reservations();
+        return $this->AdminRender('admin/statistic_data/page',[
+            'title'=>'ข้อมูลสถิติ',
+            'page'=>'statistic',
+            'data'=>json_encode($finalChartData),
+            'current_year'=>date('y'),
+           'statistic' => $statistic,
+        ]);
+    }
+    public function get_total_user_reservations() {
+        $start_date = '2023-03-02';
+        $end_date = '2025-03-10';
+    
+        // Load the model
+        $model = $this->Model('statistic', 'StatisticModel', true);
+    
+        // Get the total sum of total_users and total_reservations grouped by service_id within the given date range
+        $totalData = $model->get_total_by_date_range($start_date, $end_date);
+    
+        // Process the data to display the sum for each service_id
+        foreach ($totalData as $serviceData) {
+            $total_reserv += $serviceData['total_reservations'];
+            echo "Service ID: " . $serviceData['service_id'] . "<br>";
+            echo "Total Users: " . $serviceData['total_users'] . "<br>";
+            
+        }
+        echo "Total Reservations: " . $total_reserv . "<br><br>";
+    }
     public function delete_expire($reserv_id)
     {
         $model = null;
