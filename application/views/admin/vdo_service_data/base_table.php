@@ -68,13 +68,9 @@
 
             <!-- <table class="table table-bordered" id="Table"> -->
             <?php
-
-            if ($table === "music") {
-                echo $this->load->view('admin/room_data/room/music', [
-                    'rows' => $rows,
-                    'url' => 'music'
-                ], true);
-            } 
+                echo $this->load->view('admin/vdo_service_data/component/table', [
+                    'rows' => $rows,], true);
+            
             ?>   
         </table>
     </div>

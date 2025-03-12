@@ -157,7 +157,10 @@ $route['admin/statistic/service/netflix'] = 'Admin/vdo_service_netflix_static';
 $route['admin/statistic/service/disney'] = 'Admin/vdo_service_disney_static';
 $route['admin/statistic/service/test'] = 'Admin/vdo_service_static_test';
 
-
+$route ['admin/video/service/data'] = 'Admin/vdo_service_data';  
+$route ['admin/video/service/add'] = 'Admin/vdo_service_add';  
+$route ['admin/video/service/edit/(:num)'] = 'Admin/vdo_service_edit/$1';  
+$route ['admin/video/service/edit/submit'] = 'Admin/vdo_service_submit';  
 
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';

@@ -4,10 +4,13 @@
 
 </style>
 
-
+<?php print_r($row) ?>
 
 <div class="container mt-4">
-    <h1 class="text-center">แก้ไขข้อมูล <?= $name ?></h1>
+    <?php if($row): ?>
+    <h1 class="text-center">แก้ไขข้อมูล <?= $row['name_TH'] ?></h1>
+    <?php endif ?>
+    <h1 class="text-center">เพิ่มข้อมูล</h1>
     <div class="row">
         <div class="col-lg-7 mx-auto">
             <div class="card mt-2 p-4 bg-light">
@@ -17,46 +20,53 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="r_numb">หมายเลขห้อง</label>
-                                    <input id="r_numb" type="text" name="r_numb" value="<?= $row['r_number'] ?>"
+                                    <label for="service_id">หมายเลขรหัส</label>
+                                    <input id="service_id" type="text" name="service_id" value="<?= $row['service_id'] ?>"
                                         class="form-control" placeholder="โปรดใส่หมายเลขห้อง" >
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="status">สถานะห้อง</label>
-                                    <select name="r_status" id="status"
-                                        class="form-control text-center <?= ($row['r_status'] == 1) ? 'text-success' : 'text-danger' ?>">
-                                        <option class="text-success" value="1" <?= ($row['r_status'] == 1) ? 'selected' : ''; ?>>เปิด</option>
-                                        <option class="text-danger" value="0" <?= ($row['r_status'] == 0) ? 'selected' : ''; ?>>ปิด</option>
-                                    </select>
+                                    <label for="name_EN">ชื่ออังกฤษ</label>
+                                    <input name="name_EN" value="<?= $row['name_EN'] ?>" id="name_EN"
+                                        class="form-control text-center "/>
+                                        
+                                    
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name_TH">ชื่อภาษาไทย</label>
+                                    <input id="name_TH" type="text" name="name_TH" value="<?= $row['name_TH'] ?>"
+                                        class="form-control" placeholder="โปรดใส่หมายเลขห้อง" >
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="s_type">รูปแบบ</label>
+                                    <input name="s_type" value="<?= $row['s_type'] ?>" id="s_type"
+                                        class="form-control text-center "/>
+                                        
+                                    
+                                </div>
+                            </div>
+                        </div>
+                      
                         <!-- Room Description -->
                         <div class="row mt-3">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="r_desc">คำอธิบายห้อง</label>
-                                    <textarea id="r_desc" name="r_desc" class="form-control"
+                                    <label for="s_desc">คำอธิบายห้อง</label>
+                                    <textarea id="s_desc" name="s_desc" class="form-control"
                                         placeholder="โปรดใส่คำอธิบายห้อง" cols="3" rows="3"
-                                        ><?= $row['r_desc'] ?></textarea>
+                                        ><?= $row['s_desc'] ?></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Room Closing Description -->
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="r_close_desc">คำอธิบายปิดห้อง</label>
-                                    <textarea id="r_close_desc" name="r_close_desc" class="form-control"
-                                        placeholder="ใส่คำอธิบายหากมีการปิดห้อง" cols="3"
-                                        rows="3"><?= $row['r_close_desc'] ?></textarea>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="row mt-3">
                             <div class="col-12">
                                 <div class="form-group">
@@ -70,7 +80,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="form_message">รูปที่จะอัพโหลด</label>
-                                    <img id="preview" src="<?= base_url("public/assets/img/room_img/" . $row['r_img']) ?>"
+                                    <img id="preview" src="<?= base_url("public/assets/img/service_img/" . $row['s_picture']) ?>"
                                         class="img-fluid border border-1 border-dark rounded-2">
                                 </div>
                             </div>
@@ -124,36 +134,3 @@
 
 
 
-
-<!-- <div class="card card-shadow">
-    <div class="card-body">
-   <div class="top-body">
-    <div class="text-start">
-    <label class="form-label pl-1" for="r_number">หมายเลขห้อง</label>
-    <input type="text" class="form-control custom-input" value="<?= $row['r_number'] ?>" name="r_number" id="r_number">
-    <div id="result" class="mt-4 mb-2">
-
-    </div>
-
-</div>
-<div class="text-start">
-    <label class="form-label" for="status">สถานะห้อง</label>
-    <select name="r_status" id="status" class="form-control <?= ($row['r_status'] == 1) ? 'text-success' : 'text-danger' ?>">
-    <option class="text-success" value="1" <?= ($row['r_status'] == 1) ? 'selected' : ''; ?>>เปิด</option>
-    <option class="text-danger" value="0" <?= ($row['r_status'] == 0) ? 'selected' : ''; ?>>ปิด</option>
-</select>
-</div>
-<div id="results" class="mt-3">
-   
-</div>
-</div>
-
-<div class="text-start">
-    <label class="form-label" for="time_slot">เลือกช่วงเวลา:</label>
-    <textarea class="form-control">
-
-    </textarea>
-</div>
-<button class="btn mt-4 btn-primary" id="reservBtn" type="submit">แก้ไข</button>
-</div>
-</div> -->

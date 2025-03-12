@@ -35,7 +35,7 @@
                   <p>สถิติประจำวัน</p>
                 </a>
               </li>
-              <li class="nav-item <?= $page == "reserv_data"  || $page == "admin_data"  ? "menu-open" :"" || $page == "room_data" ? "menu-open" : '' ?>  ">
+              <li class="nav-item <?= $page == "reserv_data" || $page == 'service_data'  || $page == "admin_data"  ? "menu-open" :"" || $page == "room_data" ? "menu-open" : '' ?>  ">
                 <a href="#" class="nav-link ">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>
@@ -61,6 +61,12 @@
                     <a href="<?= base_url('index.php/admin/room_data/music') ?>" class="nav-link <?= $page == "room_data" ? "active" : "" ?>">
                     <?= $page == "room_data" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
                       <p>ข้อมูลห้อง</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?= base_url('index.php/admin/video/service/data') ?>" class="nav-link <?= $page == "service_data" ? "active" : "" ?>">
+                    <?= $page == "service_data" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ข้อมูลบริการ Video On-Demand</p>
                     </a>
                   </li>
                 </ul>
@@ -116,7 +122,7 @@
                       <p>ตั้งค่าข้อมูลเวลา</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a href="./widgets/info-box.html" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>info Box</p>
@@ -127,7 +133,7 @@
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Cards</p>
                     </a>
-                  </li>
+                  </li> -->
                 </ul>
               </li>
               <!-- <li class="nav-item">

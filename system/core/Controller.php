@@ -275,6 +275,53 @@ class CI_Controller
         return ['status' => false, 'error' => $error];
     }
 }
+	public function upload_image_service($service_number = 1, $name)
+{
+    // Check if a file is selected
+    if (empty($_FILES[$name]['name'])) {
+        return ['status' => false, 'error' => 'You did not select a file to upload.'];
+    }
+
+    $upload_path = FCPATH . "public/assets/img/service_img/";
+
+    if (!is_dir($upload_path)) {
+        if (!mkdir($upload_path, 0777, true)) {
+            die("Failed to create directory: " . $upload_path);
+        }
+    }
+
+    $resolved_path = realpath($upload_path);
+    if ($resolved_path === false) {
+        die("Resolved path is invalid.");
+    }
+
+    $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
+    $file_name = $service_number . "." . $file_ext;
+    $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
+
+    // Delete old file if exists
+    foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $service_number . ".*") as $existing_file) {
+        unlink($existing_file);
+    }
+
+    // Set upload configuration
+    $config['upload_path']   = $resolved_path;
+    $config['allowed_types'] = 'jpg|jpeg|png|gif';
+    $config['max_size']      = 2048;
+    $config['file_name']     = $file_name;
+    $config['overwrite']     = true; // Overwrite the old file
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload($name)) {
+        $data = $this->upload->data();
+        return ['status' => true, 'data' => $data,'img_name'=>$file_name];
+    } else {
+        $error = $this->upload->display_errors();
+        return ['status' => false, 'error' => $error];
+    }
+}
 	public function get_type_byId($id)
 	{
 		$key = 't_id';

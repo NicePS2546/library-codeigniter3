@@ -33,7 +33,7 @@
 <div class="container">
     <div class="col-12 col-sm-8 pb-4 col-md-6 col-lg-10 mt-4 mx-auto ani-element">
 
-        <form class="text-end" action="<?php echo base_url('index.php/admin/video/service/edit/submit'); ?>"  id="formId"
+        <form class="text-end" action="<?php echo base_url('index.php/admin/video/service/add/submit'); ?>"  id="formId"
             onsubmit="return update_service(event)" method="POST" enctype="multipart/form-data">
             
             

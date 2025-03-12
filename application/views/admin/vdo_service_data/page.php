@@ -104,7 +104,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 <div class="info-box">
 <div class="info-box-content title-container">
         <span class="info-box-text font-title"><?= $title. " ".$room_title ?></span>
-        <a href="<?= base_url("index.php/admin/room/add/$table") ?>" class="btn my-auto btn-primary" style="width:120px" >เพิ่มห้อง</a>
+        <a href="<?= base_url("index.php/admin/video/service/add") ?>" class="btn my-auto btn-primary" style="width:120px" >เพิ่มบริการ</a>
 
     </div>
 </div>
@@ -159,25 +159,10 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 
                 <!-- Tooltip Example -->
                 
-                <a href="<?= base_url('index.php/admin/room_data/music') ?>" class="<?= $card_res ?> text-center">
-                    <span class="info-box-icon text-bg-primary shadow-sm btn-shadow" data-label="Music-Relax">
-                        <i class="bi bi-music-note-beamed"></i>
-                    </span>
-                </a>
-
-                <a href="<?= base_url('index.php/admin/room_data/vdo') ?>" class="<?= $card_res ?> text-center">
-                    <span class="info-box-icon text-bg-danger shadow-sm btn-shadow" data-label="Video On-Demand">
-                        <i class="bi bi-camera-reels-fill"></i>
-                    </span>
-                </a>
-                <a href="<?= base_url('index.php/admin/room_data/mini') ?>" class="<?= $card_res ?> text-center">
-                    <span class="info-box-icon text-bg-success shadow-sm btn-shadow" data-label="Mini-Theater">
-                        <i class="bi bi-film"></i>
-                    </span>
-                </a>
+               
             </div>
             <div>
-                <?= $this->load->view('admin/room_data/base_table', ['table' => $table], true) ?>
+                <?= $this->load->view('admin/vdo_service_data/base_table', ['table' => $table], true) ?>
             </div>
         </div>
     </div>

@@ -399,7 +399,22 @@ class MiniModel extends CI_Model
         return $query->result_array(); // Returns an array of results
     }
     
-
+    public function get_data_by_date_range($start_date, $end_date)
+    {
+        // Select required columns and sum `total_pp` and count rows for reservations
+        $this->db->select('SUM(total_pp) AS total_people, COUNT(*) AS total_reservations');
+        $this->db->from($this->table);
+        
+        // Add a WHERE condition for the date range
+        $this->db->where('r_date >=', $start_date); // Filter by start date
+        $this->db->where('r_date <=', $end_date);   // Filter by end date
+        
+        // Run the query
+        $query = $this->db->get();
+    
+        // Return the result
+        return $query->row_array(); // Returns a single row of results
+    }
 
 }
 

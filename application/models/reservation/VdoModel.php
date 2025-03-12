@@ -252,28 +252,22 @@ class VdoModel extends CI_Model
     }
 
 
-    // public function get_statistic_by_day($date)
-    // {
-        
-    //     $this->db->select( "SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
-    //     $this->db->from($this->table);
-    //     $this->db->where("DATE(created_at)", $date); // Extract only the DATE part
-    //     $query = $this->db->get();
-    //     return $query->result_array(); // Returns an array of results
-    // }
+    public function get_data_by_date_range($start_date, $end_date)
+{
+    // Select required columns and sum `total_pp` and count rows for reservations
+    $this->db->select('SUM(total_pp) AS total_people, COUNT(*) AS total_reservations');
+    $this->db->from($this->table);
+    
+    // Add a WHERE condition for the date range
+    $this->db->where('r_date >=', $start_date); // Filter by start date
+    $this->db->where('r_date <=', $end_date);   // Filter by end date
+    
+    // Run the query
+    $query = $this->db->get();
 
-    // public function get_vdo_reservations_by_month($year,$s_id) {
-    //     $this->db->select('s_id, MONTH(r_date) AS month, SUM(total_pp) AS total_people, COUNT(*) AS total_reservations, SUM(TIMESTAMPDIFF(HOUR, start_time, exp_time)) AS total_hours');
-    // $this->db->from('tbn_vdo_reserv');
-    // $this->db->where('YEAR(r_date)', $year); // Filter by year
-    // $this->db->where('s_id', $s_id); // Filter by specific service ID
-    // $this->db->group_by('s_id, MONTH(r_date)'); // Group by service and month
-    // $this->db->order_by('s_id, month'); // Order by service and month
-    // $query = $this->db->get();
-
-    // return $query->result_array(); // Return the result as an array
-    // }
-
+    // Return the result
+    return $query->row_array(); // Returns a single row of results
+}
 
 
     public function get_vdo_reservations_by_month($year, $s_id) {

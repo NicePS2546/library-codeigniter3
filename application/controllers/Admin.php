@@ -1157,7 +1157,141 @@ class Admin extends CI_Controller
             
         ]);
     }
-    
+    public function vdo_service_data(){
+        $model = $this->Model('','Vdo_service_Model',false);
+        $rows = $model->get_all();
+        return $this->AdminRender('admin/vdo_service_data/page',[
+            'title'=>'ข้อมูล Video Service',
+            'page'=>'service_data',
+            'rows'=>$rows
+        ]);
+    }
+    public function vdo_service_edit($id){
+        $model = $this->Model('','Vdo_service_Model',false);
+        $row = $model->get_by_id($id);
+        return $this->AdminRender('admin/vdo_service_data/edit/page',[
+            'title'=>'ข้อมูล Video Service',
+            'page'=>'service_data',
+            'row'=>$row
+        ]);
+    }
+    public function vdo_service_add(){
+        
+        return $this->AdminRender('admin/vdo_service_data/add/page',[
+            'title'=>'ข้อมูล Video Service',
+            'page'=>'service_data',
+            
+        ]);
+    }
+    public function vdo_service_submit(){
+        $extension = 'index.php/';
+        $id = $this->post('service_id');
+        $s_type = $this->post('s_type');
+        $name_EN  = $this->post('name_EN');
+        $name_TH  = $this->post('name_TH');
+        $s_desc  = $this->post('s_desc');
+
+        $upload_img = $this->upload_image_service( $id, 'img');
+
+        $img_name = $upload_img['img_name'];
+
+       
+        $data = [
+            's_type' => $s_type,
+            'name_EN' => $name_EN,
+            'name_TH' => $name_TH,
+            's_desc' => $s_desc,
+            's_picture' => $img_name,
+        ];
+
+        $model = $this->Model('','Vdo_service_Model',false);
+       
+        $result = $model->update($id,$data);
+        if ($result) {
+            $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "แก้ไข",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
+            });
+        }, 1000);
+        </script>';
+
+        } else {
+            $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "ลบทั้งหมดไม่สำเร็จ",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
+            });
+        }, 1000);
+        </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');
+    }
+    public function vdo_service_add_submit(){
+        $extension = 'index.php/';
+        $id = $this->post('service_id');
+        $s_type = $this->post('s_type');
+        $name_EN  = $this->post('name_EN');
+        $name_TH  = $this->post('name_TH');
+        $s_desc  = $this->post('s_desc');
+
+        $upload_img = $this->upload_image_service( $id, 'img');
+
+        $img_name = $upload_img['img_name'];
+
+       
+        $data = [
+            's_type' => $s_type,
+            'name_EN' => $name_EN,
+            'name_TH' => $name_TH,
+            's_desc' => $s_desc,
+            's_picture' => $img_name,
+        ];
+
+        $model = $this->Model('','Vdo_service_Model',false);
+       
+        $result = $model->update($id,$data);
+        if ($result) {
+            $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "แก้ไข",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
+            });
+        }, 1000);
+        </script>';
+
+        } else {
+            $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "ลบทั้งหมดไม่สำเร็จ",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
+            });
+        }, 1000);
+        </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');
+    }
+
 
     public function get_total_user_reservations()
     {
