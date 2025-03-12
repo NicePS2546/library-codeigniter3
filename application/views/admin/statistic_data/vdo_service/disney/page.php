@@ -44,47 +44,19 @@ $mini = $statistic['mini']['0']['total_people'];
     }
 </style>
 <meta charset="UTF-8">
-<?php $card_res = "col-12 col-sm-6 col-md-6 col-lg-3"; ?>
 <pre>
-
+<?php print_r($data) ?>
 </pre>
+<?php $card_res = "col-12 col-sm-6 col-md-6 col-lg-3"; ?>
 <div class="col-md-12">
     <div class="info-box">
         <form method="post" class="info-box-content  title-container"
-            action="<?= base_url('index.php/admin/statistic/home') ?>">
-            <span class="info-box-text font-title">สถิติรายวัน</span>
-            <div class="search-content">
-                <input name="day" class="form-control w-75 flatpickrDay" value="<?= $day ?>" type="date">
-                <input name="year" class="form-control w-75" type="hidden">
-                <button class="btn my-auto btn-primary" type="submit" style="width:100px">ค้นหา</button>
-
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="col-md-12">
-    <div class="info-box">
-        <div class="info-box-content">
-
-            <div class="chart-container "
-                style="position: relative; height:60vh; width:80vw; padding-top: 20px; padding-bottom: 20px;">
-                <canvas id="chart-day"></canvas>
-            </div>
-
-
-        </div>
-    </div>
-</div>
-<div class="col-md-12">
-    <div class="info-box">
-        <form method="post" class="info-box-content  title-container"
-            action="<?= base_url('index.php/admin/statistic/home') ?>">
-            <span class="info-box-text font-title">สถิติรายปี</span>
+            action="<?= base_url('index.php/admin/statistic/service/netflix') ?>">
+            <span class="info-box-text font-title">สถิติการชม Disney+</span>
             <div class="search-content">
                 <input name="year" class="form-control w-75 flatpickrYear text-center" value="<?= $year ?>"
                     placeholder="โปรดใส่ปี ค.ศ." type="number">
-                <input name="day" class="form-control w-75" value="<?= $day ?>" type="hidden">
+                
                 <button class="btn my-auto btn-primary" type="submit" style="width:100px">ค้นหา</button>
 
             </div>
@@ -148,142 +120,18 @@ $thai_months = [
 ];
 
 // Convert the date string into a timestamp
-$timestamp = strtotime($day);
+
 
 // Format the day, month, and year
-$day_name = $thai_days[date('l', $timestamp)];
-$day_number = date('d', $timestamp);
-$month_name = $thai_months[(int) date('m', $timestamp)];
-$year = date('Y', $timestamp);
 
-// Combine the formatted date
-$formatted_date = "$day_name ที่ $day_number $month_name ค.ศ. $year";
+$year = date('Y');
+
+
 
 
 
 ?>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="<?= base_url('public/cdn/chart/js/chart.js') ?>"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
-<script>
-    flatpickr(".flatpickrDay", {
-        // You can add custom options here, for example:
-        dateFormat: "Y-m-d",
-        locale: "th",
-    });
-
-
-    const ctx = document.getElementById('chart-day');
-
-    const data = {
-        labels: [
-            'Music-Relax',
-            'Video On-Demand',
-            'Mini-Theater',
-        ],
-        datasets: [{
-            label: [],
-            data: [<?= $music ? $music : 0 ?>, <?= $vdo ? $vdo : 0 ?>, <?= $mini ? $mini : 0 ?>],
-            backgroundColor: [
-                'rgb(13, 110, 253)',
-                'rgb(220, 53, 69)',
-                'rgb(25, 135, 84)',
-
-            ]
-        }]
-    };
-    const config = {
-        type: 'polarArea',
-        data: data,
-        options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'สถิติการใช้บริการ วัน<?= $formatted_date ?>',
-                    font: {
-                        size: 20
-                    },
-                    padding: {
-                        top: 10,
-                        bottom: 30
-                    }
-                }
-            },
-            animation: {
-                duration: 2000, // Smooth 2-second animation
-                easing: 'easeOutQuart' // Smooth out animation
-            }
-        }
-    };
-    const myChart = new Chart(ctx, config);
-
-
-</script>
-
-<!-- <script>
-   
-   
-
-    const ctx_month = document.getElementById('chart-month');
-
-    document.addEventListener('DOMContentLoaded', function() {
-    console.log("JavaScript is running"); // Check if script runs
-    var data_month = JSON.parse('<?= $data; ?>'); 
-    console.log(data_month); // Check the value in the browser console
-});
-
-    const labels_month = [
-        "ม.ค", "ก.พ", "มี.ค", "เม.ย", "พ.ค", "มิ.ย",
-        "ก.ค", "ส.ค", "ก.ย", "ต.ค", "พ.ย", "ธ.ค"
-    ];
-
-    // Dataset with 3 bars per month
-
-    console.log(data_music)
-    const data_month = {
-        labels: labels_month,
-        datasets: [
-            {
-                label: 'Music-Relax',
-                data: data_month[0], // Data for Category A
-                backgroundColor: 'rgb(13, 110, 253)', // Blue
-                borderColor: 'rgb(13, 110, 253)',
-                borderWidth: 1
-            },
-            {
-                label: 'Video On-Demand',
-                data: data_month[1], // Data for Category B
-                backgroundColor: 'rgb(220, 53, 69)', // Purple
-                borderColor: 'rgb(220, 53, 69)',
-                borderWidth: 1
-            },
-            {
-                label: 'Mini-Theater',
-                data: data_month[2], // Data for Category C
-                backgroundColor: 'rgb(25, 135, 84)', // Green
-                borderColor: 'rgb(25, 135, 84)',
-                borderWidth: 1
-            }
-        ]
-    };
-
-    const config_month = {
-        type: 'bar',
-        data: data_month,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    };
-
-    // Render the chart
-    const myChart2 = new Chart(ctx_month, config_month);
-</script> -->
 
 
 <script>
@@ -292,7 +140,7 @@ $formatted_date = "$day_name ที่ $day_number $month_name ค.ศ. $year";
         console.log("JavaScript is running"); // Check if script runs
 
         // Parse the JSON data from PHP
-        var data_month = JSON.parse('<?= $data; ?>');
+        var data_month = JSON.parse('<?= json_encode($data); ?>');
         console.log(data_month); // Check the value in the browser console
 
         // Chart.js setup
@@ -308,21 +156,21 @@ $formatted_date = "$day_name ที่ $day_number $month_name ค.ศ. $year";
             labels: labels_month, // Month labels
             datasets: [
                 {
-                    label: 'Music-Relax', // Label for the first service
+                    label: 'จำนวนคน', // Label for the first service
                     data: data_month[0], // Data for Service 1 (first array)
                     backgroundColor: 'rgb(13, 110, 253)', // Blue
                     borderColor: 'rgb(13, 110, 253)',
                     borderWidth: 1
                 },
                 {
-                    label: 'Video On-Demand', // Label for the second service
+                    label: 'จำนวนครั้ง', // Label for the second service
                     data: data_month[1], // Data for Service 2 (second array)
                     backgroundColor: 'rgb(220, 53, 69)', // Red
                     borderColor: 'rgb(220, 53, 69)',
                     borderWidth: 1
                 },
                 {
-                    label: 'Mini-Theater', // Label for the third service
+                    label: 'จำนวนชั่งโมง', // Label for the third service
                     data: data_month[2], // Data for Service 3 (third array)
                     backgroundColor: 'rgb(25, 135, 84)', // Green
                     borderColor: 'rgb(25, 135, 84)',

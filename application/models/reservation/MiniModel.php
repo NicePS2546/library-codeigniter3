@@ -388,6 +388,19 @@ class MiniModel extends CI_Model
         return $this->db->update($this->table);
     }
 
+    public function get_statistic_by_day($date)
+    {
+        $this->db->select( "SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
+        $this->db->from('tbn_mini_reserv');
+        $this->db->where("DATE(created_at)", $date); 
+        
+    
+        $query = $this->db->get();
+        return $query->result_array(); // Returns an array of results
+    }
+    
+
+
 }
 
 

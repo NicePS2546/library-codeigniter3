@@ -1,8 +1,8 @@
 <?php
 
-$music = $statistic['music'];
-$vdo = $statistic['vdo'];
-$mini = $statistic['mini'];
+$music = $statistic['music']['0']['total_people'];
+$vdo = $statistic['vdo']['0']['total_people'];
+$mini = $statistic['mini']['0']['total_people'];
 
 ?>
 <style>
@@ -53,7 +53,7 @@ $mini = $statistic['mini'];
       <div class="info-box-content">
         <span class="info-box-text">Music Relax</span>
         <span class="info-box-number">
-          <?= $music['total_users'] ? $music['total_users'] : 0 ?>
+          <?= $music ? $music : 0 ?>
           <small>คน</small>
         </span>
         <div class="overlay">
@@ -72,7 +72,7 @@ $mini = $statistic['mini'];
       </span>
       <div class="info-box-content">
         <span class="info-box-text">Video On-Demand</span>
-        <span class="info-box-number"> <?= $vdo['total_users'] ? $vdo['total_users'] : 0 ?> คน</span>
+        <span class="info-box-number"> <?= $vdo ? $vdo : 0 ?> คน</span>
       </div>
       <!-- /.info-box-content -->
     </div>
@@ -88,7 +88,7 @@ $mini = $statistic['mini'];
       </span>
       <div class="info-box-content">
         <span class="info-box-text">Mini-Theater</span>
-        <span class="info-box-number"><?= $mini['total_users'] ? $mini['total_users'] : 0 ?> คน</span>
+        <span class="info-box-number"><?= $mini ? $mini : 0 ?> คน</span>
       </div>
       <!-- /.info-box-content -->
     </div>
@@ -163,7 +163,7 @@ $mini = $statistic['mini'];
     ],
     datasets: [{
       label: [],
-      data: [<?= $music['total_users'] ? $music['total_users'] : 0 ?>, <?= $vdo['total_users'] ? $vdo['total_users'] : 0 ?>, <?= $mini['total_users'] ? $mini['total_users'] : 0 ?>],
+      data: [<?= $music ? $music : 0 ?>, <?= $vdo ? $vdo : 0 ?>, <?= $mini ? $mini : 0 ?>],
       backgroundColor: [
         'rgb(13, 110, 253)',
         'rgb(220, 53, 69)',
@@ -193,7 +193,7 @@ $mini = $statistic['mini'];
 <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
   var options = {
-  series: [<?= $music['total_users'] ? $music['total_users'] : 0 ?>, <?= $vdo['total_users'] ? $vdo['total_users'] : 0 ?>, <?= $mini['total_users'] ? $mini['total_users'] : 0 ?>],
+  series: [<?= $music ? $music : 0 ?>, <?= $vdo ? $vdo : 0 ?>, <?= $mini ? $mini : 0 ?>],
   chart: {
     type: 'polarArea',
     height: 450, // Set the height here

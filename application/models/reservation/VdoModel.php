@@ -250,4 +250,69 @@ class VdoModel extends CI_Model
     
         return $this->db->update($this->table);
     }
+
+
+    // public function get_statistic_by_day($date)
+    // {
+        
+    //     $this->db->select( "SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
+    //     $this->db->from($this->table);
+    //     $this->db->where("DATE(created_at)", $date); // Extract only the DATE part
+    //     $query = $this->db->get();
+    //     return $query->result_array(); // Returns an array of results
+    // }
+
+    // public function get_vdo_reservations_by_month($year,$s_id) {
+    //     $this->db->select('s_id, MONTH(r_date) AS month, SUM(total_pp) AS total_people, COUNT(*) AS total_reservations, SUM(TIMESTAMPDIFF(HOUR, start_time, exp_time)) AS total_hours');
+    // $this->db->from('tbn_vdo_reserv');
+    // $this->db->where('YEAR(r_date)', $year); // Filter by year
+    // $this->db->where('s_id', $s_id); // Filter by specific service ID
+    // $this->db->group_by('s_id, MONTH(r_date)'); // Group by service and month
+    // $this->db->order_by('s_id, month'); // Order by service and month
+    // $query = $this->db->get();
+
+    // return $query->result_array(); // Return the result as an array
+    // }
+
+
+
+    public function get_vdo_reservations_by_month($year, $s_id) {
+        $this->db->select('MONTH(r_date) AS month, SUM(total_pp) AS total_people, COUNT(*) AS total_reservations, SUM(TIMESTAMPDIFF(HOUR, start_time, exp_time)) AS total_hours');
+        $this->db->from('tbn_vdo_reserv');
+        $this->db->where('YEAR(r_date)', $year);
+        $this->db->where('s_id', $s_id);
+        $this->db->group_by('MONTH(r_date)');
+        $this->db->order_by('month');
+        $query = $this->db->get();
+    
+        $data = $query->result_array();
+    
+        // Initialize the chart data with zeros for all 12 months
+        $chartData = [
+            array_fill(0, 12, 0), // total_pp
+            array_fill(0, 12, 0), // total_reservations
+            array_fill(0, 12, 0)  // total_hours
+        ];
+    
+        // Loop through the data and populate the corresponding month index
+        foreach ($data as $row) {
+            $monthIndex = (int) $row['month'] - 1; // Convert to 0-based index
+            $chartData[0][$monthIndex] = (int) $row['total_people'];       // total_pp
+            $chartData[1][$monthIndex] = (int) $row['total_reservations']; // total_reservations
+            $chartData[2][$monthIndex] = (int) $row['total_hours'];        // total_hours
+        }
+    
+        return array_values($chartData);
+    }
+    
+    public function get_statistic_by_day($date)
+    { 
+        $this->db->select( "SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
+        $this->db->from($this->table);
+        $this->db->where("DATE(created_at)", $date); // Extract only the DATE part
+        
+    
+        $query = $this->db->get();
+        return $query->result_array(); // Returns an array of results
+    }
 }

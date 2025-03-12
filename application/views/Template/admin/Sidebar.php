@@ -71,7 +71,7 @@
                   <p>Theme Generate</p>
                 </a>
               </li> -->
-              <li class="nav-item <?= $page == "statistic"  ? "menu-open" : '' ?>  ">
+              <li class="nav-item <?= $page == "statistic" || $page == "netflix" || $page == "disney"  ? "menu-open" : '' ?>  ">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>
@@ -81,23 +81,24 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item ">
-                    <a href="<?= base_url('index.php/index.php/admin/statistic/home') ?>" class="nav-link <?= $page == "statistic"  ? "active" : '' ?>  ">
+                    <a href="<?= base_url('index.php/admin/statistic/home') ?>" class="nav-link <?= $page == "statistic"  ? "active" : '' ?>  ">
                     <?= $page == "statistic" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
                       <p>ข้อมูลสถิติ</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="./widgets/info-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>info Box</p>
+                  <li class="nav-item ">
+                    <a href="<?= base_url('index.php/admin/statistic/service/netflix') ?>" class="nav-link <?= $page == "netflix"  ? "active" : '' ?>  ">
+                    <?= $page == "netflix" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ข้อมูลสถิติการเข้าชม Netflix</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="./widgets/cards.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Cards</p>
+                  <li class="nav-item ">
+                    <a href="<?= base_url('index.php/admin/statistic/service/disney') ?>" class="nav-link <?= $page == "disney"  ? "active" : '' ?>  ">
+                    <?= $page == "disney" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ข้อมูลสถิติการชม Disney+</p>
                     </a>
                   </li>
+                  
                 </ul>
               </li>
               <li class="nav-item <?= $page == "time_setting"  ? "menu-open" : "" ?>">

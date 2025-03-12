@@ -56,9 +56,37 @@ class AdminModel extends CI_Model
         $data['update_at'] = date('T-m-d H:i:s');
         return $data;
     }
+
+
+
+public function get_monthly_reservations_by_service($year = 2025) {
+    // Initialize the array to hold chart data
+    $chartData = [
+        1 => array_fill(0, 12, 0), // Music service (12 months initialized to 0)
+        2 => array_fill(0, 12, 0), // Video service
+        3 => array_fill(0, 12, 0)  // Mini service
+    ];
+
+    // Query for each service table (assuming service_id corresponds to the table)
+    $services = ['tbn_music_reserv' => 1, 'tbn_vdo_reserv' => 2, 'tbn_mini_reserv' => 3];
+
+    foreach ($services as $table => $serviceId) {
+        $this->db->select('MONTH(created_at) as month, SUM(total_pp) as total_users');
+        $this->db->from($table);
+        $this->db->where('YEAR(created_at)', $year);
+        $this->db->group_by('MONTH(created_at)');
+        $query = $this->db->get();
+        $data = $query->result_array();
+
+        // Loop through the data and sum the total_users by month
+        foreach ($data as $row) {
+            $monthIndex = (int) $row['month'] - 1; // Convert to 0-based index (January = 0)
+            $chartData[$serviceId][$monthIndex] += (int) $row['total_users']; // Add total_users for this month
+        }
+    }
+
+    // Convert associative array to indexed array (for chart rendering)
+    return array_values($chartData);
 }
-
-
-
-
+}
 ?>

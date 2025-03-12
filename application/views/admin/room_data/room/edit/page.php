@@ -32,7 +32,7 @@
 
 <div class="container">
     <div class="col-12 col-sm-8 pb-4 col-md-6 col-lg-10 mt-4 mx-auto ani-element">
-<?php print($r_id) ?>
+
         <form class="text-end" action="<?php echo base_url('index.php/admin/room/edit/submit'); ?>"  id="formId"
             onsubmit="return update_room(event)" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">

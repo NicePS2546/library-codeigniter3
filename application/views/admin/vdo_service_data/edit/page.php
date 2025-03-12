@@ -33,11 +33,11 @@
 <div class="container">
     <div class="col-12 col-sm-8 pb-4 col-md-6 col-lg-10 mt-4 mx-auto ani-element">
 
-        <form class="text-end" action="<?php echo base_url('index.php/admin/room/add/submit/ok'); ?>"  id="formId"
-            onsubmit="return update_room(event)" method="POST" enctype="multipart/form-data">
+        <form class="text-end" action="<?php echo base_url('index.php/admin/vo_service/edit/submit'); ?>"  id="formId"
+            onsubmit="return update_service(event)" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
             <input type="hidden" name="type" value="<?= $type ?>">
-            <?= $this->load->view('admin/room_data/room/component/form_content', ['row' => $row], true) ?>
+            <?= $this->load->view('admin/vdo_service_data/component/form_content', ['row' => $row], true) ?>
 
         </form>
     </div>
@@ -134,7 +134,7 @@
         }
     });
 
-    function update_room(event) {
+    function update_service(event) {
         event.preventDefault(); // Prevent default form submission
 
         const r_number = $('#r_numb').val(); // Get input value

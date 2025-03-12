@@ -371,5 +371,16 @@ class MusicModel extends CI_Model
     
         return $this->db->update($this->table);
     }
+
+    public function get_statistic_by_day($date)
+    { 
+        $this->db->select( "SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
+        $this->db->from($this->table);
+        $this->db->where("DATE(created_at)", $date); // Extract only the DATE part
+        
+    
+        $query = $this->db->get();
+        return $query->result_array(); // Returns an array of results
+    }
 }
 

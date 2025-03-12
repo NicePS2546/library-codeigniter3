@@ -5,13 +5,16 @@ class Admin extends CI_Controller
 {
     public function index()
     {
-        $this->load->model('statistic/StatisticModel');
+        
         $this->load->model('OnlineUser_model');
-        $statistic = $this->StatisticModel;
         $online_model = $this->OnlineUser_model;
-        $music = $statistic->get_by_service(1);
-        $vdo = $statistic->get_by_service(2);
-        $mini = $statistic->get_by_service(3);
+        
+        $day = date('Y-m-d');
+
+        $music = $this->Model('reservation','MusicModel',true)->get_statistic_by_day($day);
+        $vdo = $this->Model('reservation','VdoModel',true)->get_statistic_by_day($day);
+        $mini = $this->Model('reservation','MiniModel',true)->get_statistic_by_day($day);
+
         $currentUsers = $online_model->get_online_users();
 
         $statistic = [
@@ -95,7 +98,7 @@ class Admin extends CI_Controller
 
     public function reserv_mini()
     {
-        
+
         $expired_rows = $this->get_expired();
         $this->load->model('reservation/MiniModel');
         $model = $this->MiniModel;
@@ -258,7 +261,7 @@ class Admin extends CI_Controller
 
     public function edit_reserv_music($id)
     {
-       
+
         $model = $this->Model('reservation', 'MusicModel', true);
         $row = $model->get_reserved_sole($id);
 
@@ -283,7 +286,7 @@ class Admin extends CI_Controller
     }
     public function edit_reserv_mini($id)
     {
-       
+
         $model = $this->Model('reservation', 'MiniModel', true);
         $row = $model->get_reserved_sole($id);
 
@@ -297,7 +300,7 @@ class Admin extends CI_Controller
     }
     public function room_data($type)
     {
-       
+
         $model = null;
         switch ($type) {
             case 'music':
@@ -436,8 +439,9 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
-    public function edit_room_page($type,$r_id){
-        
+    public function edit_room_page($type, $r_id)
+    {
+
         switch ($type) {
             case 'music':
                 $model = $this->Model('', 'RoomMusic', false);
@@ -461,20 +465,21 @@ class Admin extends CI_Controller
                 break;
         }
         $row = $model->getRowById($r_id);
-        return $this->AdminRender('admin/room_data/room/edit/page',[
-            'title'=>'แก้ไขข้อมูลห้อง',
-            'url'=>$url,
-            'row'=>$row,
-            'type'=>$type,
-            'r_id'=>$r_id,
-            'page'=>'room_data'
+        return $this->AdminRender('admin/room_data/room/edit/page', [
+            'title' => 'แก้ไขข้อมูลห้อง',
+            'url' => $url,
+            'row' => $row,
+            'type' => $type,
+            'r_id' => $r_id,
+            'page' => 'room_data'
         ]);
     }
-    public function add_room_page($type){
-        return $this->AdminRender('admin/room_data/room/add/page',[
-            'title'=>'เพิ่มข้อมูลห้อง',
-            'type'=>$type,
-             'page'=>'room_data'
+    public function add_room_page($type)
+    {
+        return $this->AdminRender('admin/room_data/room/add/page', [
+            'title' => 'เพิ่มข้อมูลห้อง',
+            'type' => $type,
+            'page' => 'room_data'
         ]);
     }
 
@@ -493,9 +498,9 @@ class Admin extends CI_Controller
         $r_status = $this->post('r_status');
         $r_close_desc = $this->post('r_close_desc');
         $r_desc = $this->post('r_desc');
-      
-        $upload_img = $this->upload_image($type,$r_number,'img');
-        
+
+        $upload_img = $this->upload_image($type, $r_number, 'img');
+
         $img_name = $upload_img['img_name'];
 
         $data = [
@@ -504,8 +509,8 @@ class Admin extends CI_Controller
             'r_close_desc' => $r_close_desc,
             'r_desc' => $r_desc,
         ];
-        if($img_name){
-           $data['r_img'] = $img_name;
+        if ($img_name) {
+            $data['r_img'] = $img_name;
         }
 
         switch ($type) {
@@ -530,8 +535,8 @@ class Admin extends CI_Controller
                 $room_title = 'Music-Relax';
                 break;
         }
-       
-        $result = $model->updateRoom($data,$r_id);
+
+        $result = $model->updateRoom($data, $r_id);
         if ($result) {
             $sweet = '<script>
             setTimeout(function() {
@@ -541,7 +546,7 @@ class Admin extends CI_Controller
                     title: "แก้ไขข้อมูลสำเร็จ",
                     showConfirmButton: true,
                 }).then(function(){
-                     window.location = "' . base_url() . $extension . 'admin/room_data/'.$type.'"; 
+                     window.location = "' . base_url() . $extension . 'admin/room_data/' . $type . '"; 
                 });
             }, 1000);
             </script>';
@@ -555,7 +560,7 @@ class Admin extends CI_Controller
                     title: "แก้ไขข้อมูลไม่สำเร็จ",
                     showConfirmButton: true,
                 }).then(function(){
-                     window.location = "' . base_url() . $extension . 'admin/room_data/'.$type.'"; 
+                     window.location = "' . base_url() . $extension . 'admin/room_data/' . $type . '"; 
                 });
             }, 1000);
             </script>';
@@ -573,14 +578,14 @@ class Admin extends CI_Controller
 
         $extension = 'index.php/';
         $type = $this->post('type');
-      
+
         $r_number = $this->post('r_numb');
         $r_status = $this->post('r_status');
         $r_close_desc = $this->post('r_close_desc');
         $r_desc = $this->post('r_desc');
-      
-        $upload_img = $this->upload_image($type,$r_number,'img');
-        
+
+        $upload_img = $this->upload_image($type, $r_number, 'img');
+
         $img_name = $upload_img['img_name'];
 
         $data = [
@@ -589,8 +594,8 @@ class Admin extends CI_Controller
             'r_close_desc' => $r_close_desc,
             'r_desc' => $r_desc,
         ];
-        if($img_name){
-           $data['r_img'] = $img_name;
+        if ($img_name) {
+            $data['r_img'] = $img_name;
         }
 
         switch ($type) {
@@ -615,7 +620,7 @@ class Admin extends CI_Controller
                 $room_title = 'Music-Relax';
                 break;
         }
-       
+
         $result = $model->insertRoom($data);
         if ($result) {
             $sweet = '<script>
@@ -626,7 +631,7 @@ class Admin extends CI_Controller
                     title: "เพิ่มข้อมูลห้องสำเร็จ",
                     showConfirmButton: true,
                 }).then(function(){
-                     window.location = "' . base_url() . $extension . 'admin/room_data/'.$type.'"; 
+                     window.location = "' . base_url() . $extension . 'admin/room_data/' . $type . '"; 
                 });
             }, 1000);
             </script>';
@@ -640,7 +645,7 @@ class Admin extends CI_Controller
                     title: "เพิ่มข้อมูลห้องไม่สำเร็จ",
                     showConfirmButton: true,
                 }).then(function(){
-                     window.location = "' . base_url() . $extension . 'admin/room_data/'.$type.'"; 
+                     window.location = "' . base_url() . $extension . 'admin/room_data/' . $type . '"; 
                 });
             }, 1000);
             </script>';
@@ -1078,68 +1083,99 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
-    public function statistic_page(){
-        $current_year = date('Y'); 
-        $model = $this->Model('statistic','StatisticModel',true);
-        $data = $model->get_month_satatistic($current_year);
-        
+    public function statistic_page()
+    {
+        $get_year = $this->post('year');
+        $get_day = $this->post('day');
 
-        $music = $model->get_by_service(1);
-        $vdo = $model->get_by_service(2);
-        $mini = $model->get_by_service(3);
+        $current_year = date('Y');
+        $current_day = date('Y-m-d');
+        // $model = $this->Model('statistic', 'StatisticModel', true);
+        $year = $get_year ? $get_year : $current_year;
+        $day = $get_day ? $get_day : $current_day;
+
+        $model = $this->Model('','AdminModel',false);
+        $data = $model->get_monthly_reservations_by_service($year);
+
+
+       
+        $music = $this->Model('reservation','MusicModel',true)->get_statistic_by_day($day);
+        $vdo = $this->Model('reservation','VdoModel',true)->get_statistic_by_day($day);
+        $mini = $this->Model('reservation','MiniModel',true)->get_statistic_by_day($day);
+       
 
         $statistic = [
             'music' => $music,
             'vdo' => $vdo,
             'mini' => $mini,
         ];
-        
-        $chartData = [
-            1 => array_fill(0, 12, 0), // Service 1
-            2 => array_fill(0, 12, 0), // Service 2
-            3 => array_fill(0, 12, 0)  // Service 3
-        ];
 
-        // Loop through the data and sum up `total_users` for each month
-        foreach ($data as $row) {
-            $monthIndex = (int) $row['month'] - 1; // Convert to 0-based index
-            $serviceId = (int) $row['service_id']; // Extract service_id
-
-            if (isset($chartData[$serviceId])) {
-                $chartData[$serviceId][$monthIndex] += $row['total_users']; // Sum total_users
-            }
-        }
-
-        // Convert associative array to indexed array for Chart.js
-        $finalChartData = array_values($chartData);
-        // echo "<pre>";
-        // print_r($finalChartData);
-        // echo "</pre>";
-        // $this->get_total_user_reservations();
-        return $this->AdminRender('admin/statistic_data/page',[
-            'title'=>'ข้อมูลสถิติ',
-            'page'=>'statistic',
-            'data'=>json_encode($finalChartData),
-            'current_year'=>date('y'),
-           'statistic' => $statistic,
+       
+        return $this->AdminRender('admin/statistic_data/page', [
+            'title' => 'ข้อมูลสถิติ',
+            'page' => 'statistic',
+            'data' => json_encode($data),
+            'current_year' => date('y'),
+            'statistic' => $statistic,
+            'day'=>$day,
+            'year'=>$year
         ]);
     }
-    public function get_total_user_reservations() {
+
+   
+    public function vdo_service_netflix_static(){
+        $get_year = $this->post('year');
+        $year = $get_year ? $get_year : date('Y');
+        $stats = $this->Model('reservation','VdoModel',true)->get_vdo_reservations_by_month($year,9999);
+        
+        // // Loop through the result and display the statistics
+        // echo '<pre>';
+        // print_r($stats);
+        // echo '</pre>';
+        return $this->AdminRender('admin/statistic_data/vdo_service/netflix/page', [
+            'title' => 'ข้อมูลสถิติการเข้าชม Netflix',
+            'page' => 'netflix',
+            'data'=>$stats,
+            'year'=>$year
+            
+        ]);
+    }
+    public function vdo_service_disney_static(){
+        $get_year = $this->post('year');
+        $year = $get_year ? $get_year : date('Y');
+        $stats = $this->Model('reservation','VdoModel',true)->get_vdo_reservations_by_month($year,9998);
+        
+        // // Loop through the result and display the statistics
+        // echo '<pre>';
+        // print_r($stats);
+        // echo '</pre>';
+        return $this->AdminRender('admin/statistic_data/vdo_service/disney/page', [
+            'title' => 'ข้อมูลสถิติการชม Disney+',
+            'page' => 'disney',
+            'data'=>$stats,
+            'year'=>$year
+            
+        ]);
+    }
+    
+
+    public function get_total_user_reservations()
+    {
         $start_date = '2023-03-02';
         $end_date = '2025-03-10';
-    
+
         // Load the model
         $model = $this->Model('statistic', 'StatisticModel', true);
-    
+
         // Get the total sum of total_users and total_reservations grouped by service_id within the given date range
         $totalData = $model->get_total_by_date_range($start_date, $end_date);
-    
+
         // Process the data to display the sum for each service_id
         foreach ($totalData as $serviceData) {
             $total_reserv += $serviceData['total_reservations'];
             echo "Service ID: " . $serviceData['service_id'] . "<br>";
             echo "Total Users: " . $serviceData['total_users'] . "<br>";
-            
+
         }
         echo "Total Reservations: " . $total_reserv . "<br><br>";
     }
@@ -1212,32 +1248,34 @@ class Admin extends CI_Controller
 
     }
 
-    public function time_setting_page(){
-        $model = $this->Model('','Time_Setting_Model',false);
+    public function time_setting_page()
+    {
+        $model = $this->Model('', 'Time_Setting_Model', false);
         $rows = $model->getAllTime();
 
-        return $this->AdminRender('admin/time_setting/page',[
-            'title'=>'ข้อมูลเวลาห้อง',
-            'page'=>'time_setting',
-            'rows'=>$rows,
+        return $this->AdminRender('admin/time_setting/page', [
+            'title' => 'ข้อมูลเวลาห้อง',
+            'page' => 'time_setting',
+            'rows' => $rows,
             'get_type' => function ($r_s_id) {
                 return $this->get_type_byId($r_s_id);
             }
         ]);
     }
-    public function time_setting_submit(){
+    public function time_setting_submit()
+    {
         $extension = 'index.php/';
-        $model = $this->Model('','Time_Setting_Model',false);
+        $model = $this->Model('', 'Time_Setting_Model', false);
         $s_id = $this->post('s_id');
         $t_start = $this->post('t_start');
         $t_end = $this->post('t_end');
         $interval = $this->post('interval_time');
-        $data= [
-            'start_time'=>$t_start,
-            'end_time'=>$t_end,
-            'interval_hours'=>$interval
+        $data = [
+            'start_time' => $t_start,
+            'end_time' => $t_end,
+            'interval_hours' => $interval
         ];
-        $result = $model->updateTime($data,$s_id);
+        $result = $model->updateTime($data, $s_id);
 
         if ($result) {
             $sweet = '<script>
@@ -1269,4 +1307,6 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'TimeSetting', 'admin');
     }
+
+   
 }

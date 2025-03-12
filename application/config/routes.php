@@ -153,6 +153,11 @@ $route['admin/time/setting/submit'] = 'Admin/time_setting_submit';
 
 $route['admin/statistic/home'] = 'Admin/statistic_page';
 
+$route['admin/statistic/service/netflix'] = 'Admin/vdo_service_netflix_static';
+$route['admin/statistic/service/disney'] = 'Admin/vdo_service_disney_static';
+$route['admin/statistic/service/test'] = 'Admin/vdo_service_static_test';
+
+
 
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';
