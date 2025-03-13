@@ -11,7 +11,7 @@ class Welcome extends CI_Controller {
 		$userdata = $this->session->userdata('userdata');
 		// $this->check_expire();
 		
-		return $this->Render('welcome_message',[
+		return $this->homeRender('welcome_message',[
 			'title'=>'home',
 			'userdata'=>$userdata,
 			'page'=>'home']);

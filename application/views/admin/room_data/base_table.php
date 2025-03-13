@@ -132,41 +132,40 @@
         location.reload();
     }, 180000);
 </script>
+
 <script>
-    // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2
-    function showDeleteConfirmation(id, r_id) {
-        Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            text: 'คุณแน่ใจใช่ใหมว่าจะปิดห้องหมายเลขที่ ' + r_id + '?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'ปืด',
-            cancelButtonText: 'ยกเลิก',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '<?= base_url("index.php/admin/remove/room/$table/") ?>' + id;
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'id';
-                input.value = id;
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-            }
-        });
-    }
-    // แนบตัวตรวจจับเหตุการณ์คลิกกับองค์ปุ่ มลบทั้งหมดที่มีคลาส delete-button
-    const deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const get_id = button.getAttribute('data-user-id');
-            const name = button.getAttribute('data-user-fullname');
-            showDeleteConfirmation(get_id, name);
-        });
+    function showDeleteConfirmation(r_id) {
+    Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: 'คุณแน่ใจใช่ไหมว่าจะลบห้องหมายเลขที่ ' + r_id + '?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // หากผู้ใช้ยืนยัน ให้ส่งค่าฟอร์มไปยัง delete.php เพื่อลบข้อมูล
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '<?= base_url("index.php/admin/remove/room/$table/") ?>' + r_id; // ใช้ r_id ที่รับมา
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'id';
+            input.value = r_id; // ใช้ r_id ที่รับมา
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
     });
+}
+
+// แนบตัวตรวจจับเหตุการณ์คลิกกับปุ่มลบทั้งหมดที่มีคลาส delete-button
+document.querySelectorAll('.delete-button').forEach((button) => {
+    button.addEventListener('click', () => {
+        const r_id = button.getAttribute('data-r-id'); // ใช้ r_id ให้ตรงกัน
+        showDeleteConfirmation(r_id);
+    });
+});
 </script>
 
 <div class="modal fade" id="reservedModal" tabindex="-1" arialabelledby="memberModalLabel" aria-hidden="true">

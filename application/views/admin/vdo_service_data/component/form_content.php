@@ -4,13 +4,14 @@
 
 </style>
 
-<?php print_r($row) ?>
+
 
 <div class="container mt-4">
     <?php if($row): ?>
     <h1 class="text-center">แก้ไขข้อมูล <?= $row['name_TH'] ?></h1>
-    <?php endif ?>
+    <?php else: ?>
     <h1 class="text-center">เพิ่มข้อมูล</h1>
+    <?php endif ?>
     <div class="row">
         <div class="col-lg-7 mx-auto">
             <div class="card mt-2 p-4 bg-light">

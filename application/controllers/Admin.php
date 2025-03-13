@@ -1260,7 +1260,7 @@ class Admin extends CI_Controller
 
         $model = $this->Model('','Vdo_service_Model',false);
        
-        $result = $model->update($id,$data);
+        $result = $model->insert($data);
         if ($result) {
             $sweet = '<script>
         setTimeout(function() {
@@ -1312,6 +1312,57 @@ class Admin extends CI_Controller
 
         }
         echo "Total Reservations: " . $total_reserv . "<br><br>";
+    }
+    public function delete_room($type,$id)
+    {
+       $extension = 'index.php/';
+        $model = null;
+
+        switch ($type) {
+            case 'music':
+                $modelName = 'RoomMusic';
+                break;
+            case 'vdo':
+                $modelName = 'RoomVdo';
+                break;
+            case 'mini':
+                $modelName = 'RoomMini';
+                break;
+            default:
+                break;
+            
+        }
+       $model = $this->Model('',$modelName,false);
+       $result = $model->deleteRoom($id);
+       if ($result) {
+        $sweet = '<script>
+    setTimeout(function() {
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "ลบห้องสำเร็จ",
+            showConfirmButton: true,
+        }).then(function(){
+             window.location = "' . base_url() . $extension . 'admin/room_data/'.$type.'"; 
+        });
+    }, 1000);
+    </script>';
+
+    } else {
+        $sweet = '<script>
+    setTimeout(function() {
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "ลบห้องไม่สำเร็จ",
+            showConfirmButton: true,
+        }).then(function(){
+             window.location = "' . base_url() . $extension . 'admin/room_data/'.$type.'"; 
+        });
+    }, 1000);
+    </script>';
+    }
+    return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
     public function delete_expire($reserv_id)
     {

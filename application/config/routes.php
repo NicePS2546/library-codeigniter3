@@ -140,6 +140,7 @@ $route['admin/active/(:any)'] = 'Admin/active_admin/$1';
 
 $route['admin/room_data/(:any)'] = 'Admin/room_data/$1';
 $route['admin/room/view/(:any)'] = 'Admin/room_view_data/$1';
+$route['admin/remove/room/(:any)/(:num)'] = 'Admin/delete_room/$1/$2';
 $route['admin/room/edit/(:any)/(:num)'] = 'Admin/edit_room_page/$1/$2';
 $route['admin/room/edit/submit'] = 'Admin/edit_room_submit';
 $route['admin/room/add/(:any)'] = 'Admin/add_room_page/$1';
@@ -159,6 +160,7 @@ $route['admin/statistic/service/test'] = 'Admin/vdo_service_static_test';
 
 $route ['admin/video/service/data'] = 'Admin/vdo_service_data';  
 $route ['admin/video/service/add'] = 'Admin/vdo_service_add';  
+$route ['admin/video/service/add/submit'] = 'Admin/vdo_service_add_submit';  
 $route ['admin/video/service/edit/(:num)'] = 'Admin/vdo_service_edit/$1';  
 $route ['admin/video/service/edit/submit'] = 'Admin/vdo_service_submit';  
 

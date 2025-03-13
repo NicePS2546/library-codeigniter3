@@ -21,7 +21,8 @@
         echo "<tr>
                     <td>$no</td>
                     <td>" . $row['r_number'] . "</td>
-                    <td><img heigh='50px' width='50px' class='img-fluid rounded' src='".base_url('public/assets/img/room_img/').$row['r_img']."'></td>
+                    <td><img height='50px' width='50px' class='img-fluid rounded' 
+     src='".base_url('public/assets/img/room_img/') . $row['r_img'] . "'?v='". time() ."' /></td>
                     <td>" . $row['r_desc']. "</td>
                    
                     <td class = '$status_color' >" . $status  . "</td>

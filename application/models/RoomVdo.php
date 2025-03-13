@@ -42,7 +42,7 @@ class RoomVdo extends CI_Model {
     // Update data in the table
     public function updateRoom($data, $id)
     {
-        $data = $this->modifiedStamp($data);  // Apply updated timestamp
+        
         $this->db->where($this->primaryKey, $id);
         return $this->db->update($this->table, $data);
     }

@@ -135,6 +135,51 @@ class CI_Controller
 
 		return $this->view("Template/main/Layout", $data);
 	}
+	public function homeRender($view, $data)
+	{
+		$type = $this->get_type();
+		$this->check_expire_music(); // check expire for music
+		$this->check_expire_vdo(); // check expire for music
+		$this->check_expire_mini(); // check expire for music
+
+		// Layout structure
+		$layout = [
+			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
+			'header' => $this->view('Template/home/header',[],true), // Return content as string
+			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
+			'content' => $this->view($view, $data,true), // Return content as string
+			'footer' => $this->view('Template/home/footer',[],true), // Return content as string
+			
+		];
+		$current_url = $this->getCurrentUrl();
+		$current_date = date("Y-m-d H:i");
+		$page = [
+			'music' => $current_url == base_url('index.php/music'),
+			'vdo' => $current_url == base_url('index.php/vdo'),
+			'mini' => $current_url == base_url('index.php/mini'),
+			'index'=> $current_url == base_url()
+		];
+		
+		$stage = $this->config->item('stage');
+		if($stage == "Development"){
+			$currentTime = $this->config->item('fixed_time');
+		}else{
+			$currentTime = date("H:i");
+		}
+		
+		$day = getDay($current_date);
+		if($day == "Saturday"){
+			$layout['notice'] = $this->view('component/holiday', [], true);
+		}else if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', [], true);
+		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', [], true);
+		}
+		// Merge the layout data with the original data
+		$data['layout'] = $layout;
+
+		return $this->view("Template/home/layout", $data);
+	}
 	public function check_admin(){
 		$check_admin = $this->session->has_userdata('admin_data');
 		
@@ -206,6 +251,7 @@ class CI_Controller
 
 		return $this->view("Template/test/Layout", $data);
 	}
+	
 
 	public function get_type()
 	{
@@ -227,101 +273,124 @@ class CI_Controller
 
 		return $data;
 	}
-	
+
 	public function upload_image($type = 'vdo', $r_number = 1, $name)
 {
-    // Check if a file is selected
-    if (empty($_FILES[$name]['name'])) {
-        return ['status' => false, 'error' => 'You did not select a file to upload.'];
-    }
-
     $upload_path = FCPATH . "public/assets/img/room_img/$type/";
-
-    if (!is_dir($upload_path)) {
-        if (!mkdir($upload_path, 0777, true)) {
-            die("Failed to create directory: " . $upload_path);
-        }
-    }
-
-    $resolved_path = realpath($upload_path);
-    if ($resolved_path === false) {
-        die("Resolved path is invalid.");
-    }
-
     $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
     $file_name = $r_number . "." . $file_ext;
-    $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
+    $full_path = $upload_path . $file_name;
 
-    // Delete old file if exists
-    foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $r_number . ".*") as $existing_file) {
+    // Delete old file (if exists)
+    foreach (glob($upload_path . $r_number . ".*") as $existing_file) {
         unlink($existing_file);
     }
 
-    // Set upload configuration
-    $config['upload_path']   = $resolved_path;
-    $config['allowed_types'] = 'jpg|jpeg|png|gif';
-    $config['max_size']      = 2048;
-    $config['file_name']     = $file_name;
-    $config['overwrite']     = true; // Overwrite the old file
-
-    $this->load->library('upload', $config);
-    $this->upload->initialize($config);
-
-    if ($this->upload->do_upload($name)) {
-        $data = $this->upload->data();
-        return ['status' => true, 'data' => $data,'img_name'=>$type.'/'.$file_name];
+    // Move file manually
+    if (move_uploaded_file($_FILES[$name]['tmp_name'], $full_path)) {
+        return ['status' => true, 'img_name' => $type . '/' . $file_name];
     } else {
-        $error = $this->upload->display_errors();
-        return ['status' => false, 'error' => $error];
+        return ['status' => false, 'error' => 'Failed to move uploaded file.'];
     }
 }
-	public function upload_image_service($service_number = 1, $name)
-{
-    // Check if a file is selected
-    if (empty($_FILES[$name]['name'])) {
-        return ['status' => false, 'error' => 'You did not select a file to upload.'];
-    }
+	
+// 	public function upload_image($type = 'vdo', $r_number = 1, $name)
+// {
+//     // Log file details
+//     log_message('debug', print_r($_FILES, true));
 
-    $upload_path = FCPATH . "public/assets/img/service_img/";
+//     if (empty($_FILES[$name]['name'])) {
+//         return ['status' => false, 'error' => 'No file selected.'];
+//     }
 
-    if (!is_dir($upload_path)) {
-        if (!mkdir($upload_path, 0777, true)) {
-            die("Failed to create directory: " . $upload_path);
-        }
-    }
+//     $upload_path = FCPATH . "public/assets/img/room_img/$type/";
+//     if (!is_dir($upload_path)) {
+//         if (!mkdir($upload_path, 0777, true)) {
+//             die("Failed to create directory: " . $upload_path);
+//         }
+//     }
 
-    $resolved_path = realpath($upload_path);
-    if ($resolved_path === false) {
-        die("Resolved path is invalid.");
-    }
+//     $resolved_path = realpath($upload_path);
+//     if ($resolved_path === false) {
+//         die("Resolved path is invalid.");
+//     }
 
-    $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
-    $file_name = $service_number . "." . $file_ext;
-    $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
+//     $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
+//     $file_name = $r_number . "." . $file_ext;
+//     $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
 
-    // Delete old file if exists
-    foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $service_number . ".*") as $existing_file) {
-        unlink($existing_file);
-    }
+//     // Delete old files safely
+//     foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $r_number . ".*") as $existing_file) {
+//         if (file_exists($existing_file)) {
+//             unlink($existing_file);
+//         }
+//     }
 
-    // Set upload configuration
-    $config['upload_path']   = $resolved_path;
-    $config['allowed_types'] = 'jpg|jpeg|png|gif';
-    $config['max_size']      = 2048;
-    $config['file_name']     = $file_name;
-    $config['overwrite']     = true; // Overwrite the old file
+//     // Upload Config
+//     $config['upload_path']   = $resolved_path;
+//     $config['allowed_types'] = 'jpg|jpeg|png|gif|bmp|webp|tiff|svg|ico';
+//     $config['max_size']      = 2048;
+//     $config['file_name']     = $file_name;
+//     $config['overwrite']     = true;
 
-    $this->load->library('upload', $config);
-    $this->upload->initialize($config);
+//     $this->load->library('upload', $config);
+//     $this->upload->initialize($config);
 
-    if ($this->upload->do_upload($name)) {
-        $data = $this->upload->data();
-        return ['status' => true, 'data' => $data,'img_name'=>$file_name];
-    } else {
-        $error = $this->upload->display_errors();
-        return ['status' => false, 'error' => $error];
-    }
-}
+//     if ($this->upload->do_upload($name)) {
+//         $data = $this->upload->data();
+//         return ['status' => true, 'data' => $data, 'img_name' => "$type/$file_name"];
+//     } else {
+//         log_message('error', "Upload failed: " . $this->upload->display_errors());
+//         return ['status' => false, 'error' => $this->upload->display_errors()];
+//     }
+// }
+// 	public function upload_image_service($service_number = 1, $name)
+// {
+//     // Check if a file is selected
+//     if (empty($_FILES[$name]['name'])) {
+//         return ['status' => false, 'error' => 'You did not select a file to upload.'];
+//     }
+
+//     $upload_path = FCPATH . "public/assets/img/service_img/";
+
+//     if (!is_dir($upload_path)) {
+//         if (!mkdir($upload_path, 0777, true)) {
+//             die("Failed to create directory: " . $upload_path);
+//         }
+//     }
+
+//     $resolved_path = realpath($upload_path);
+//     if ($resolved_path === false) {
+//         die("Resolved path is invalid.");
+//     }
+
+//     $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
+//     $file_name = $service_number . "." . $file_ext;
+//     $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
+
+//     // Delete old file if exists
+//     foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $service_number . ".*") as $existing_file) {
+//         unlink($existing_file);
+//     }
+
+//     // Set upload configuration
+//     $config['upload_path']   = $resolved_path;
+//     $config['allowed_types'] = 'jpg|jpeg|png|gif';
+//     $config['max_size']      = 2048;
+//     $config['file_name']     = $file_name;
+//     $config['overwrite']     = true; // Overwrite the old file
+
+//     $this->load->library('upload', $config);
+//     $this->upload->initialize($config);
+
+//     if ($this->upload->do_upload($name)) {
+//         $data = $this->upload->data();
+//         return ['status' => true, 'data' => $data,'img_name'=>$file_name];
+//     } else {
+//         $error = $this->upload->display_errors();
+//         return ['status' => false, 'error' => $error];
+//     }
+// }
 	public function get_type_byId($id)
 	{
 		$key = 't_id';

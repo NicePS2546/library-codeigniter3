@@ -191,43 +191,29 @@ class Debug extends CI_Controller
             ->set_output(json_encode($rooms));
     }
 
-    public function delete()
+    public function delete_room($type,$id)
     {
-        $id = $this->input->post('id');
-        $type = $this->input->post('type');
-
-        if (!$id || !$type) {
-            echo json_encode(['success' => false, 'message' => 'Invalid input.']);
-            return;
-        }
-
+       
         $model = null;
 
         switch ($type) {
             case 'music':
-                $model = 'RoomMusic';
+                $modelName = 'RoomMusic';
                 break;
             case 'vdo':
-                $model = 'RoomVdo';
+                $modelName = 'RoomVdo';
                 break;
             case 'mini':
-                $model = 'RoomMini';
+                $modelName = 'RoomMini';
                 break;
             default:
-            return $this->json_output(json_encode(['status' => false, 'message' => 'Invalid room type selected.']));
-            
+                break;
             
         }
 
-        $this->load->model($model);
-        if ($this->$model->deleteRoom($id)) {
-            return $this->json_output(json_encode(['success' => true, 'message' => "Room with ID $id deleted successfully."]));
-            
-            
-        } else {
-            return $this->json_output(json_encode(['success' => false, 'message' => 'Failed to delete the room.']));
-            
-        }
+       $model = $this->Model('',$modelName,false);
+       $result = $model->deleteRoom($id);
+       
     }
 
     public function status_modify()

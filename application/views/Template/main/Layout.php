@@ -34,7 +34,6 @@
   <!--- offline CDN --->
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="<?= base_url('public/cdn/boostrap5_3_0/css/bootstrap.min.css') ?>">
-  <!--- offline CDN --->
 
   <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" /> <!-- Custom Loader CSS -->
   <script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js') ?>"></script>

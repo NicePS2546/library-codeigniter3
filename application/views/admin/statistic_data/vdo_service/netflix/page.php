@@ -44,9 +44,7 @@ $mini = $statistic['mini']['0']['total_people'];
     }
 </style>
 <meta charset="UTF-8">
-<pre>
-<?php print_r($data) ?>
-</pre>
+
 <?php $card_res = "col-12 col-sm-6 col-md-6 col-lg-3"; ?>
 <div class="col-md-12">
     <div class="info-box">

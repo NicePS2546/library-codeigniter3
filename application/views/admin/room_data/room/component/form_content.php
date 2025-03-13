@@ -80,7 +80,7 @@
                         <!-- Submit Button -->
                         <div class="row mt-3">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-success btn-block">เพิ่ม</button>
+                                <button type="submit" class="btn btn-success btn-block"><?= $row ?  'แก้ไข' : 'เพิ่ม' ?></button>
                             </div>
                         </div>
 
