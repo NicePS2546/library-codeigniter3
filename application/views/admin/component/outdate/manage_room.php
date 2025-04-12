@@ -9,7 +9,7 @@
                 <input type="hidden" name="id" value="<?= $row['reserv_id']; ?>">
 
                 <button type="button" class="btn btn-danger btn-action delete-expire-button"
-                    data-reserv-id="<?= $row['reserv_id']; ?>" data-r-s-id="<?= $row['r_s_id'] ?>" data-user-fullname="<?= $row['fullname']; ?> "><i class="bi bi-x-square"></i></button>
+                    data-reserv-id="<?= $row['reserv_id']; ?>" data-r-s-id="<?= $row['r_s_id'] ?>" data-user-fullname="<?= $row['st_id']; ?> "><i class="bi bi-x-square"></i></button>
             </div>
         </div>
 

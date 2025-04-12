@@ -42,7 +42,7 @@
   <link rel="stylesheet" href="<?= base_url('public/assets/fonts/icomoon/style.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/cdn/animated.css') ?>" />
   <script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
-  <link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
+  <link rel="stylesheet" href="<?= base_url("public/cdn/sweet2.min.css") ?>">
 
 
   <style>
@@ -162,7 +162,7 @@
   <?= $layout['notice'] ? $layout['notice'] : '' ?>
   <!-- jQuery -->
   <script src="<?= base_url('public/cdn/jQuery/jquery-3.6.0.min.js') ?>"></script>
-  <script src="<?= base_url('public/cdn/popper.min.js') ?>"></script>
+  <script src="<?= base_url('public/cdn/popper.js') ?>"></script>
   <script src="<?= base_url('public/cdn/boostrap5_3_0/js/boostrap.min.js') ?>"></script>
 
   <!-- Custom Scripts -->
@@ -179,7 +179,7 @@
     // Run when page loads
     window.onload = function () {
         addUser();
-        updateOnlineUsers();
+  
     };
 
     // Run when page is closed or refreshed
@@ -209,16 +209,7 @@
         }, 100);
       });
     });
-    $(document).ready(function () {
-      // Initialize Flatpickr with both Date and Time picker
-      flatpickr("#datetime", {
-        enableTime: true,          // Enable time selection
-        dateFormat: "Y-m-d H:i",   // Date and time format (24-hour)
-        time_24hr: true,           // Use 24-hour time format
-        minuteIncrement: 1,
-        locale: 'th'         // Increment minutes by 1
-      });
-    });
+   
 
 
 

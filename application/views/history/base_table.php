@@ -10,7 +10,9 @@
             max-width: 50%;
         }
     }
-
+    .swal2-confirm{
+        background-color: red;
+    }
     .info-box {
         display: flex !important;
         align-items: center !important;
@@ -117,8 +119,8 @@
             text: 'คุณแน่ใจใช่ใหมว่าจะยกเลิกการจอง ?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'ปืด',
-            cancelButtonText: 'ยกเลิก',
+            confirmButtonText: 'ยกเลิก',
+            cancelButtonText: 'ปิด',
         }).then((result) => {
             if (result.isConfirmed) {
                 // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล

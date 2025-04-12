@@ -39,7 +39,7 @@ class Admin extends CI_Controller
 
         ]);
     }
-
+    
     public function reserv_music()
     {
         $expired_rows = $this->get_expired();
@@ -281,7 +281,7 @@ class Admin extends CI_Controller
             'title' => 'แก้ไขรายละเอียดข้อมูลการจอง',
             'page' => 'reserv_data',
             'row' => $row,
-            '$url' => 'music'
+            '$url' => 'vdo'
         ]);
     }
     public function edit_reserv_mini($id)
@@ -294,7 +294,7 @@ class Admin extends CI_Controller
             'title' => 'แก้ไขรายละเอียดข้อมูลการจอง',
             'page' => 'reserv_data',
             'row' => $row,
-            '$url' => 'music',
+            '$url' => 'mini',
 
         ]);
     }
@@ -1040,7 +1040,9 @@ class Admin extends CI_Controller
 
         return true;
     }
-
+public function test_room(){
+    return $this->AdminRender('test_upload_page',[]);
+}
     public function delete_all()
     {
         if (!$this->check_admin()) {
@@ -1083,6 +1085,15 @@ class Admin extends CI_Controller
         }
         return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
+    public function report_statistic(){
+        
+
+        return $this->AdminRender('admin/report/page',[
+            'title'=>'รายงานข้อมูล',
+            'page'=> 'report_page'
+        ]);
+    }
+    
     public function statistic_page()
     {
         $get_year = $this->post('year');
@@ -1193,15 +1204,18 @@ class Admin extends CI_Controller
 
         $upload_img = $this->upload_image_service( $id, 'img');
 
-        $img_name = $upload_img['img_name'];
-
+        $img_data = $this->upload->data();
+    //     echo '<pre>';
+    //     print_r($img_data['file_name']);
+    //     echo '</pre>';
+    //    exit();
        
         $data = [
             's_type' => $s_type,
             'name_EN' => $name_EN,
             'name_TH' => $name_TH,
             's_desc' => $s_desc,
-            's_picture' => $img_name,
+            's_picture' => $img_data['file_name'],
         ];
 
         $model = $this->Model('','Vdo_service_Model',false);

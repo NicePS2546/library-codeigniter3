@@ -11,7 +11,7 @@
                 <input type="hidden" name="id" value="<?= $row['r_id']; ?>">
 
                 <button type="button" class="btn btn-danger btn-action delete-button"
-                    data-r-id="<?= $row['r_id']; ?>"  ><i class="bi bi-x-square"></i></button>
+                    data-r-id="<?= $row['r_id']; ?>"  ><i data-r-id="<?= $row['r_id']; ?>" class="bi delete-button bi-x-square"></i></button> 
             </div>
         </div>
 

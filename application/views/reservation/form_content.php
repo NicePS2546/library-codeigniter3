@@ -3,6 +3,12 @@
     .card-body{
         border: 1px solid rgb(214, 214, 214) !important;
     }
+    input{
+        border: 1px solid rgb(98, 98, 98) !important;
+    }
+    select{
+        border: 1px solid rgb(98, 98, 98) !important;
+    }
 
 </style>
 <?php

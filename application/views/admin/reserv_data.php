@@ -124,51 +124,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
     <div class="info-box ">
         <div class="info-box-content">
             <div class="row d-flex pt-4 pb-4 justify-content-center align-items-center">
-                <!-- <div class="<?= $card_res ?> text-center">
-                    <a class="info-box btn">
-                        <span class="info-box-icon text-bg-primary shadow-sm">
-                            <i class="bi bi-music-note-beamed"></i>
-                        </span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Music Relax</span>
-                            </span>
-                            <div class="overlay">
-                                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
-                            </div>
-                        </div>
-                    </a>
-                  
-                </div>
                
-                <div class="<?= $card_res ?> text-center">
-                    <a class="info-box btn">
-                        <span class="info-box-icon text-bg-danger shadow-sm">
-                            <i class="bi bi-camera-reels-fill"></i>
-                        </span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Video On-Demand</span>
-
-                        </div>
-                        
-                    </a>
-                   
-                </div>
-               
-                <div class="col-12 col-sm-12 col-md-12 col-lg-3 text-center">
-                    <a class="info-box btn">
-                        <span class="info-box-icon text-bg-success shadow-sm">
-                            <i class="bi bi-film"></i>
-                        </span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Mini-Theater</span>
-
-                        </div>
-                       
-                    </a>
-                    
-                </div> -->
-
-                <!-- Tooltip Example -->
                 
                 <a href="<?= base_url('index.php/admin/check/reserv/music') ?>" class="<?= $card_res ?> text-center">
                     <span class="info-box-icon text-bg-primary shadow-sm btn-shadow" data-label="Music-Relax">

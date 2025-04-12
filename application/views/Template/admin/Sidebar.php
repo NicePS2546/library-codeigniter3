@@ -104,6 +104,12 @@
                       <p>ข้อมูลสถิติการชม Disney+</p>
                     </a>
                   </li>
+                  <li class="nav-item ">
+                    <a href="<?= base_url('index.php/admin/statistic/report/') ?>" class="nav-link <?= $page == "disney"  ? "active" : '' ?>  ">
+                    <?= $page == "disney" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ออกรายงานข้อมูลสถิติ</p>
+                    </a>
+                  </li>
                   
                 </ul>
               </li>

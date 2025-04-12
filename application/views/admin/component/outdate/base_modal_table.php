@@ -166,6 +166,39 @@
             showDeleteExpireConfirmation(get_id, name,service_id);
         });
     });
+
+    function showDeleteAllConfirmation(table) {
+        Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            text: 'คุณแน่ใจใช่ใหมว่าจะลบทั้งหมด ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ลบ',
+            cancelButtonText: 'ยกเลิก',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '<?= base_url("index.php/admin/update/deleteAll/reserv") ?>';
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'table';
+                input.value = table;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+     const deleteAllBtn = document.querySelectorAll('.delete-all-btn');
+    console.log(deleteAllBtn);
+    deleteAllBtn.forEach((button) => {
+        button.addEventListener('click', () => {
+            const table = button.getAttribute('data-table');
+            showDeleteAllConfirmation(table);
+        });
+    });
 </script>
 
  <!-- Modal Structure 2 (Side Modal)--> 

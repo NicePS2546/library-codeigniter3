@@ -7,7 +7,7 @@
 
 
 <div class="container mt-4">
-    <h1 class="text-center">เพิ่มข้อมูลห้อง</h1>
+    <h1 class="text-center"><?= $row ?  'แก้ไขข้อมูล' : 'เพิ่มข้อมูลห้อง' ?></h1>
     <div class="row">
         <div class="col-lg-7 mx-auto">
             <div class="card mt-2 p-4 bg-light">

@@ -201,11 +201,11 @@ class CI_Controller
 		// Layout structure
 		$layout = [
 			  // Default title if not provided
-			'header' => $this->view('Template/admin/Header', ['title'=>$data['title']],true), // Return navbar as string
-			'navbar' => $this->view('Template/admin/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
-			'sidebar' => $this->view('Template/admin/Sidebar', ['title'=>$data['title']],true), // Return content as string,
+			'header' => $this->view('Template/Admin/Header', ['title'=>$data['title']],true), // Return navbar as string
+			'navbar' => $this->view('Template/Admin/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
+			'sidebar' => $this->view('Template/Admin/Sidebar', ['title'=>$data['title']],true), // Return content as string,
 			'content' => $this->view($view, $data,true), // Return content as string,
-			'footer'=>$this->view('Template/admin/Footer',[],true)
+			'footer'=>$this->view('Template/Admin/Footer',[],true)
 		];
 
 		$current_url = $this->getCurrentUrl();
@@ -274,123 +274,69 @@ class CI_Controller
 		return $data;
 	}
 
+
+
 	public function upload_image($type = 'vdo', $r_number = 1, $name)
+	{
+		
+		$config['upload_path'] = "./public/assets/img/room_img/$type/";  // โฟลเดอร์ ตำแหน่งเดียวกับ root ของโปรเจ็ค
+		$config['allowed_types'] = 'gif|jpg|png|jpeg'; // ปรเเภทไฟล์ 
+		$config['max_size']     = '0';  // ขนาดไฟล์ (kb)  0 คือไม่จำกัด ขึ้นกับกำหนดใน php.ini ปกติไม่เกิน 2MB
+		$config['max_width'] = '20000';  // ความกว้างรูปไม่เกิน
+		$config['max_height'] = '30000'; // ความสูงรูปไม่เกิน
+		$new_name = time().$_FILES[$name]['name'];
+		$config['file_name'] = $new_name;
+
+		$this->upload->initialize($config);
+		 if (!$this->upload->do_upload($name)){
+			
+			// echo "<pre>";
+			// echo "error";
+			// echo "</pre>";
+			// exit();
+			return ['status' => false, 'error' => 'Failed to move uploaded file.'];
+		 }else{
+			$data = $this->upload->data();
+			// echo "<pre>";
+			// print_r($data);
+			// echo "</pre>";
+			// exit();
+			return ['status' => true, 'img_name' => $type . '/' . $data['file_name']];
+		 }
+		// Generate a random filename (fallback for older PHP versions)
+		
+	}
+
+
+	public function upload_image_service($service_number = 1, $name)
 {
-    $upload_path = FCPATH . "public/assets/img/room_img/$type/";
-    $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
-    $file_name = $r_number . "." . $file_ext;
-    $full_path = $upload_path . $file_name;
+	$config['upload_path'] = "./public/assets/img/service_img/";  // โฟลเดอร์ ตำแหน่งเดียวกับ root ของโปรเจ็ค
+	$config['allowed_types'] = 'gif|jpg|png|jpeg|webp|svg'; // ปรเเภทไฟล์ 
+	$config['max_size']     = '0';  // ขนาดไฟล์ (kb)  0 คือไม่จำกัด ขึ้นกับกำหนดใน php.ini ปกติไม่เกิน 2MB
+	$config['max_width'] = '20000';  // ความกว้างรูปไม่เกิน
+	$config['max_height'] = '30000'; // ความสูงรูปไม่เกิน
+	$new_name = time().$_FILES[$name]['name'];
+	$config['file_name'] = $new_name;
 
-    // Delete old file (if exists)
-    foreach (glob($upload_path . $r_number . ".*") as $existing_file) {
-        unlink($existing_file);
-    }
-
-    // Move file manually
-    if (move_uploaded_file($_FILES[$name]['tmp_name'], $full_path)) {
-        return ['status' => true, 'img_name' => $type . '/' . $file_name];
-    } else {
-        return ['status' => false, 'error' => 'Failed to move uploaded file.'];
-    }
+	$this->upload->initialize($config);
+	 if (!$this->upload->do_upload($name)){
+		
+		// $data = $this->upload->data();
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+		// exit();
+		return ['status' => false, 'error' => 'Failed to move uploaded file.'];
+	 }else{
+		// $data = $this->upload->data();
+		// echo "<pre>";
+		// print_r($data['file_name']);
+		// echo "</pre>";
+		// exit();
+		return ['status' => true, 'img_name' => $data['file_name']];
+	 }
+	// Generate a random filename (fallback for older PHP versions)
 }
-	
-// 	public function upload_image($type = 'vdo', $r_number = 1, $name)
-// {
-//     // Log file details
-//     log_message('debug', print_r($_FILES, true));
-
-//     if (empty($_FILES[$name]['name'])) {
-//         return ['status' => false, 'error' => 'No file selected.'];
-//     }
-
-//     $upload_path = FCPATH . "public/assets/img/room_img/$type/";
-//     if (!is_dir($upload_path)) {
-//         if (!mkdir($upload_path, 0777, true)) {
-//             die("Failed to create directory: " . $upload_path);
-//         }
-//     }
-
-//     $resolved_path = realpath($upload_path);
-//     if ($resolved_path === false) {
-//         die("Resolved path is invalid.");
-//     }
-
-//     $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
-//     $file_name = $r_number . "." . $file_ext;
-//     $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
-
-//     // Delete old files safely
-//     foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $r_number . ".*") as $existing_file) {
-//         if (file_exists($existing_file)) {
-//             unlink($existing_file);
-//         }
-//     }
-
-//     // Upload Config
-//     $config['upload_path']   = $resolved_path;
-//     $config['allowed_types'] = 'jpg|jpeg|png|gif|bmp|webp|tiff|svg|ico';
-//     $config['max_size']      = 2048;
-//     $config['file_name']     = $file_name;
-//     $config['overwrite']     = true;
-
-//     $this->load->library('upload', $config);
-//     $this->upload->initialize($config);
-
-//     if ($this->upload->do_upload($name)) {
-//         $data = $this->upload->data();
-//         return ['status' => true, 'data' => $data, 'img_name' => "$type/$file_name"];
-//     } else {
-//         log_message('error', "Upload failed: " . $this->upload->display_errors());
-//         return ['status' => false, 'error' => $this->upload->display_errors()];
-//     }
-// }
-// 	public function upload_image_service($service_number = 1, $name)
-// {
-//     // Check if a file is selected
-//     if (empty($_FILES[$name]['name'])) {
-//         return ['status' => false, 'error' => 'You did not select a file to upload.'];
-//     }
-
-//     $upload_path = FCPATH . "public/assets/img/service_img/";
-
-//     if (!is_dir($upload_path)) {
-//         if (!mkdir($upload_path, 0777, true)) {
-//             die("Failed to create directory: " . $upload_path);
-//         }
-//     }
-
-//     $resolved_path = realpath($upload_path);
-//     if ($resolved_path === false) {
-//         die("Resolved path is invalid.");
-//     }
-
-//     $file_ext = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
-//     $file_name = $service_number . "." . $file_ext;
-//     $full_path = $resolved_path . DIRECTORY_SEPARATOR . $file_name;
-
-//     // Delete old file if exists
-//     foreach (glob($resolved_path . DIRECTORY_SEPARATOR . $service_number . ".*") as $existing_file) {
-//         unlink($existing_file);
-//     }
-
-//     // Set upload configuration
-//     $config['upload_path']   = $resolved_path;
-//     $config['allowed_types'] = 'jpg|jpeg|png|gif';
-//     $config['max_size']      = 2048;
-//     $config['file_name']     = $file_name;
-//     $config['overwrite']     = true; // Overwrite the old file
-
-//     $this->load->library('upload', $config);
-//     $this->upload->initialize($config);
-
-//     if ($this->upload->do_upload($name)) {
-//         $data = $this->upload->data();
-//         return ['status' => true, 'data' => $data,'img_name'=>$file_name];
-//     } else {
-//         $error = $this->upload->display_errors();
-//         return ['status' => false, 'error' => $error];
-//     }
-// }
 	public function get_type_byId($id)
 	{
 		$key = 't_id';

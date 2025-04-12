@@ -37,8 +37,7 @@ class Mini extends CI_Controller
         $vdoModel = $this->VdoModel;
         $this->load->model('reservation/MusicModel');
         $music = $this->MusicModel;
-        $this->load->model('statistic/StatisticModel');
-        $statistic = $this->StatisticModel;
+        
 
 
         $extension = "index.php/";
@@ -62,6 +61,22 @@ class Mini extends CI_Controller
         $music_dupl = $music->check_duplicate($st_id, $r_id);
         $mini_dulp = $model->check_duplicate($st_id, $r_id);
         $vdo_dupl = $vdoModel->check_duplicate($st_id, $r_id);
+        $check_time_dul = $this->Model('reservation','MiniModel',true)->check_time_duplicate($r_id,$start_time,$exp_time);
+        if ($check_time_dul) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "เวลานี้ถูกจองไปแล้วโปรดจองใหม่อีกครั้ง",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'mini"; 
+                });
+            }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
+        }
         $data = [
             'st_id' => $st_id,  // Example: Replace with actual student/user ID
             'r_id' => $r_id, // Room number
@@ -183,7 +198,7 @@ class Mini extends CI_Controller
             </script>';
             return $this->sweet($sweet, 'Mini-Theater Reservation', 'mini');  // Stop execution if validation fails
         }
-        $result = transaction($this->db,$model->reserve($data),$statistic->updateDailyStatistics(3 , $total_pp, 1));
+        $result = $model->reserve($data);
 
         if ($result) {
             $sweet = '<script>

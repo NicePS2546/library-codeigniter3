@@ -51,7 +51,7 @@ class RoomVdo extends CI_Model {
     public function getRoomById($id)
     {
         $this->db->where($this->primaryKey, $id);
-        return $this->db->get($this->table)->row();
+        return $this->db->get($this->table)->row_array();
     }
     public function getRoomByNumber($n)
     {

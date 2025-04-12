@@ -145,6 +145,7 @@ $route['admin/room/edit/(:any)/(:num)'] = 'Admin/edit_room_page/$1/$2';
 $route['admin/room/edit/submit'] = 'Admin/edit_room_submit';
 $route['admin/room/add/(:any)'] = 'Admin/add_room_page/$1';
 $route['admin/room/add/submit/ok'] = 'Admin/add_room_submit';
+$route['admin/room/test'] = 'Admin/test_room';
 
 $route['admin/update/deleteAll/reserv'] = 'Admin/delete_all';
 $route['admin/update/delete/(:num)'] = 'Admin/delete_expire/$1';
@@ -153,6 +154,7 @@ $route['admin/time/setting'] = 'Admin/time_setting_page';
 $route['admin/time/setting/submit'] = 'Admin/time_setting_submit';
 
 $route['admin/statistic/home'] = 'Admin/statistic_page';
+$route['admin/statistic/report'] = 'Admin/report_statistic';
 
 $route['admin/statistic/service/netflix'] = 'Admin/vdo_service_netflix_static';
 $route['admin/statistic/service/disney'] = 'Admin/vdo_service_disney_static';

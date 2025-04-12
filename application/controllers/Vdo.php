@@ -36,11 +36,14 @@ class Vdo extends CI_Controller
         ]);
     }
     public function reserv_page($r_id,$s_id){
+        $model = $this->Model('','RoomVdo',false);
+        $data = $model->getRoomById($r_id);
         return $this->Render('reservation/vdo/vdo_reserv',[
             'title'=>"Reservation",
             'page'=>"vdo",
             'r_id' => $r_id,
-            's_id' => $s_id    
+            's_id' => $s_id ,
+            'data'=>$data 
         ]);
     }
 
@@ -74,6 +77,22 @@ class Vdo extends CI_Controller
         list($start_time, $exp_time) = explode('-', $time_slot);
         $vdo_dupl = $model->check_duplicate($st_id,$r_id);
         $music_dulp = $musicModel->check_duplicate($st_id,$r_id);
+        $check_time_dul = $this->Model('reservation','VdoModel',true)->check_time_duplicate($r_id,$start_time,$exp_time);
+        if ($check_time_dul) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "เวลานี้ถูกจองไปแล้วโปรดจองใหม่อีกครั้ง",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'vdo"; 
+                });
+            }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
+        }
         $data = [
             'st_id' => $st_id,  // Example: Replace with actual student/user ID
             'r_id' => $r_id, // Room number

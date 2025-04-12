@@ -279,7 +279,7 @@ html,body{
         <div class="carousel-caption d-none d-md-block">
           <h5 class="display-6 font-weight-bold">บริการห้อง Music Relax</h5>
           <p>ลงทะเบียนเข้าใช้งาน 4-7 คน</p>
-          <a href="#">
+          <a href="<?= base_url('index.php/music') ?>">
             <button type="button" class="btn btn-success btn-lg">ลงทะเบียน</button>
           </a>
         </div>
@@ -292,7 +292,7 @@ html,body{
         <div class="carousel-caption d-none d-md-block">
           <h5 class="display-6 font-weight-bold">ชมภาพยนตร์ VDO on-demand</h5>
           <p>ลงทะเบียนเข้าใช้งาน 1-6 คน</p>
-          <a href="#">
+          <a href="<?= base_url('index.php/vdo') ?>">
             <button type="button" class="btn btn-success btn-lg">ลงทะเบียน</button>
           </a>
         </div>
@@ -305,7 +305,7 @@ html,body{
         <div class="carousel-caption d-none d-md-block">
           <h5 class="display-6 font-weight-bold">บริการห้องมินิเธียเตอร์</h5>
           <p>ลงทะเบียนเข้าใช้งาน 8 คนขึ้นไป</p>
-          <a href="#">
+          <a href="<?= base_url('index.php/mini') ?>">
             <button type="button" class="btn btn-success btn-lg">ลงทะเบียน</button>
           </a>
         </div>

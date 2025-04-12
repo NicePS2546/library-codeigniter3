@@ -160,11 +160,19 @@
 }
 
 // แนบตัวตรวจจับเหตุการณ์คลิกกับปุ่มลบทั้งหมดที่มีคลาส delete-button
-document.querySelectorAll('.delete-button').forEach((button) => {
-    button.addEventListener('click', () => {
-        const r_id = button.getAttribute('data-r-id'); // ใช้ r_id ให้ตรงกัน
+// document.querySelectorAll('.delete-button').forEach((button) => {
+//     button.addEventListener('click', () => {
+//         const r_id = button.getAttribute('data-r-id'); // ใช้ r_id ให้ตรงกัน
+//         showDeleteConfirmation(r_id);
+//     });
+// });
+
+
+document.addEventListener('click', (event) => {
+    if (event.target.classList.contains('delete-button')) {
+        const r_id = event.target.getAttribute('data-r-id');
         showDeleteConfirmation(r_id);
-    });
+    }
 });
 </script>
 
@@ -200,11 +208,11 @@ document.querySelectorAll('.delete-button').forEach((button) => {
         <?php $post_url = base_url("index.php/admin/room/view/"); ?>
         
         // เมื่อคลิกปุ่ ม View
-        $('.view-room-button').on('click', function () {
+      $(document).on('click', '.view-room-button', function () {
 
             const r_id = $(this).data('r-id');
             const table = $(this).data('table');
-            console.log('<?= $post_url ?>')
+            
             $.ajax({ // ส่ง AJAX
                 url: '<?= $post_url ?>'+table,
                 type: 'POST', // ใช้เมธอด POST
@@ -216,7 +224,7 @@ document.querySelectorAll('.delete-button').forEach((button) => {
                     const reserved = response; // แปลงข้อความ JSON ให้กลายเป็นObject
                     console.log(reserved);
                     const img = '<?= base_url('public/assets/img/room_img/') ?>' + reserved.r_img;
-            
+            console.log(response);
                     const status = reserved.r_status == 1 ? ' เปิดใช้งาน' : ' ปิดใช้งาน';
                     const close_desc = reserved.r_close_desc ? reserved.r_close_desc : 'ยังไม่ได้ตั้ง';
                     $('#room-numb').text(reserved.r_number); // แสดงข้อมูลใน Modal โดยใช้ ID ของแต่ละข้อมูล

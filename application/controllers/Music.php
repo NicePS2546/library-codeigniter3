@@ -29,11 +29,13 @@ class Music extends CI_Controller
     }
     public function reserv_page($r_id)
     {
-
+        $model = $this->Model('','RoomMusic',false);
+        $data = $model->getRoomById($r_id);
         return $this->Render('reservation/music', [
             'title' => 'Reservation',
             'r_id' => $r_id,
             'page' => 'music',
+            'data'=>$data
             
         ]);
     }
@@ -45,7 +47,7 @@ class Music extends CI_Controller
         $vdoModel = $this->VdoModel;
         $mini = $this->Model('reservation','MiniModel',true);
         $this->load->model('statistic/StatisticModel');
-        $statistic = $this->StatisticModel;
+       
 
 
         $extension = "index.php/";
@@ -69,6 +71,24 @@ class Music extends CI_Controller
         $music_dupl = $model->check_duplicate($st_id, $r_id);
         $vdo_dupl = $vdoModel->check_duplicate($st_id, $r_id);
         $mini_dupl = $mini->check_duplicate($st_id, $r_id);
+        
+        $check_time_dul = $this->Model('reservation','MusicModel',true)->check_time_duplicate($r_id,$start_time,$exp_time);
+        if ($check_time_dul) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "เวลานี้ถูกจองไปแล้วโปรดจองใหม่อีกครั้ง",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'music"; 
+                });
+            }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
+        }
+
         $data = [
             'st_id' => $st_id,  // Example: Replace with actual student/user ID
             'r_id' => $r_id, // Room number
@@ -189,7 +209,7 @@ class Music extends CI_Controller
             </script>';
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
         }
-        $result = transaction($this->db,$model->reserve($data),$statistic->updateDailyStatistics(1, $total_pp, 1));
+        $result = $model->reserve($data);
 
         if ($result) {
             $sweet = '<script>

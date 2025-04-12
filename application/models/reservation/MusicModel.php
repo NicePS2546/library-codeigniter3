@@ -112,6 +112,20 @@ class MusicModel extends CI_Model
 
         return $query->result_array();
     }
+
+    public function check_time_duplicate($r_id, $start_time, $exp_time) {
+        $this->db->where('r_id', $r_id);
+        $this->db->where('r_date', date('Y-m-d')); 
+        $this->db->where('r_status', 'actived');
+        $this->db->where("(
+            start_time < '$exp_time' 
+            AND exp_time > '$start_time'
+        )", NULL, FALSE);
+    
+        $query = $this->db->get('tbn_music_reserv');
+        return $query->num_rows() > 0; // TRUE if overlapping reservation exists
+    }
+    
     // Check if the selected time range is available for a specific date
     public function check_availability($startTime, $endTime, $r_date)
     {
@@ -398,6 +412,19 @@ class MusicModel extends CI_Model
     
         // Return the result
         return $query->row_array(); // Returns a single row of results
+    }
+    public function statistic_date_range($start_date, $end_date)
+    {
+        $this->db->select('st_id, COUNT(*) as reservation_count, SUM(total_pp) as total_people');
+        $this->db->from('tbn_vdo_reserv');
+        $this->db->where('r_date >=', $start_date);
+        $this->db->where('r_date <=', $end_date);
+        $this->db->where('r_status !=', 'deleted'); // optional: exclude deleted
+        $this->db->group_by('st_id');
+        $this->db->order_by('reservation_count', 'DESC');
+        
+        $query = $this->db->get();
+        return $query->result(); // return as object array
     }
 }
 

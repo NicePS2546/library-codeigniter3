@@ -31,8 +31,12 @@
 </style>
 
 <div class="container">
+    <!-- <pre>
+        <?php print_r($data) ?>
+    </pre> -->
     <div class="col-12 col-sm-10 pb-4 col-md-8 col-lg-6 mt-4 mx-auto ani-element">
-        <h1>จองห้อง</h1>
+        <h4>จองห้อง Music-Relax ห้องที่ <?= $data['r_number'] ?></h4>
+        <?= $this->load->view('reservation/rule_container',[],true) ?>
         <form class="text-end" action="<?php echo base_url('index.php/music/reserv/submit'); ?>" id="formId"
             onsubmit="return reserv(event)" method="POST">
             <input type="hidden" name="r_id" value="<?= $r_id ?>">
