@@ -12,12 +12,25 @@ class Music extends CI_Controller
     public function index()
     {
         $this->load->model('RoomMusic');
+         $extension = "index.php/";
         $model = $this->RoomMusic;
         $data = $model->getAllRoom();
-
         $this->load->model('reservation/MusicModel');
         $reservModel = $this->MusicModel;
-
+        $isAllFull = $this->checkAllFull($data);
+        if ($isAllFull) {
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: "ขออภัยในความไม่สะดวก",
+                    text: "ขณะนี้ห้องบริการถูกจองหมดแล้ว",
+                    showConfirmButton: true,
+                })
+            }, 1000);
+            </script>';
+        }
 
         return $this->Render("music", [
             'title' => 'Music-Relax',
@@ -34,15 +47,42 @@ class Music extends CI_Controller
     {
         $model = $this->Model('', 'RoomMusic', false);
         $data = $model->getRoomById($r_id);
+
         return $this->Render('reservation/music', [
             'title' => 'Reservation',
             'r_id' => $r_id,
             'page' => 'music',
             'data' => $data,
-            
 
         ]);
     }
+
+    // public function checkAllFull($rooms)
+    // {
+    //     foreach ($rooms as &$room) { // <- Note the & here!
+    //         $availability = $this->get_availible_time_card($room['r_id']);
+    //         $room['is_full'] = empty($availability['availableSlots']) ? 1 : 0;
+    //     }
+    //     echo "<pre>";
+    //     print_r($rooms);
+    //     echo "</pre>";
+    // }
+
+    public function checkAllFull($rooms)
+    {
+        foreach ($rooms as &$room) {
+            $availability = $this->get_availible_time_card($room['r_id']);
+            $room['is_full'] = empty($availability['availableSlots']) ? 1 : 0;
+
+            if ($room['is_full'] == 0) {
+                // As soon as one room is not full, we can stop and return false
+                return false;
+            }
+        }
+
+       return true;
+    }
+
     public function reserv()
     {
         $this->load->model('reservation/MusicModel');

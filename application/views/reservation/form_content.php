@@ -18,7 +18,7 @@
     <div class="card-body">
 <div class="text-start">
     <label class="form-label pl-1" for="st_id1">รหัสประจำตัว</label>
-    <input type="text" class="form-control" value="<?= $user_data['uid'] ? $user_data['uid'] : ''  ?>" name="st_id" id="st_id1">
+    <input type="text" maxlength="13" class="form-control" value="<?= $user_data['uid'] ? $user_data['uid'] : ''  ?>" name="st_id" id="st_id1">
     <div id="result" class="mt-4 mb-2">
     <!-- <?= $user_data['uid'] ? 'disabled' : '' ?> -->
     </div>
@@ -26,7 +26,7 @@
 </div>
 <div class="text-start">
     <label class="form-label" for="total">จำนวนคนเข้าใช้</label>
-    <input type="number" class="form-control" name="total" id="total">
+    <input type="number" maxlength="2" class="form-control" name="total" id="total">
 </div>
 <div id="results" class="mt-3">
     <!-- Fetched results will appear here -->

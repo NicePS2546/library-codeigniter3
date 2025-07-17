@@ -11,10 +11,22 @@ class Vdo extends CI_Controller
 
         $this->load->model('reservation/VdoModel');
         $r_model = $this->VdoModel;
-
+        
+        $isAllFull = $this->checkAllFull($data);
+        if ($isAllFull) {
+            echo '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: "ขออภัยในความไม่สะดวก",
+                    text: "ขณะนี้ห้องบริการถูกจองหมดแล้ว",
+                    showConfirmButton: true,
+                })
+            }, 1000);
+            </script>';
+        }
         $sorted_rooms = $this->sortRoom($data);
-
-
         return $this->Render("vdo", [
             'title' => 'Video On-Demand',
             'rooms' => $sorted_rooms,
@@ -44,6 +56,21 @@ class Vdo extends CI_Controller
 
         return $rooms;
     }
+    public function checkAllFull($rooms)
+    {
+        foreach ($rooms as &$room) {
+            $availability = $this->get_availible_time_card($room['r_id']);
+            $room['is_full'] = empty($availability['availableSlots']) ? 1 : 0;
+
+            if ($room['is_full'] == 0) {
+                // As soon as one room is not full, we can stop and return false
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function service_page($r_id)
     {
         $this->load->model('Vdo_service_Model');

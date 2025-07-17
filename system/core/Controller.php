@@ -125,7 +125,7 @@ class CI_Controller
 		$day = getDay($current_date);
 		if($day == "Saturday"){
 			$layout['notice'] = $this->view('component/holiday', [], true);
-		}else if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+		}else if ($currentTime < "09:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);
 		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);
@@ -170,7 +170,7 @@ class CI_Controller
 		$day = getDay($current_date);
 		if($day == "Saturday"){
 			$layout['notice'] = $this->view('component/holiday', [], true);
-		}else if ($currentTime < "08:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+		}else if ($currentTime < "09:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);
 		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', [], true);

@@ -24,10 +24,7 @@
         <?php endif; ?>
 
         <div class="d-flex justify-content-center gap-3">
-            <a href="<?= base_url() ?>index.php/mini/reserv/<?= $room['r_id'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-success' : 'btn-danger disabled' ?>">
-                <?= $room['r_status'] ? 'จองห้อง' : 'ห้องถูกปิด' ?>
-            </a>
-            
+           
             <?php if ($room['r_status'] && $room['isFree'] ) : ?>
                 <a href="<?= base_url() ?>index.php/<?= $url ?>/check/<?= $room['r_id'] ?>" id="card" class="btn <?= $room['r_status'] ? 'btn-primary' : 'btn-danger' ?>">ตรวจสอบ</a>
             <?php endif; ?>

@@ -4,9 +4,7 @@
         alt="image room no.<?= $room['r_number'] ?>">
     <div class="card-body">
         <h5 class="card-title">ห้องที่ <?= $room['r_number']; ?></h5>
-       <!-- <pre>
-        <?php print_r($aviliable_time) ?>
-       </pre> -->
+      
         <?php
         $room_dynamic = $page == "vdo" ? "service" : "reserv";
         if ($room['r_status']): ?>
