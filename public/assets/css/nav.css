@@ -1,0 +1,237 @@
+.nav-link {
+    transition: transform ease-in-out 0.5s !important;
+  }
+
+  .nav-link:hover {
+    transform: scale(1.08);
+    color: black;
+
+  }
+
+  .btn#modal {
+    transition: all 250ms ease-in-out !important;
+
+  }
+
+  .btn#modal:hover {
+    transform: scale(1.12);
+    transition: all 250ms ease-in-out;
+  }
+
+  .navbar-nav {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .navbar-toggler {
+    margin-left: auto;
+    /* Push the hamburger icon to the right */
+  }
+
+  /* Optional: Custom styles if you want to tweak the appearance */
+  .modal-header {
+    background-color: #007bff;
+    color: white;
+  }
+
+  /* Adjust Login button spacing */
+  .btn-login {
+    margin-left: auto;
+    transition: transform 0.4s ease-in-out !important;
+  }
+
+  .btn-login:hover {
+    transform: scale(1.04);
+
+  }
+
+  .btn-admin {
+    margin-left: auto;
+    transition: transform 0.4s ease-in-out !important;
+  }
+
+  .btn-admin:hover {
+    transform: scale(1.04);
+
+  }
+
+  .shadow {
+    box-shadow: 20px;
+
+  }
+
+  .fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    /* Higher z-index to ensure it stays on top */
+    width: 100%;
+    /* Make sure the navbar spans the width of the viewport */
+    z-index: 1020;
+    /* Ensures the navbar stays above other elements */
+    background-color: #f8f9fa;
+    /* Set a background color */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Optional: Add a shadow for better visibility */
+  }
+
+
+
+  @keyframes slideleft {
+    from {
+      transform: translateX(100px);
+    }
+    to {
+      transform: translateX(0px);
+    }
+  }
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+
+  @media (max-width: 991px) { /* Target devices with width <= 991px */
+    .nav-link {
+      display: inline-block;
+      transition: transform 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
+    }
+  
+    .nav-link:hover {
+      transform: translateX(-15px) !important; /* Slide left on hover */
+      color: black; /* Change text color */
+    }
+  
+    /* Prevent flickering */
+    .nav-link:not(:hover) {
+      transform: translateX(0); /* Ensure it returns to the default state smoothly */
+    }
+
+    .navbar-toggler {
+        transition: all 0.3s ease; /* Smooth transition for other changes */
+        outline: none !important; 
+    }
+    
+      .navbar-toggler:focus {
+       
+        outline: none; /* Remove the outline */
+        box-shadow: none; 
+    }
+  }
+
+
+ /*------------Hamburger Menu----------*/
+
+  
+
+ #nav-icon2 {
+  width: 50px;
+  height: 45px;
+  position: relative;
+  border: none !important;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: .5s ease-in-out;
+  -moz-transition: .5s ease-in-out;
+  -o-transition: .5s ease-in-out;
+  transition: .5s ease-in-out;
+  cursor: pointer;
+}
+
+#nav-icon2 span {
+  display: block;
+  margin-top: 10px;
+  position: absolute;
+  height: 3px;
+  width: 30%;
+  background: #d3531a;
+  opacity: 1;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: .25s ease-in-out;
+  -moz-transition: .25s ease-in-out;
+  -o-transition: .25s ease-in-out;
+  transition: .25s ease-in-out;
+}
+
+#nav-icon2 span:nth-child(even) {
+  left: 30%;
+  border-radius: 0 9px 9px 0;
+}
+
+#nav-icon2 span:nth-child(odd) {
+  left:0px;
+  border-radius: 9px 0 0 9px;
+}
+
+#nav-icon2 span:nth-child(1), #nav-icon2 span:nth-child(2) {
+  top: 0px;
+}
+
+#nav-icon2 span:nth-child(3), #nav-icon2 span:nth-child(4) {
+  top: 10px;
+}
+
+#nav-icon2 span:nth-child(5), #nav-icon2 span:nth-child(6) {
+  top: 20px;
+}
+
+#nav-icon2.open span:nth-child(1),#nav-icon2.open span:nth-child(6) {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+#nav-icon2.open span:nth-child(2),#nav-icon2.open span:nth-child(5) {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+#nav-icon2.open span:nth-child(1) {
+  left: 8px;
+  top: 18px;
+}
+
+#nav-icon2.open span:nth-child(2) {
+  left: calc(50% - 5px);
+  top: 18px;
+}
+
+#nav-icon2.open span:nth-child(3) {
+  left: -50%;
+  opacity: 0;
+}
+
+#nav-icon2.open span:nth-child(4) {
+  left: 100%;
+  opacity: 0;
+}
+
+#nav-icon2.open span:nth-child(5) {
+  left: 5px;
+  top: 29px;
+}
+
+#nav-icon2.open span:nth-child(6) {
+  left: calc(50% - 5px);
+  top: 29px;
+}
+
+
+/* Custom visibility and animation styles */
+ /*------------Hamburger Menu----------*/
+  
+ 

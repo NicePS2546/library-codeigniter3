@@ -1,0 +1,37 @@
+// $('#st_id1').on('input', function () {
+    //     const query = $(this).val();  // Get the input value
+    //     const result = $('#result');
+    //     result.html('<p class="mt-4 card py-2 px-2 w-50 text-center>กำลังโหลด....</p>')
+    //     if (query.length > 0) {
+            
+    //         // Simulate an API request with a mock response
+    //         $.ajax({
+    //             url: '<?= site_url('music/get/user') ?>',  // Mock API endpoint
+    //             type: 'POST',
+    //             data: { uid: query },
+    //             success: function (response) {
+    //                 // Filter results based on query
+    //                 const data = JSON.parse(response);
+    //                 const results = data.userdata;
+    //                 let output = '';
+    //                 console.log(data);
+
+    //             if (data.message == "Success") {
+    //                 // Construct the result output
+    //                 output = `<p class="mt-4 card py-2 px-2 w-50 text-center">${results.fullname}</p>`;
+    //             } else if(data.message == "fail"){
+    //                 console.log(data.message);
+    //                 output = '<p class="mt-4 card py-2 px-2 w-50 text-center">No results found</p>';
+    //             }
+
+    //             // Display the results in the #result div
+    //             result.html(output);
+    //             },
+    //             error: function () {
+    //                 result.html('<p>An error occurred while fetching data.</p>');
+    //             }
+    //         });
+    //     } else {
+    //         $('#results').html(''); // Clear results if the input is empty
+    //     }
+    // });

@@ -1,0 +1,82 @@
+h1 {
+    margin-bottom: 40px;
+}
+
+label {
+    color: #333;
+}
+
+.controls {
+    gap: 10px;
+}
+
+/* Force full width */
+#r_desc,
+#form_message {
+    width: 100% !important;
+    min-height: 70px;
+    /* Set a minimum height */
+    resize: vertical;
+    /* Allow resizing */
+}
+
+/* Ensure it remains full width on large screens */
+@media (min-width: 1096px) {
+    #r_desc {
+        max-width: 100% !important;
+    }
+}
+
+.form-group {
+    text-align: start;
+    margin-bottom: 10px;
+}
+
+/* Allow textarea resizing */
+textarea {
+    resize: vertical;
+    /* Users can resize if needed */
+}
+
+/* Ensure textarea takes full width */
+#r_desc,
+#form_message {
+    width: 100% !important;
+    min-height: 200px;
+    /* Minimum height */
+}
+
+/* Fix issue where width was limited at 1096px */
+@media (min-width: 1096px) {
+    #r_desc {
+        max-width: 100% !important;
+        /* Prevent it from shrinking */
+    }
+}
+
+/* Make form container full width on smaller screens */
+@media (max-width: 1326px) {
+    .col-lg-7 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Fix form layout */
+.card {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Adjust input layout */
+.custom-top {
+    flex-direction: row;
+    /* Prevent it from stacking */
+    width: 100%;
+    gap: 10px;
+}
+
+.custom-top .form-group {
+    flex: 1;
+    /* Let inputs take equal width */
+}
