@@ -167,12 +167,16 @@ $route ['admin/video/service/edit/(:num)'] = 'Admin/vdo_service_edit/$1';
 $route ['admin/video/service/edit/submit'] = 'Admin/vdo_service_submit';  
 
 $route['admin/reserv/activate/(:num)'] = 'Admin/reserv_activation/$1';
+
+//time system
+$route['admin/system/time/setting'] = 'Admin/time_system_setting_page';
+$route['admin/system/time/setting/submit'] = 'Admin/time_system_setting_submit';
+
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';
 $route['online/remove/user'] = 'OnlineUser/remove';
 $route['online/count/user'] = 'OnlineUser/count';
 $route['online/test'] = 'OnlineUser/test';
-
 
 
 

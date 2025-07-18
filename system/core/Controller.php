@@ -99,12 +99,20 @@ class CI_Controller
 		$this->check_expire_music(); // check expire for music
 		$this->check_expire_vdo(); // check expire for music
 		$this->check_expire_mini(); // check expire for music
+		$get_sys_time = $this->getTimeSystem(1);
+		$sys_time = $get_sys_time['data'];
+
+		//for testing <>
+		// echo "<pre>";
+		// print_r($get_sys_time);
+		// echo "</pre>";
+		// exit();
 
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
-			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
-			'content' => $this->view($view, $data,true), // Return content as string
+			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model' => $data['model'], 'type' => $type], true), // Return navbar as string
+			'content' => $this->view($view, $data, true), // Return content as string
 		];
 		$current_url = $this->getCurrentUrl();
 		$current_date = date("Y-m-d H:i");
@@ -112,23 +120,23 @@ class CI_Controller
 			'music' => $current_url == base_url('index.php/music'),
 			'vdo' => $current_url == base_url('index.php/vdo'),
 			'mini' => $current_url == base_url('index.php/mini'),
-			'index'=> $current_url == base_url()
+			'index' => $current_url == base_url()
 		];
-		
+
 		$stage = $this->config->item('stage');
-		if($stage == "Development"){
+		if ($stage == "Development") {
 			$currentTime = $this->config->item('fixed_time');
-		}else{
+		} else {
 			$currentTime = date("H:i");
 		}
-		
+
 		$day = getDay($current_date);
-		if($day == "Saturday"){
+		if ($day == "Saturday") {
 			$layout['notice'] = $this->view('component/holiday', [], true);
-		}else if ($currentTime < "09:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
-			$layout['notice'] = $this->view('component/not_in_time', [], true);
-		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
-			$layout['notice'] = $this->view('component/not_in_time', [], true);
+		} else if ($currentTime < $sys_time['start_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', ['time' => $sys_time['start_sys_time']], true);
+		} else if ($currentTime > $sys_time['end_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', ['time' => $sys_time['start_sys_time']], true);
 		}
 		// Merge the layout data with the original data
 		$data['layout'] = $layout;
@@ -141,15 +149,16 @@ class CI_Controller
 		$this->check_expire_music(); // check expire for music
 		$this->check_expire_vdo(); // check expire for music
 		$this->check_expire_mini(); // check expire for music
-
+		$get_sys_time = $this->getTimeSystem(1);
+		$sys_time = $get_sys_time['data'];
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
-			'header' => $this->view('Template/home/header',[],true), // Return content as string
-			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
-			'content' => $this->view($view, $data,true), // Return content as string
-			'footer' => $this->view('Template/home/footer',[],true), // Return content as string
-			
+			'header' => $this->view('Template/home/header', [], true), // Return content as string
+			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model' => $data['model'], 'type' => $type], true), // Return navbar as string
+			'content' => $this->view($view, $data, true), // Return content as string
+			'footer' => $this->view('Template/home/footer', [], true), // Return content as string
+
 		];
 		$current_url = $this->getCurrentUrl();
 		$current_date = date("Y-m-d H:i");
@@ -157,32 +166,33 @@ class CI_Controller
 			'music' => $current_url == base_url('index.php/music'),
 			'vdo' => $current_url == base_url('index.php/vdo'),
 			'mini' => $current_url == base_url('index.php/mini'),
-			'index'=> $current_url == base_url()
+			'index' => $current_url == base_url()
 		];
-		
+
 		$stage = $this->config->item('stage');
-		if($stage == "Development"){
+		if ($stage == "Development") {
 			$currentTime = $this->config->item('fixed_time');
-		}else{
+		} else {
 			$currentTime = date("H:i");
 		}
-		
+
 		$day = getDay($current_date);
-		if($day == "Saturday"){
+		if ($day == "Saturday") {
 			$layout['notice'] = $this->view('component/holiday', [], true);
-		}else if ($currentTime < "09:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
-			$layout['notice'] = $this->view('component/not_in_time', [], true);
-		} else if ($currentTime > "16:00" && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
-			$layout['notice'] = $this->view('component/not_in_time', [], true);
+		} else if ($currentTime < $sys_time['start_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', ['time' => $sys_time['start_sys_time']], true);
+		} else if ($currentTime > $sys_time['end_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
+			$layout['notice'] = $this->view('component/not_in_time', ['time' => $sys_time['start_sys_time']], true);
 		}
 		// Merge the layout data with the original data
 		$data['layout'] = $layout;
 
 		return $this->view("Template/home/layout", $data);
 	}
-	public function check_admin(){
+	public function check_admin()
+	{
 		$check_admin = $this->session->has_userdata('admin_data');
-		
+
 		return $check_admin;
 	}
 	public function AdminRender($view, $data)
@@ -191,8 +201,8 @@ class CI_Controller
 		$this->check_expire_music(); // check expire for music
 		$this->check_expire_vdo(); // check expire for music
 		$this->check_expire_mini(); // check expire for music
-		
-		if(!$this->check_admin()){
+
+		if (!$this->check_admin()) {
 			$this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
 			redirect('/');
 			exit();
@@ -200,26 +210,26 @@ class CI_Controller
 
 		// Layout structure
 		$layout = [
-			  // Default title if not provided
-			'header' => $this->view('Template/Admin/Header', ['title'=>$data['title']],true), // Return navbar as string
-			'navbar' => $this->view('Template/Admin/Navbar', ['page' => $data['page'], 'model'=> $data['model'],'type' => $type],true), // Return navbar as string
-			'sidebar' => $this->view('Template/Admin/Sidebar', ['title'=>$data['title']],true), // Return content as string,
-			'content' => $this->view($view, $data,true), // Return content as string,
-			'footer'=>$this->view('Template/Admin/Footer',[],true)
+			// Default title if not provided
+			'header' => $this->view('Template/Admin/Header', ['title' => $data['title']], true), // Return navbar as string
+			'navbar' => $this->view('Template/Admin/Navbar', ['page' => $data['page'], 'model' => $data['model'], 'type' => $type], true), // Return navbar as string
+			'sidebar' => $this->view('Template/Admin/Sidebar', ['title' => $data['title']], true), // Return content as string,
+			'content' => $this->view($view, $data, true), // Return content as string,
+			'footer' => $this->view('Template/Admin/Footer', [], true)
 		];
 
 		$current_url = $this->getCurrentUrl();
 		// $current_date = date("Y-m-d");
 
-		
-		
+
+
 		$stage = $this->config->item('stage');
-		if($stage == "Development"){
+		if ($stage == "Development") {
 			$currentTime = $this->config->item('fixed_time');
-		}else{
+		} else {
 			$currentTime = date("H:i");
 		}
-		
+
 		// $day = getDay($current_date);
 		// if($day == "Saturday"){
 		// 	$layout['notice'] = $this->view('component/holiday', [], true);
@@ -242,8 +252,8 @@ class CI_Controller
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
-			'navbar' => $this->view('Template/test/Navbar', ['page' => $data['page'], 'type' => $type],true), // Return navbar as string
-			'content' => $this->view($view, $data,true), // Return content as string
+			'navbar' => $this->view('Template/test/Navbar', ['page' => $data['page'], 'type' => $type], true), // Return navbar as string
+			'content' => $this->view($view, $data, true), // Return content as string
 		];
 
 		// Merge the layout data with the original data
@@ -251,7 +261,7 @@ class CI_Controller
 
 		return $this->view("Template/test/Layout", $data);
 	}
-	
+
 
 	public function get_type()
 	{
@@ -278,65 +288,65 @@ class CI_Controller
 
 	public function upload_image($type = 'vdo', $r_number = 1, $name)
 	{
-		
+
 		$config['upload_path'] = "./public/assets/img/room_img/$type/";  // โฟลเดอร์ ตำแหน่งเดียวกับ root ของโปรเจ็ค
 		$config['allowed_types'] = 'gif|jpg|png|jpeg'; // ปรเเภทไฟล์ 
-		$config['max_size']     = '0';  // ขนาดไฟล์ (kb)  0 คือไม่จำกัด ขึ้นกับกำหนดใน php.ini ปกติไม่เกิน 2MB
+		$config['max_size'] = '0';  // ขนาดไฟล์ (kb)  0 คือไม่จำกัด ขึ้นกับกำหนดใน php.ini ปกติไม่เกิน 2MB
 		$config['max_width'] = '20000';  // ความกว้างรูปไม่เกิน
 		$config['max_height'] = '30000'; // ความสูงรูปไม่เกิน
-		$new_name = time().$_FILES[$name]['name'];
+		$new_name = time() . $_FILES[$name]['name'];
 		$config['file_name'] = $new_name;
 
 		$this->upload->initialize($config);
-		 if (!$this->upload->do_upload($name)){
-			
+		if (!$this->upload->do_upload($name)) {
+
 			// echo "<pre>";
 			// echo "error";
 			// echo "</pre>";
 			// exit();
 			return ['status' => false, 'error' => 'Failed to move uploaded file.'];
-		 }else{
+		} else {
 			$data = $this->upload->data();
 			// echo "<pre>";
 			// print_r($data);
 			// echo "</pre>";
 			// exit();
 			return ['status' => true, 'img_name' => $type . '/' . $data['file_name']];
-		 }
+		}
 		// Generate a random filename (fallback for older PHP versions)
-		
+
 	}
 
 
 	public function upload_image_service($service_number = 1, $name)
-{
-	$config['upload_path'] = "./public/assets/img/service_img/";  // โฟลเดอร์ ตำแหน่งเดียวกับ root ของโปรเจ็ค
-	$config['allowed_types'] = 'gif|jpg|png|jpeg|webp|svg'; // ปรเเภทไฟล์ 
-	$config['max_size']     = '0';  // ขนาดไฟล์ (kb)  0 คือไม่จำกัด ขึ้นกับกำหนดใน php.ini ปกติไม่เกิน 2MB
-	$config['max_width'] = '20000';  // ความกว้างรูปไม่เกิน
-	$config['max_height'] = '30000'; // ความสูงรูปไม่เกิน
-	$new_name = time().$_FILES[$name]['name'];
-	$config['file_name'] = $new_name;
+	{
+		$config['upload_path'] = "./public/assets/img/service_img/";  // โฟลเดอร์ ตำแหน่งเดียวกับ root ของโปรเจ็ค
+		$config['allowed_types'] = 'gif|jpg|png|jpeg|webp|svg'; // ปรเเภทไฟล์ 
+		$config['max_size'] = '0';  // ขนาดไฟล์ (kb)  0 คือไม่จำกัด ขึ้นกับกำหนดใน php.ini ปกติไม่เกิน 2MB
+		$config['max_width'] = '20000';  // ความกว้างรูปไม่เกิน
+		$config['max_height'] = '30000'; // ความสูงรูปไม่เกิน
+		$new_name = time() . $_FILES[$name]['name'];
+		$config['file_name'] = $new_name;
 
-	$this->upload->initialize($config);
-	 if (!$this->upload->do_upload($name)){
-		
-		$data = $this->upload->data();
-		// echo "<pre>";
-		// print_r($data);
-		// echo "</pre>";
-		// exit();
-		return ['status' => false, 'error' => 'Failed to move uploaded file.'];
-	 }else{
-		$data = $this->upload->data();
-		// echo "<pre>";
-		// print_r($data['file_name']);
-		// echo "</pre>";
-		// exit();
-		return ['status' => true, 'img_name' => $data['file_name']];
-	 }
-	// Generate a random filename (fallback for older PHP versions)
-}
+		$this->upload->initialize($config);
+		if (!$this->upload->do_upload($name)) {
+
+			$data = $this->upload->data();
+			// echo "<pre>";
+			// print_r($data);
+			// echo "</pre>";
+			// exit();
+			return ['status' => false, 'error' => 'Failed to move uploaded file.'];
+		} else {
+			$data = $this->upload->data();
+			// echo "<pre>";
+			// print_r($data['file_name']);
+			// echo "</pre>";
+			// exit();
+			return ['status' => true, 'img_name' => $data['file_name']];
+		}
+		// Generate a random filename (fallback for older PHP versions)
+	}
 	public function get_type_byId($id)
 	{
 		$key = 't_id';
@@ -348,13 +358,15 @@ class CI_Controller
 		return $data['type'];
 	}
 
-	public function json_output($data){
+	public function json_output($data)
+	{
 		return $this->output
-            ->set_content_type('application/json')
-            ->set_output($data);
+			->set_content_type('application/json')
+			->set_output($data);
 	}
 
-	public function check_expire_music(){
+	public function check_expire_music()
+	{
 		$this->load->model('reservation/MusicModel');
 		$model = $this->MusicModel;
 		$currentDate = date("Y-m-d");
@@ -362,19 +374,21 @@ class CI_Controller
 		// echo $rows;
 		// exit();
 		$model->expire_reserv($rows);
-		
+
 		return $rows;
 	}
-	public function check_expire_mini(){
+	public function check_expire_mini()
+	{
 		$this->load->model('reservation/MiniModel');
 		$model = $this->MiniModel;
 		$currentDate = date("Y-m-d");
 		$rows = $model->get_past_reservations($currentDate);
 		$model->expire_reserv($rows);
-		
+
 		return $rows;
 	}
-	public function check_expire_vdo(){
+	public function check_expire_vdo()
+	{
 		$this->load->model('reservation/VdoModel');
 		$model = $this->VdoModel;
 		$currentDate = date("Y-m-d");
@@ -382,150 +396,176 @@ class CI_Controller
 		// echo $rows;
 		// exit();
 		$model->expire_reserv($rows);
-		
+
 		return $rows;
 	}
 
-	public function sweet($sweet,$title = "submit",$page = "*"){
+	public function sweet($sweet, $title = "submit", $page = "*")
+	{
 		return $this->Render('sweet', [
-			'sweet'=>$sweet,
-            'title' => $title,
-            'page' => $page,
-        ]);
+			'sweet' => $sweet,
+			'title' => $title,
+			'page' => $page,
+		]);
 	}
 	public function getCurrentUrl()
-{
-    // Check if the connection is secure (https)
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+	{
+		// Check if the connection is secure (https)
+		$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 
-    // Get the hostname
-    $host = $_SERVER['HTTP_HOST'];
+		// Get the hostname
+		$host = $_SERVER['HTTP_HOST'];
 
-    // Get the request URI
-    $uri = $_SERVER['REQUEST_URI'];
+		// Get the request URI
+		$uri = $_SERVER['REQUEST_URI'];
 
-    // Combine to create the full URL
-    $currentUrl = $protocol . $host . $uri;
+		// Combine to create the full URL
+		$currentUrl = $protocol . $host . $uri;
 
-    return $currentUrl;
-}
-
-public function get_all_time($s_id){
-	$this->load->model('Time_Setting_Model');
-	$time_setting_Model = $this->Time_Setting_Model;
-	$time_data = $time_setting_Model->getTimeByS_Id($s_id);
-	return generateTimeSlots($time_data['start_time'],$time_data['end_time'],$time_data['interval_hours']);
-	 
-}
-public function post($post){
-	return $this->input->post($post);
-}
-public function Model($path,$name,$usePath){
-	if($usePath){
-		$this->load->model("$path/$name");
-	}else{
-		$this->load->model($name);
+		return $currentUrl;
 	}
-	
-	return $this->$name;
-}
-public function get_user_sso_by_id($id)
-{
-	// $this->db->where('u_stuid',$id);
-	// $this->db->or_where('u_idcard',$id);  
-	// $query = $this->db->get('tbl_user');
-	// return $query->row();
 
+	public function get_all_time($s_id)
+	{
+		$this->load->model('Time_Setting_Model');
+		$time_setting_Model = $this->Time_Setting_Model;
+		$time_data = $time_setting_Model->getTimeByS_Id($s_id);
+		return generateTimeSlots($time_data['start_time'], $time_data['end_time'], $time_data['interval_hours']);
 
-
-	$account = addslashes(stripslashes(htmlspecialchars(trim($id))));
-
-	$ldapconf["host"] = "ldap://202.29.9.109";
-	$ldapconf["port"] = NULL;
-	$ldapconf["basedn"] = "dc=npru,dc=ac,dc=th";
-	$ldapconf["LDAP_OPT_PROTOCOL_VERSION"] = 3;
-
-	$ds = ldap_connect($ldapconf["host"]);
-	if (!$ds) {
-		echo "Could not connect to LDAP Server.";
-		exit();
 	}
-	$ls = ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldapconf["LDAP_OPT_PROTOCOL_VERSION"]);
-	if (!$ls) {
-		echo "Failed to set protocol version.";
-		ldap_close($ds);
-		exit();
+	public function post($post)
+	{
+		return $this->input->post($post);
 	}
-	// 10001 = อาจารย์
+	public function Model($path, $name, $usePath)
+	{
+		if ($usePath) {
+			$this->load->model("$path/$name");
+		} else {
+			$this->load->model($name);
+		}
+
+		return $this->$name;
+	}
+	public function get_user_sso_by_id($id)
+	{
+		// $this->db->where('u_stuid',$id);
+		// $this->db->or_where('u_idcard',$id);  
+		// $query = $this->db->get('tbl_user');
+		// return $query->row();
+
+
+
+		$account = addslashes(stripslashes(htmlspecialchars(trim($id))));
+
+		$ldapconf["host"] = "ldap://202.29.9.109";
+		$ldapconf["port"] = NULL;
+		$ldapconf["basedn"] = "dc=npru,dc=ac,dc=th";
+		$ldapconf["LDAP_OPT_PROTOCOL_VERSION"] = 3;
+
+		$ds = ldap_connect($ldapconf["host"]);
+		if (!$ds) {
+			echo "Could not connect to LDAP Server.";
+			exit();
+		}
+		$ls = ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldapconf["LDAP_OPT_PROTOCOL_VERSION"]);
+		if (!$ls) {
+			echo "Failed to set protocol version.";
+			ldap_close($ds);
+			exit();
+		}
+		// 10001 = อาจารย์
 // 10002 = เจ้าหน้าที่
 // 10003 = นักศึกษา
 // 10005 = หน่อยงาน
-	$query = "( & ( |(uid=" . $account . ")(uidnumber=" . $account . ")(gecos=" . $account . "))(accountStatus=TRUE)( | (gidNumber=10001)(gidNumber=10002)(gidNumber=10003)))";
-	$sr = ldap_search($ds, $ldapconf["basedn"], $query);
-	$info = ldap_get_entries($ds, $sr);
-	//  print "<pre>";
-	// print_r($info);
-	//  print "</pre>";
+		$query = "( & ( |(uid=" . $account . ")(uidnumber=" . $account . ")(gecos=" . $account . "))(accountStatus=TRUE)( | (gidNumber=10001)(gidNumber=10002)(gidNumber=10003)))";
+		$sr = ldap_search($ds, $ldapconf["basedn"], $query);
+		$info = ldap_get_entries($ds, $sr);
+		//  print "<pre>";
+		// print_r($info);
+		//  print "</pre>";
 
-	if ($info['count'] >= 1) {
-		return $info;
-	} else {
-		return false;
+		if ($info['count'] >= 1) {
+			return $info;
+		} else {
+			return false;
+		}
 	}
-}
-public function get_sso_name($ids)
-{
-    // Ensure $ids is an array
-    if (!is_array($ids)) {
-        $ids = [$ids];
-    }
+	public function get_sso_name($ids)
+	{
+		// Ensure $ids is an array
+		if (!is_array($ids)) {
+			$ids = [$ids];
+		}
 
-    // Create a query filter to search for all the IDs at once
-    $accountFilter = [];
-    foreach ($ids as $id) {
-        $accountFilter[] = "( |(uid=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . ")(uidnumber=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . ")(gecos=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . "))";
-    }
-    $accountQuery = implode(' ', $accountFilter);
+		// Create a query filter to search for all the IDs at once
+		$accountFilter = [];
+		foreach ($ids as $id) {
+			$accountFilter[] = "( |(uid=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . ")(uidnumber=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . ")(gecos=" . addslashes(stripslashes(htmlspecialchars(trim($id)))) . "))";
+		}
+		$accountQuery = implode(' ', $accountFilter);
 
-    // LDAP configuration
-    $ldapconf["host"] = "ldap://202.29.9.109";
-    $ldapconf["port"] = NULL;
-    $ldapconf["basedn"] = "dc=npru,dc=ac,dc=th";
-    $ldapconf["LDAP_OPT_PROTOCOL_VERSION"] = 3;
+		// LDAP configuration
+		$ldapconf["host"] = "ldap://202.29.9.109";
+		$ldapconf["port"] = NULL;
+		$ldapconf["basedn"] = "dc=npru,dc=ac,dc=th";
+		$ldapconf["LDAP_OPT_PROTOCOL_VERSION"] = 3;
 
-    // Connect to LDAP
-    $ds = ldap_connect($ldapconf["host"]);
-    if (!$ds) {
-        echo "Could not connect to LDAP Server.";
-        exit();
-    }
+		// Connect to LDAP
+		$ds = ldap_connect($ldapconf["host"]);
+		if (!$ds) {
+			echo "Could not connect to LDAP Server.";
+			exit();
+		}
 
-    // Set the LDAP protocol version
-    $ls = ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldapconf["LDAP_OPT_PROTOCOL_VERSION"]);
-    if (!$ls) {
-        echo "Failed to set protocol version.";
-        ldap_close($ds);
-        exit();
-    }
+		// Set the LDAP protocol version
+		$ls = ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldapconf["LDAP_OPT_PROTOCOL_VERSION"]);
+		if (!$ls) {
+			echo "Failed to set protocol version.";
+			ldap_close($ds);
+			exit();
+		}
 
-    // Construct the LDAP query
-    $query = "( & ( |$accountQuery)(accountStatus=TRUE)( | (gidNumber=10001)(gidNumber=10002)(gidNumber=10003)))";
-    $sr = ldap_search($ds, $ldapconf["basedn"], $query);
-    $info = ldap_get_entries($ds, $sr);
+		// Construct the LDAP query
+		$query = "( & ( |$accountQuery)(accountStatus=TRUE)( | (gidNumber=10001)(gidNumber=10002)(gidNumber=10003)))";
+		$sr = ldap_search($ds, $ldapconf["basedn"], $query);
+		$info = ldap_get_entries($ds, $sr);
 
-    // Process the result
-    $results = [];
-    foreach ($info as $entry) {
-        if (isset($entry['uid'][0])) {
-            $results[$entry['uid'][0]] = isset($entry['cn'][0]) ? $entry['cn'][0] : 'Unknown';
-        }
-    }
+		// Process the result
+		$results = [];
+		foreach ($info as $entry) {
+			if (isset($entry['uid'][0])) {
+				$results[$entry['uid'][0]] = isset($entry['cn'][0]) ? $entry['cn'][0] : 'Unknown';
+			}
+		}
 
-    ldap_close($ds);
+		ldap_close($ds);
 
-    return $results;
-}
+		return $results;
+	}
 
+	public function getTimeSystem($id)
+	{
+		try {
+			$time_sys_model = $this->Model('', 'System_time_model', false);
+			$row = $time_sys_model->getTimeById($id);
+
+			if ($row) {
+				return [
+					'message' => 'success',
+					'data' => $row
+				];
+			}
+
+		} catch (Exception $e) {
+			return [
+				'message' => "Error occure. " . $e->getMessage()
+			];
+		}
+
+
+
+	}
 
 
 

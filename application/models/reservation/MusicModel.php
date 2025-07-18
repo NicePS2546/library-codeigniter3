@@ -34,7 +34,7 @@ class MusicModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }
-    public function get_all_reserved($status='expired')
+    public function get_all_reserved($status = 'expired')
     {
         $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
         $this->db->from('tbn_room_music');
@@ -42,9 +42,9 @@ class MusicModel extends CI_Model
         $this->db->where('tbn_music_reserv.r_status', $status);
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
-       
+
     }
-    public function get_all_reserved_expired($status='expired')
+    public function get_all_reserved_expired($status = 'expired')
     {
         $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
         $this->db->from('tbn_room_music');
@@ -52,7 +52,7 @@ class MusicModel extends CI_Model
         $this->db->where('tbn_music_reserv.r_status', $status);
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
-        
+
     }
     public function get_all_by_reserv_id($st_id, $status = ['expired', 'deleted'])
     {
@@ -104,25 +104,28 @@ class MusicModel extends CI_Model
         $this->db->select('*');
         $this->db->from('tbn_music_reserv');
         $this->db->where('st_id', $st_id);
-        $this->db->where('r_status', 'actived');
+        $this->db->where('r_date', date('Y-m-d'));
+        $this->db->where("(r_status = 'actived' OR r_status = 'expired')");
+
         $query = $this->db->get();
 
         return $query->result_array();
     }
 
-    public function check_time_duplicate($r_id, $start_time, $exp_time) {
+    public function check_time_duplicate($r_id, $start_time, $exp_time)
+    {
         $this->db->where('r_id', $r_id);
-        $this->db->where('r_date', date('Y-m-d')); 
+        $this->db->where('r_date', date('Y-m-d'));
         $this->db->where('r_status', 'actived');
         $this->db->where("(
             start_time < '$exp_time' 
             AND exp_time > '$start_time'
         )", NULL, FALSE);
-    
+
         $query = $this->db->get('tbn_music_reserv');
         return $query->num_rows() > 0; // TRUE if overlapping reservation exists
     }
-    
+
     // Check if the selected time range is available for a specific date
     public function check_availability($startTime, $endTime, $r_date)
     {
@@ -224,7 +227,7 @@ class MusicModel extends CI_Model
     //     return $this->db->update('tbn_music_reserv', $data);  // Update the status to expired
     // }
 
-	public function update_expire($reservationId, $expire_by_time = true)
+    public function update_expire($reservationId, $expire_by_time = true)
     {
         if ($expire_by_time == true) {
             $data = [
@@ -237,7 +240,7 @@ class MusicModel extends CI_Model
                 'r_note' => 'deleted_by_admin'
             ];
         }
-		
+
         $this->db->where('reserv_id', $reservationId);  // Use the correct column name
         return $this->db->update('tbn_music_reserv', $data);  // Update the status to expired
     }
@@ -386,29 +389,29 @@ class MusicModel extends CI_Model
         if (empty($ids)) {
             return false;
         }
-    
+
         // อัปเดตค่า r_status ในตาราง โดยใช้ WHERE IN()
         $this->db->where_in('reserv_id', $ids)
-                 ->set('r_status', $status)
-                 ->update($this->table);
-    
+            ->set('r_status', $status)
+            ->update($this->table);
+
         return $this->db->affected_rows() > 0;
     }
     public function delete_outdate($reserv_id)
     {
         $this->db->where('reserv_id', $reserv_id);
         $this->db->set('r_status', 'deleted');
-    
+
         return $this->db->update($this->table);
     }
 
     public function get_statistic_by_day($date)
-    { 
-        $this->db->select( "SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
+    {
+        $this->db->select("SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
         $this->db->from($this->table);
         $this->db->where("DATE(created_at)", $date); // Extract only the DATE part
-        
-    
+
+
         $query = $this->db->get();
         return $query->result_array(); // Returns an array of results
     }
@@ -418,14 +421,14 @@ class MusicModel extends CI_Model
         // Select required columns and sum `total_pp` and count rows for reservations
         $this->db->select('SUM(total_pp) AS total_people, COUNT(*) AS total_reservations');
         $this->db->from($this->table);
-        
+
         // Add a WHERE condition for the date range
         $this->db->where('r_date >=', $start_date); // Filter by start date
         $this->db->where('r_date <=', $end_date);   // Filter by end date
-        
+
         // Run the query
         $query = $this->db->get();
-    
+
         // Return the result
         return $query->row_array(); // Returns a single row of results
     }
@@ -438,7 +441,7 @@ class MusicModel extends CI_Model
         $this->db->where('r_status !=', 'deleted'); // optional: exclude deleted
         $this->db->group_by('st_id');
         $this->db->order_by('reservation_count', 'DESC');
-        
+
         $query = $this->db->get();
         return $query->result_array(); // return as object array
     }

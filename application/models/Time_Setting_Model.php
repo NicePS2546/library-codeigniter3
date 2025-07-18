@@ -69,5 +69,8 @@ class Time_Setting_Model extends CI_Model {
         $this->db->where($this->primaryKey, $id); // Replace 'id' with your table's primary key column
         return $this->db->delete($this->table); // Replace 'rooms' with your table name
     }
+    public function batch_update_time($data){
+       return $this->db->update_batch($this->table, $data, 't_id');
+    }
 }
 ?>

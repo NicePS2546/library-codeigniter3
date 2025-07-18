@@ -125,7 +125,7 @@
               </div>
               <div>
                 <label for="password">รหัสผ่าน</label>
-                <input type="password" class="form-control" name="password" placeholder="โปรดใส่รหัสผ่าน" id="password">
+                <input type="password" class="form-control" autocomplete="off" name="password" placeholder="โปรดใส่รหัสผ่าน" id="password">
               </div>
               <label class="form-label text-danger">รหัส SSO ที่เข้าใช้ WI-Fi มหาวิทยาลัย</label>
             </div>

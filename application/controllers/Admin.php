@@ -3,6 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin extends CI_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->database(); // Load database here
+    }
     public function index()
     {
 
@@ -1486,6 +1491,71 @@ class Admin extends CI_Controller
                 return $this->get_type_byId($r_s_id);
             }
         ]);
+    }
+    public function time_system_setting_page()
+    {
+        $model = $this->Model('', 'System_time_model', false);
+        $rows = $model->getAllTime();
+        // echo "<pre>";
+        // print_r($rows);
+        // echo "</pre>";
+        // exit;
+        return $this->AdminRender('admin/time_system_setting/page', [
+            'title' => 'ข้อมูลเวลาระบบ',
+            'page' => 'time_setting',
+            'rows' => $rows,
+        ]);
+    }
+    public function time_system_setting_submit()
+    {
+        $extension = 'index.php/';
+        $model = $this->Model('', 'System_time_model', false);
+        $time_setting = $this->Model('', 'Time_Setting_Model', false);
+        $time_id = $this->post('time_id');
+        $t_start = $this->post('t_start');
+        $t_end = $this->post('t_end');
+
+        $data = [
+            'start_sys_time' => $t_start,
+            'end_sys_time' => $t_end
+        ];
+        $time_setting_data = [
+            ['t_id' => 1, 'end_time' => $t_end, 'update_at' => date('Y-m-d H:i:s')],
+            ['t_id' => 2, 'end_time' => $t_end, 'update_at' => date('Y-m-d H:i:s')],
+            ['t_id' => 3, 'end_time' => $t_end, 'update_at' => date('Y-m-d H:i:s')],
+        ];
+
+        $result = $model->updateTimeSysytem($data, $time_id);
+        $result_set_time_slot = $time_setting->batch_update_time($time_setting_data);
+        if ($result && $result_set_time_slot) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "ตั้งค่าเวลาระบบสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . '/admin/system/time/setting"; 
+                });
+            }, 1000);
+            </script>';
+
+        } else {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ตั้งค่าเวลาระบบไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                    window.location = "' . base_url() . $extension . '/admin/system/time/setting"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'TimeSetting', 'admin');
     }
     public function time_setting_submit()
     {

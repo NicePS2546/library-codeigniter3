@@ -123,9 +123,15 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="<?= base_url('index.php/admin/time/setting') ?>" class="nav-link <?= $page == "time_setting" ? "active" :"" ?>">
-                    <?= $page == "time_setting" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                    <a href="<?= base_url('index.php/admin/time/setting') ?>" class="nav-link <?= $title == "ข้อมูลเวลาห้อง" ? "active" :"" ?>">
+                    <?= $title == "ข้อมูลเวลาห้อง" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
                       <p>ตั้งค่าข้อมูลเวลา</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?= base_url('index.php/admin/system/time/setting') ?>" class="nav-link <?= $title == "ข้อมูลเวลาระบบ" ? "active" :"" ?>">
+                    <?= $title == "ข้อมูลเวลาระบบ" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ตั้งค่าเวลาระบบ</p>
                     </a>
                   </li>
                   <!-- <li class="nav-item">
