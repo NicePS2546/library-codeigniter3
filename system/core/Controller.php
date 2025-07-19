@@ -115,7 +115,7 @@ class CI_Controller
 			'content' => $this->view($view, $data, true), // Return content as string
 		];
 		$current_url = $this->getCurrentUrl();
-		$current_date = date("Y-m-d H:i");
+		
 		$page = [
 			'music' => $current_url == base_url('index.php/music'),
 			'vdo' => $current_url == base_url('index.php/vdo'),
@@ -126,8 +126,10 @@ class CI_Controller
 		$stage = $this->config->item('stage');
 		if ($stage == "Development") {
 			$currentTime = $this->config->item('fixed_time');
+			$current_date = $this->config->item('fixed_date');
 		} else {
 			$currentTime = date("H:i");
+			$current_date = date("Y-m-d H:i");
 		}
 
 		$day = getDay($current_date);
@@ -161,7 +163,7 @@ class CI_Controller
 
 		];
 		$current_url = $this->getCurrentUrl();
-		$current_date = date("Y-m-d H:i");
+		
 		$page = [
 			'music' => $current_url == base_url('index.php/music'),
 			'vdo' => $current_url == base_url('index.php/vdo'),
@@ -172,8 +174,10 @@ class CI_Controller
 		$stage = $this->config->item('stage');
 		if ($stage == "Development") {
 			$currentTime = $this->config->item('fixed_time');
+			$current_date = $this->config->item('fixed_date');
 		} else {
 			$currentTime = date("H:i");
+			$current_date = date("Y-m-d H:i");
 		}
 
 		$day = getDay($current_date);
@@ -370,6 +374,11 @@ class CI_Controller
 		$this->load->model('reservation/MusicModel');
 		$model = $this->MusicModel;
 		$currentDate = date("Y-m-d");
+		$stage = $this->config->item('stage');
+		
+		if($stage == "Development"){
+			$currentDate = $this->config->item('fixed_date');
+		}
 		$rows = $model->get_past_reservations($currentDate);
 		// echo $rows;
 		// exit();
@@ -382,6 +391,11 @@ class CI_Controller
 		$this->load->model('reservation/MiniModel');
 		$model = $this->MiniModel;
 		$currentDate = date("Y-m-d");
+		$stage = $this->config->item('stage');
+		
+		if($stage == "Development"){
+			$currentDate = $this->config->item('fixed_date');
+		}
 		$rows = $model->get_past_reservations($currentDate);
 		$model->expire_reserv($rows);
 
@@ -392,6 +406,12 @@ class CI_Controller
 		$this->load->model('reservation/VdoModel');
 		$model = $this->VdoModel;
 		$currentDate = date("Y-m-d");
+
+		$stage = $this->config->item('stage');
+		
+		if($stage == "Development"){
+			$currentDate = $this->config->item('fixed_date');
+		}
 		$rows = $model->get_past_reservations($currentDate);
 		// echo $rows;
 		// exit();

@@ -99,18 +99,36 @@ class MusicModel extends CI_Model
         return $query->row_array(); // Returns the result as an array
 
     }
-    public function check_duplicate($st_id)
+    public function check_duplicate($st_id,$r_id)
     {
         $this->db->select('*');
-        $this->db->from('tbn_music_reserv');
+        $this->db->from($this->table);
+        $this->db->where('r_id', $r_id);
         $this->db->where('st_id', $st_id);
-        $this->db->where('r_date', date('Y-m-d'));
-        $this->db->where("(r_status = 'actived' OR r_status = 'expired')");
-
+        $this->db->where('r_status', 'actived');
         $query = $this->db->get();
 
         return $query->result_array();
     }
+
+   public function check_day_duplicate($st_id,$r_id)
+{
+    $stage = $this->config->item('stage');
+    $currentDate = date('Y-m-d');
+    if($stage == "Development"){
+        $currentDate = $this->config->item('fixed_date');
+    }
+        
+    $this->db->select('*');
+    $this->db->from($this->table);
+    $this->db->where('r_id', $r_id);
+    $this->db->where('st_id', $st_id);
+    $this->db->where('r_date', $currentDate);
+    $this->db->where_in('r_status', ['actived', 'expired']);
+    $query = $this->db->get();
+
+    return $query->num_rows() > 0;
+}
 
     public function check_time_duplicate($r_id, $start_time, $exp_time)
     {

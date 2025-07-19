@@ -99,6 +99,18 @@ class MiniModel extends CI_Model
 
         return $query->result_array();
     }
+    public function check_day_duplicate($st_id)
+    {
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('st_id', $st_id);
+        $this->db->where('r_date', date('Y-m-d'));
+        $this->db->where("(r_status = 'actived' OR r_status = 'expired')");
+
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
     public function check_time_duplicate($r_id, $start_time, $exp_time) {
         $this->db->where('r_id', $r_id);
         $this->db->where('r_date', date('Y-m-d')); // Check for today
@@ -150,10 +162,6 @@ class MiniModel extends CI_Model
         if ($stage == "Development") {
             $currentTime = $this->config->item('fixed_time');
         }
-
-
-
-
 
         // Query to select expired reservations
         $this->db->select('reserv_id, r_date, exp_time');
