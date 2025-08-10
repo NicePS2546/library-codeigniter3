@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mini extends CI_Controller
+class Mini extends MY_Controller
 {
 
     public function index()
@@ -11,11 +11,23 @@ class Mini extends CI_Controller
         $data = $model->getAllRoom();
         $this->load->model('reservation/MiniModel');
         $reservModel = $this->MiniModel;
+
+        $stage = $this->config->item('stage');
+        if ($stage == "Development") {
+            $currentTime = $this->config->item('fixed_time');
+            $currentDate = $this->config->item('fixed_date');
+            $currentDateTime = "$currentDate $currentTime";
+        } else {
+            $currentTime = date('H:i:s');  // Get the current time
+            $currentDate = date('Y-m-d');
+        }
+
+        $holiday = $this->get_holiday($currentDate);
         return $this->Render("mini", [
             'title' => 'Mini-Theater',
             'rooms' => $data,
             'page' => 'mini',
-            'model'=> $reservModel
+            'model' => $reservModel
         ]);
 
     }
@@ -26,7 +38,7 @@ class Mini extends CI_Controller
             'title' => 'Reservation',
             'r_id' => $r_id,
             'page' => 'mini',
-            
+
         ]);
     }
     public function reserv()
@@ -37,7 +49,7 @@ class Mini extends CI_Controller
         $vdoModel = $this->VdoModel;
         $this->load->model('reservation/MusicModel');
         $music = $this->MusicModel;
-        
+
 
 
         $extension = "index.php/";
@@ -61,7 +73,7 @@ class Mini extends CI_Controller
         $music_dupl = $music->check_duplicate($st_id, $r_id);
         $mini_dulp = $model->check_duplicate($st_id, $r_id);
         $vdo_dupl = $vdoModel->check_duplicate($st_id, $r_id);
-        $check_time_dul = $this->Model('reservation','MiniModel',true)->check_time_duplicate($r_id,$start_time,$exp_time);
+        $check_time_dul = $this->Model('reservation', 'MiniModel', true)->check_time_duplicate($r_id, $start_time, $exp_time);
         if ($check_time_dul) {
             $sweet = '<script>
             setTimeout(function() {
@@ -237,14 +249,14 @@ class Mini extends CI_Controller
         $reserveds = $model->get_reserved($r_id, 'actived');
         foreach ($reserveds as $key => $reserved) {
             $u_data = $this->get_user_sso_by_id($reserved['st_id']);
-            
+
             // Ensure $u_data exists and has the expected structure
             $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
-        
+
             // Store fullname in the correct entry inside the array
             $reserveds[$key]['fullname'] = $fullname;
         }
-        
+
         return $this->Render("checkroom/table.php", [
             'rows' => $reserveds,
             'title' => 'Check Reserved',
@@ -282,7 +294,7 @@ class Mini extends CI_Controller
             //     '15:00-16:00',
             //     // Add more slots as needed
             // ];
-            
+
             $allSlots = $this->get_all_time(3);
 
 
@@ -308,14 +320,14 @@ class Mini extends CI_Controller
 
             $day = getDay(date("Y-m-d H:i"));
 
-            if($day == "Saturday"){
+            if ($day == "Saturday") {
                 echo json_encode([
                     'availableSlots' => [], // Available slots
                     'rows_fromtable' => $reservedSlotRanges, // Reserved slots
                     'date' => $current_date,
                     'closest_time' => $closest_time
                 ]);
-            }else{
+            } else {
                 echo json_encode([
                     'availableSlots' => array_values($availableSlots), // Available slots
                     'rows_fromtable' => $reservedSlotRanges, // Reserved slots
@@ -325,7 +337,7 @@ class Mini extends CI_Controller
             }
 
 
-            
+
         } catch (Exception $e) {
             // Log the error message
             log_message('error', 'Error in fetch_available_slots: ' . $e->getMessage());
@@ -369,28 +381,30 @@ class Mini extends CI_Controller
 
         return $closestSlot;
     }
-    public function join_page($id){
-        
+    public function join_page($id)
+    {
+
         $this->load->model('reservation/MiniModel');
         $model = $this->MiniModel;
         $row = $model->get_reserved_row($id);
-        return $this->Render('mini/join_room',[
-            'title'=>'Join Room',
-            'page'=>'mini',
+        return $this->Render('mini/join_room', [
+            'title' => 'Join Room',
+            'page' => 'mini',
             'row' => $row,
-            'r_id'=>$id
+            'r_id' => $id
         ]);
     }
 
-    public function join(){
+    public function join()
+    {
         $r_id = $this->input->post('r_id');
         $extension = "index.php/";
         $this->load->model('reservation/MiniModel');
         $this->load->model('statistic/StatisticModel');
         $statistic = $this->StatisticModel;
         $model = $this->MiniModel;
-        $result = transaction($this->db,$model->join_room($r_id),$statistic->updateDailyStatistics(3 , 1, 0));
-        
+        $result = transaction($this->db, $model->join_room($r_id), $statistic->updateDailyStatistics(3, 1, 0));
+
         if ($result) {
             $sweet = '<script>
             setTimeout(function() {

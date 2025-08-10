@@ -150,7 +150,7 @@
     </div>
     <?php
     } else {
-        echo $this->load->view('component/table/no_data', ['page' => 'music'], true);
+        echo $this->load->view('component/table/no_data', ['page' => $table], true);
     } ?>
 
 <script src="<?= base_url('public/cdn/jQuery/jquery-3.7.1.js') ?>"></script>

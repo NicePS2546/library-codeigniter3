@@ -1,11 +1,23 @@
 <script src="<?= base_url('public/cdn/sweetalert.js') ?>"></script>
-			<script>
-            setTimeout(function() {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการ หยุดวันเสาร์",
-                    showConfirmButton: true,
-                });
-            }, 1000);
+
+<script>
+    const data = <?= json_encode($row) ?>;
+
+    const titleText = data
+        ? (data.title.includes("วัน")
+            ? "หยุดทำการ" + data.title
+            : "หยุดทำการวัน " + data.title)
+        : "หยุดทำการวันเสาร์";
+        
+    setTimeout(() => {
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: 'ขออภัยในความไม่สะดวก',
+            text: titleText,
+
+            showConfirmButton: true,
+        });
+    }, 1000);
+
 </script>

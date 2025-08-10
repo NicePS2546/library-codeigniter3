@@ -4,6 +4,7 @@ $music = $statistic['music']['0']['total_people'];
 $vdo = $statistic['vdo']['0']['total_people'];
 $mini = $statistic['mini']['0']['total_people'];
 
+$total = $music + $vdo;
 ?>
 <style>
  
@@ -84,11 +85,11 @@ $mini = $statistic['mini']['0']['total_people'];
   <div class="<?= $card_res ?>">
     <div class="info-box">
       <span class="info-box-icon text-bg-success shadow-sm">
-      <i class="bi bi-film"></i>
+      <i class="bi bi-person-fill"></i>
       </span>
       <div class="info-box-content">
-        <span class="info-box-text">Mini-Theater</span>
-        <span class="info-box-number"><?= $mini ? $mini : 0 ?> คน</span>
+        <span class="info-box-text">จำนวนผู้ใช้บริการ</span>
+        <span class="info-box-number"><?= $total ? $total : 0 ?> คน</span>
       </div>
       <!-- /.info-box-content -->
     </div>
@@ -159,11 +160,11 @@ $mini = $statistic['mini']['0']['total_people'];
     labels: [
       'Music-Relax',
       'Video On-Demand',
-      'Mini-Theater',
+      'จำนวนผู้ใช้บริการ',
     ],
     datasets: [{
       label: [],
-      data: [<?= $music ? $music : 0 ?>, <?= $vdo ? $vdo : 0 ?>, <?= $mini ? $mini : 0 ?>],
+      data: [<?= $music ? $music : 0 ?>, <?= $vdo ? $vdo : 0 ?>, <?= $total ? $total : 0 ?>],
       backgroundColor: [
         'rgb(13, 110, 253)',
         'rgb(220, 53, 69)',

@@ -54,9 +54,10 @@
         <!-- Footer -->
         <footer class="footer mt-auto py-3 bg-light">
             <div class="container text-center">
-                <p>ฝ่ายบริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
+                <p>บริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
                 <p>สำนักวิทยบริการและเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครปฐม</p>
-                <p>&copy; 2019 ARIT LibraryNPRU</p>
+                  <p></p>
+                <p>&copy; 2025 ARIT NPRU ติดต่อ 034109300 ต่อ 3443</p>
             </div>
         </footer>
     </div>

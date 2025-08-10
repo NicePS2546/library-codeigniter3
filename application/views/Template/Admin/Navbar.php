@@ -15,7 +15,7 @@
               </a>
             </li>
             <li class="nav-item d-none d-md-block"><a href="<?= base_url() ?>" class="nav-link">Home</a></li>
-            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
+            <li class="nav-item d-none d-md-block"><a href="https://facebook.com/aritnpru" class="nav-link">Contact</a></li>
           </ul>
           <!--end::Start Navbar Links-->
           <!--begin::End Navbar Links-->
@@ -47,7 +47,7 @@
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 /> -->
-                <span style="font-size:18px" class="d-none d-md-inline">ยินดีต้อนรับผู้ดูแล <?= $admin_info['fname']. " ".$admin_info['lname'] ?> !</span>
+                <span style="font-size:18px" class="d-none d-md-inline">ยินดีต้อนรับคุณ <?= $admin_info['fname']. " ".$admin_info['lname'] ?> (ผู้ดูแล)</span>
               </a>
             </li>
             <!--end::User Menu Dropdown-->

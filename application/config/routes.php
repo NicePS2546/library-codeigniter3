@@ -106,6 +106,7 @@ $route['history/delete/(:num)/(:num)'] = 'SSO/delete_reserv/$1/$2';
 // Test
 $route['test/sweet'] = 'test/testSweet';
 $route['test/sweet2'] = 'Test/sweet2';
+$route['test/sso'] = 'Test/sso';
 
 //Admin
 $route['admin'] = 'Admin/index';
@@ -171,6 +172,14 @@ $route['admin/reserv/activate/(:num)'] = 'Admin/reserv_activation/$1';
 //time system
 $route['admin/system/time/setting'] = 'Admin/time_system_setting_page';
 $route['admin/system/time/setting/submit'] = 'Admin/time_system_setting_submit';
+
+//setting date for close system
+$route['admin/system/date/holiday'] = "Admin/no_service_page";
+$route['admin/system/date/holiday/get/api'] = "Admin/fetch_holiday";
+$route['admin/system/date/holiday/get/table'] = "Admin/get_holiday_table";
+$route['admin/system/date/holiday/table'] = "Admin/holiday_data";
+$route['admin/system/date/holiday/submit'] = "Admin/add_holiday_submit";
+$route['admin/system/date/holiday/delete/(:any)'] = "Admin/delete_holiday/$1";
 
 //online user management
 $route['online/append/user'] = 'OnlineUser/add';

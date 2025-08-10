@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Music extends CI_Controller
+class Music extends MY_Controller
 {
     public function __construct()
     {
@@ -18,7 +18,22 @@ class Music extends CI_Controller
         $this->load->model('reservation/MusicModel');
         $reservModel = $this->MusicModel;
         $isAllFull = $this->checkAllFull($data);
-        if ($isAllFull) {
+        $inServiceTime = $this->checkSystemTime();
+        $systemTime = $this->Model('', 'System_time_model', false)->getTimeById(1);
+        
+        $stage = $this->config->item('stage');
+        if ($stage == "Development") {
+            $currentTime = $this->config->item('fixed_time');
+            $currentDate = $this->config->item('fixed_date');
+            $currentDateTime = "$currentDate $currentTime";
+        } else {
+            $currentTime = date('H:i:s');  // Get the current time
+            $currentDate = date('Y-m-d');
+        }
+
+        $holiday = $this->get_holiday($currentDate);
+        
+        if ($isAllFull && $inServiceTime["status"]) {
             echo '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -31,6 +46,7 @@ class Music extends CI_Controller
             }, 1000);
             </script>';
         }
+        
 
         return $this->Render("music", [
             'title' => 'Music-Relax',
@@ -39,7 +55,8 @@ class Music extends CI_Controller
             'model' => $reservModel,
             'aviliable_time' => function ($r_id) {
                 return $this->get_availible_time_card($r_id);
-            }
+            },
+            'isHoliday' => $holiday ? true : false
         ]);
 
     }
@@ -102,8 +119,8 @@ class Music extends CI_Controller
         $this->load->model('reservation/VdoModel');
         $vdoModel = $this->VdoModel;
         $miniModel = $this->Model('reservation', 'MiniModel', true);
-
-
+        $sys_time = $this->getTimeSystem(1);
+        $sys_time = $sys_time['data'];
 
         $extension = "index.php/";
         $r_id = $this->input->post('r_id');  // Room number
@@ -111,14 +128,15 @@ class Music extends CI_Controller
         $total_pp = $this->input->post('total');     // Total people
 
         $time_slot = $this->input->post('time_slot'); // Selected time slot
-        $currentDate = date('Y-m-d H:i');  // Get the current date
+        $currentDateTime = date('Y-m-d H:i:s');  // Get the current date
 
         $stage = $this->config->item('stage');
         if ($stage == "Development") {
             $currentTime = $this->config->item('fixed_time');
             $currentDate = $this->config->item('fixed_date');
+            $currentDateTime = "$currentDate $currentTime";
         } else {
-            $currentTime = date('H:i');  // Get the current time
+            $currentTime = date('H:i:s');  // Get the current time
             $currentDate = date('Y-m-d');
         }
 
@@ -130,8 +148,8 @@ class Music extends CI_Controller
         $mini_dupl = $miniModel->check_duplicate($st_id, $r_id);
 
         $music_day_dupl = $musicModel->check_day_duplicate($st_id, $r_id);
-        $vdo_day_dupl = $vdoModel->check_day_duplicate($st_id, $r_id);
-        $mini_day_dupl = $miniModel->check_day_duplicate($st_id, $r_id);
+        // $vdo_day_dupl = $vdoModel->check_day_duplicate($st_id, $r_id);
+        // $mini_day_dupl = $miniModel->check_day_duplicate($st_id, $r_id);
         //use for testing    
         // echo "<pre>";
         // print_r($music_day_dupl);
@@ -156,6 +174,7 @@ class Music extends CI_Controller
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
         }
 
+
         $data = [
             'st_id' => $st_id,  // Example: Replace with actual student/user ID
             'r_id' => $r_id, // Room number
@@ -165,20 +184,22 @@ class Music extends CI_Controller
             'r_date' => $currentDate,
             'r_status' => 'actived', // Status of the reservation
             'r_verify' => 1,  // Verification flag (0 for unverified)
-            'created_at' => date('Y-m-d H:i:s'),
-            'update_at' => date('Y-m-d H:i:s')
+            'created_at' => $currentDateTime,
+            'update_at' => $currentDateTime
         ];
 
         $sweet = '';
         $day = getDay($currentDate);
-
-        if ($day == "Saturday") {
+        $holiday = $this->get_holiday($currentDate);
+        $textHoliday = $holiday ? 'ไม่อยู่ในเวลาทำการหยุดวัน' . $holiday['title'] : 'ไม่อยู่ในเวลาทำการหยุดวันเสาร์';
+        if ($day == "Saturday" || $holiday) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการหยุดวันเสาร์",
+                    title: "ขออภัยในความไม่สะดวก",
+                    text:"' . $textHoliday . '",
                     showConfirmButton: true,
                 }).then(function(){
                      window.location = "' . base_url() . $extension . 'music"; 
@@ -187,13 +208,20 @@ class Music extends CI_Controller
             </script>';
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
         }
-        if ($currentTime > "16:00") {
+
+        // echo "<pre>";
+        // echo $currentTime. "<br>";
+        // print_r($sys_time['start_sys_time']);
+        // echo "</pre>";
+        // exit();
+
+        if ($currentTime > $sys_time['end_sys_time']) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการ",
+                    title: "ไม่อยู่ในเวลาทำการ1",
                     showConfirmButton: true,
                 }).then(function(){
                      window.location = "' . base_url() . $extension . 'music"; 
@@ -201,13 +229,13 @@ class Music extends CI_Controller
             }, 1000);
             </script>';
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
-        } else if ($currentTime < "09:00") {
+        } else if ($currentTime < $sys_time['start_sys_time']) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "ไม่อยู่ในเวลาทำการ",
+                    title: "ไม่อยู่ในเวลาทำการ2",
                     showConfirmButton: true,
                 }).then(function(){
                      window.location = "' . base_url() . $extension . 'music"; 
@@ -280,14 +308,14 @@ class Music extends CI_Controller
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
         }
 
-        if ($music_day_dupl || $vdo_day_dupl || $mini_day_dupl) {
+        if ($music_day_dupl) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
                     icon: "error",
                     title: "ขออภัย",
-                    text: "ใช้บริการได้วันละ 1 ครั้ง",
+                    text: "ใช้บริการห้อง Music ได้วันละ 1 ครั้ง",
                     showConfirmButton: true,
                 }).then(function() {
                     window.location = "' . base_url() . $extension . 'music"; 
@@ -475,60 +503,6 @@ class Music extends CI_Controller
         }
     }
 
-
-    public function check_availability()
-    {
-        $model = $this->RoomMusic;
-        // Get selected time slot from form input
-        $selectedSlot = $this->input->post('time_slot');
-        $r_date = $this->input->post('r_date'); // Get the reservation date
-
-        // Extract start and end times from the selected slot
-        list($startTime, $endTime) = explode('-', $selectedSlot);
-
-        // Check if the selected time slot is available
-        $isAvailable = $model->check_availability($startTime, $endTime, $r_date);
-
-        if ($isAvailable) {
-            // Proceed with reservation if available
-            $model->reserve($startTime, $endTime, $r_date);
-            echo "Reservation successful!";
-        } else {
-            echo "The selected time slot is already reserved.";
-        }
-    }
-
-
-
-    public function check_current_time_slot($currentDate, $r_id)
-    {
-        // Get the current date and time
-        $currentDate = date('Y-m-d'); // Current date (e.g., 2025-01-12)
-        $currentTime = date('H:i'); // Current time (e.g., 11:37)
-
-        // Load the model
-        $this->load->model('reservation/MiniModel');
-
-        // Get the reserved slots for today where r_verify is true
-        $reservedSlots = $this->MiniModel->get_reserved_slots($currentDate, $r_id);
-
-        // Check if the current time falls within any reserved slot
-        foreach ($reservedSlots as $slot) {
-            // Convert start and end times to time format
-            $start_time = date('H:i', strtotime($slot['start_time']));
-            $exp_time = date('H:i', strtotime($slot['exp_time']));
-
-            // Check if the current time is within this range
-            if ($currentTime >= $start_time && $currentTime <= $exp_time && $slot['r_verify'] == 1) {
-                // The current time is within a reserved and verified slot
-                return "The current time ($currentTime) is within a reserved and verified slot!";
-
-            }
-        }
-
-        // If no match is found, the current time is not within any reserved slot
-        return "The current time ($currentTime) is not within any reserved and verified slot.";
-    }
 
 
 

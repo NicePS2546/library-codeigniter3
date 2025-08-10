@@ -12,7 +12,7 @@
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">ศูนย์ผู้ดูแล</span>
+            <span class="brand-text fw-light">หน้าผู้ดูแล</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -113,7 +113,7 @@
                   
                 </ul>
               </li>
-              <li class="nav-item <?= $page == "time_setting"  ? "menu-open" : "" ?>">
+              <li class="nav-item <?= $page == "setting"  ? "menu-open" : "" ?>">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>
@@ -123,15 +123,21 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="<?= base_url('index.php/admin/time/setting') ?>" class="nav-link <?= $title == "ข้อมูลเวลาห้อง" ? "active" :"" ?>">
-                    <?= $title == "ข้อมูลเวลาห้อง" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
-                      <p>ตั้งค่าข้อมูลเวลา</p>
+                    <a href="<?= base_url('index.php/admin/time/setting') ?>" class="nav-link <?= $title == "ตั้งค่าเวลาห้อง" ? "active" :"" ?>">
+                    <?= $title == "ตั้งค่าเวลาห้อง" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ตั้งค่าเวลาห้อง</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="<?= base_url('index.php/admin/system/time/setting') ?>" class="nav-link <?= $title == "ข้อมูลเวลาระบบ" ? "active" :"" ?>">
-                    <?= $title == "ข้อมูลเวลาระบบ" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                    <a href="<?= base_url('index.php/admin/system/time/setting') ?>" class="nav-link <?= $title == "ตั้งค่าเวลาระบบ" ? "active" :"" ?>">
+                    <?= $title == "ตั้งค่าเวลาระบบ" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
                       <p>ตั้งค่าเวลาระบบ</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?= base_url('index.php/admin/system/date/holiday') ?>" class="nav-link <?= $title == "ตั้งค่าวันปิดระบบ" || $title == "ตารางวันปิดระบบ"  ? "active" :"" ?>">
+                    <?= $title == "ตั้งค่าวันปิดระบบ" || $title == "ตารางวันปิดระบบ" ? '<i class="nav-icon bi bi-circle-fill"></i>' : '<i class="nav-icon bi bi-circle"></i>' ?>
+                      <p>ตั้งค่าวันปิดระบบ</p>
                     </a>
                   </li>
                   <!-- <li class="nav-item">

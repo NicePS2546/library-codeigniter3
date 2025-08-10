@@ -2,12 +2,12 @@
 <!--begin::Footer-->
 <footer class="app-footer">
   <!--begin::To the end-->
-  <div class="float-end d-none d-sm-inline">ฝ่ายบริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</div>
+  <div class="float-end d-none d-sm-inline">บริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</div>
   <!--end::To the end-->
   <!--begin::Copyright-->
   <strong>
-  &copy; 2019 ARIT LibraryNPRU
-    <a href="http://research.npru.ac.th/itlib" class="text-decoration-none">Research.npru</a>.
+  &copy; 2025 ARIT NPRU
+    <a href="http://research.npru.ac.th/itlib" class="text-decoration-none">research.npru</a>.
   </strong>
   สำนักวิทยบริการและเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครปฐม
   <!--end::Copyright-->

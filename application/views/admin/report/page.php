@@ -4,6 +4,14 @@ $music = $statistic['music'];
 $vdo = $statistic['vdo'];
 $mini = $statistic['mini'];
 
+$nf = $statistic['nf_stats'];
+$disney = $statistic['disney_stats'];
+$streaming = $statistic['streaming'];
+
+// echo "<pre>";
+// print_r($music);
+// echo "</pre>";
+// exit();
 $music_t_p = 0;
 $music_rs = 0;
 
@@ -12,6 +20,15 @@ $vdo_rs = 0;
 
 $mini_t_p = 0;
 $mini_rs = 0;
+
+$nf_t_p = 0;
+$nf_rs = 0;
+
+$disney_t_p = 0;
+$disney_rs = 0;
+
+$streaming_t_p = 0;
+$streaming_rs = 0;
 
 // Create an array of Thai month and day names
 $thai_days = [
@@ -56,10 +73,13 @@ $end_date = [
     'month_name' => $thai_months[(int) date('m', $get_end_date)],
     'year' => date('Y', $get_end_date)
 ];
+// format year christ to buddist
+$ps_start_year = $start_date['year'] + 543;
+$ps_end_year = $end_date['year'] + 543;
 
 // Combine the formatted date
-$formatted_start_date = $start_date['day_name'] . " ที่ " . $start_date['day_nums'] . " " . $start_date['month_name'] . " ค.ศ." . $start_date['year'];
-$formatted_end_date = $end_date['day_name'] . " ที่ " . $end_date['day_nums'] . " " . $end_date['month_name'] . " ค.ศ." . $end_date['year'];
+$formatted_start_date = $start_date['day_name'] . " ที่ " . $start_date['day_nums'] . " " . $start_date['month_name'] . " พ.ศ." . $ps_start_year;
+$formatted_end_date = $end_date['day_name'] . " ที่ " . $end_date['day_nums'] . " " . $end_date['month_name'] . " พ.ศ." . $ps_end_year;
 
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -142,6 +162,20 @@ $formatted_end_date = $end_date['day_name'] . " ที่ " . $end_date['day_num
                         $mini_rs += (int) $stat['reservation_count'];
                     }
 
+                    foreach ($nf as $stat){
+                         $nf_t_p += (int) $stat['total_people'];
+                        $nf_rs += (int) $stat['reservation_count'];
+                    }
+
+                    foreach ($disney as $stat){
+                         $disney_t_p += (int) $stat['total_people'];
+                        $disney_rs += (int) $stat['reservation_count'];
+                    }
+
+                    foreach ($streaming as $stat){
+                         $streaming_t_p += (int) $stat['total_people'];
+                        $streaming_rs += (int) $stat['reservation_count'];
+                    }
                     ?>
 
 
@@ -158,19 +192,30 @@ $formatted_end_date = $end_date['day_name'] . " ที่ " . $end_date['day_num
                             <h2>Music-Relax</h2>
                             <h5>จำนวนผู้เข้าใช้บริการทั้งหมด: <?= $music_t_p ?> คน</h5>
                             <h5>จำนวนการจองทั้งหมด: <?= $music_rs ?> ครั้ง</h5>
+                            
+                     
+                           
                         </div>
 
                         <div class="col-md-4 mb-4 text-center">
                             <h2>Video On-Demand</h2>
                             <h5>จำนวนผู้เข้าใช้บริการทั้งหมด: <?= $vdo_t_p ?> คน</h5>
                             <h5>จำนวนการจองทั้งหมด: <?= $vdo_rs ?> ครั้ง</h5>
+                            <h5 class="mt-2">จำนวนผู้ใช้บริการ Disney: <?= $disney_t_p ?> คน</h5>
+                            <h5 class="">จำนวนการจอง Disney: <?= $disney_rs ?> ครั้ง</h5>
+
+                            <h5 class="mt-2">จำนวนผู้ใช้บริการ Netflix: <?= $nf_t_p ?> คน</h5>
+                            <h5 class="mt-2">จำนวนการจอง Netflix: <?= $nf_rs ?> ครั้ง</h5>
+
+                            <h5 class="mt-2">จำนวนผู้ใช้บริการ Streaming: <?= $streaming_t_p ?> คน</h5>
+                            <h5 class="mt-2">จำนวนการจอง Streaming: <?= $streaming_rs ?> ครั้ง</h5>
                         </div>
 
-                        <div class="col-md-4 mb-4 text-center">
+                        <!-- <div class="col-md-4 mb-4 text-center">
                             <h2>Mini-Theater</h2>
                             <h5>จำนวนผู้เข้าใช้บริการทั้งหมด: <?= $mini_t_p ?> คน</h5>
                             <h5>จำนวนการจองทั้งหมด: <?= $mini_rs ?> ครั้ง</h5>
-                        </div>
+                        </div> -->
                     </div>
                 <?php else: ?>
                     <h4 class="text-center">ไม่มีข้อมูลให้รายงานในขณะนี้</h4>

@@ -16,14 +16,24 @@ class VdoModel extends CI_Model
         $this->db->from($this->table);
         $this->db->where('r_date >=', $start_date);
         $this->db->where('r_date <=', $end_date);
-        
         $this->db->group_by('st_id');
         $this->db->order_by('reservation_count', 'DESC');
-        
         $query = $this->db->get();
         return $query->result_array(); // return as object array
     }
-    public function activeReserv($reserv_id)
+    public function statistic_services_date_range($start_date, $end_date,$s_id)
+    {
+        $this->db->select('st_id, COUNT(*) as reservation_count, SUM(total_pp) as total_people');
+        $this->db->from($this->table);
+        $this->db->where('r_date >=', $start_date);
+        $this->db->where('r_date <=', $end_date);
+        $this->db->where('s_id', $s_id);
+        $this->db->group_by('st_id');
+        $this->db->order_by('reservation_count', 'DESC');
+        $query = $this->db->get();
+        return $query->result_array(); // return as object array
+    }
+       public function activeReserv($reserv_id)
     {
         $this->db->where_in('reserv_id', $reserv_id)
             ->set('r_status', 'actived')
@@ -134,7 +144,15 @@ class VdoModel extends CI_Model
 
         return $query->result_array();
     }
-
+    public function get_by_room_numb ($r_id){
+      
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('r_id',$r_id);
+        $this->db->where('r_status','actived');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
     public function check_time_duplicate($r_id, $start_time, $exp_time) {
         $this->db->where('r_id', $r_id);
         $this->db->where('r_date', date('Y-m-d')); // Check for today

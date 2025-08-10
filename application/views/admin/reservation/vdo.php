@@ -18,8 +18,16 @@
 
     foreach ($rows as $row):
         $no++;
+        $r_numb = $row['r_id'];
+       if($row['r_id'] == 1){
+            
+           $r_numb += 1;
+        }elseif($row['r_id'] == 2){
+             $r_numb -= 1;
+        };
+
         echo "<tr>
-                   <td>" . $row['r_number'] . "</td>
+                   <td>" . $r_numb . "</td>
                     <td>" . $row['st_id'] . "</td>
                     <td>" . $row['fullname'] . "</td>
                     <td>" . $row['total_pp'] . " คน</td>

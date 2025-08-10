@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Vdo extends CI_Controller
+class Vdo extends MY_Controller
 {
     public function index()
     {
@@ -11,8 +11,21 @@ class Vdo extends CI_Controller
 
         $this->load->model('reservation/VdoModel');
         $r_model = $this->VdoModel;
-        
+
         $isAllFull = $this->checkAllFull($data);
+
+        $stage = $this->config->item('stage');
+        if ($stage == "Development") {
+            $currentTime = $this->config->item('fixed_time');
+            $currentDate = $this->config->item('fixed_date');
+            $currentDateTime = "$currentDate $currentTime";
+        } else {
+            $currentTime = date('H:i:s');  // Get the current time
+            $currentDate = date('Y-m-d');
+        }
+
+        $holiday = $this->get_holiday($currentDate);
+
         if ($isAllFull) {
             echo '<script>
             setTimeout(function() {
@@ -34,7 +47,8 @@ class Vdo extends CI_Controller
             'model' => $r_model,
             'aviliable_time' => function ($r_id) {
                 return $this->get_availible_time_card($r_id);
-            }
+            },
+            'isHoliday'=> $holiday ? true : false
 
         ]);
 

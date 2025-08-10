@@ -132,7 +132,9 @@ footer .arit{
     padding: 10px;
 
 }
-
+footer div p{
+    margin-bottom: 0px !important;
+}
 .c{
 
     height: 70%;

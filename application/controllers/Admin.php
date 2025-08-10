@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Admin extends CI_Controller
+class Admin extends MY_Controller
 {
     public function __construct()
     {
@@ -35,6 +35,7 @@ class Admin extends CI_Controller
             'currentUsers' => $currentUsers
         ]);
     }
+
     public function reserv_data()
     {
 
@@ -74,16 +75,26 @@ class Admin extends CI_Controller
     }
     public function reserv_vdo()
     {
+        // $r_id = $this->post('room_numb') ? $this->post('room_numb') : 1 ; 
+
+        // if($r_id == 1){
+        //     $r_numb = $r_id;
+        //     $r_id += 1;
+        // }elseif($r_id == 2){
+        //     $r_numb = $r_id;
+        //     $r_id -= 1;
+
+        // };
+
         $expired_rows = $this->get_expired();
         $this->load->model('reservation/VdoModel');
         $model = $this->VdoModel;
+        // $rows = $model->get_by_room_numb($r_id);
         $rows = $model->get_all_reserved('actived');
         foreach ($rows as $key => $reserved) {
             $u_data = $this->get_user_sso_by_id($reserved['st_id']);
-
             // Ensure $u_data exists and has the expected structure
             $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
-
             // Store fullname in the correct entry inside the array
             $rows[$key]['fullname'] = $fullname;
         }
@@ -91,6 +102,7 @@ class Admin extends CI_Controller
         return $this->AdminRender('admin/reserv_data', [
             'title' => 'ข้อมูลการจอง',
             'page' => 'reserv_data',
+            'r_numb' => 'placeholder',
             'table' => 'vdo',
             'rows' => $rows,
             'expired_rows' => $expired_rows,
@@ -1093,17 +1105,30 @@ class Admin extends CI_Controller
     public function report_statistic()
     {
         $start_date = $this->post('start_date');
-        $end_date = $this->post('end_date');
-
+        $end_date = $this->post('end_date');//statistic_nf_date_range
+        // $disney_stats = $this->Model('reservation', 'VdoModel', true)->get_vdo_reservations_by_month($year, 9998);
+        // $nf_stats = $this->Model('reservation', 'VdoModel', true)->get_vdo_reservations_by_month($year, 9999);
         if ($start_date && $end_date) {
-            $music = $this->Model('reservation', 'MusicModel', true)->statistic_date_range($start_date, $end_date);
-            $vdo = $this->Model('reservation', 'VdoModel', true)->statistic_date_range($start_date, $end_date);
-            $mini = $this->Model('reservation', 'MiniModel', true)->statistic_date_range($start_date, $end_date);
+            $music = $this->Model('reservation', 'MusicModel', true);
+            $vdo = $this->Model('reservation', 'VdoModel', true);
+            $mini = $this->Model('reservation', 'MiniModel', true);
+
+            //statistic
+            $music_stats = $music->statistic_date_range($start_date, $end_date);
+            $vdo_stats = $vdo->statistic_date_range($start_date, $end_date);
+            $mini_stats = $mini->statistic_date_range($start_date, $end_date);
+
+            $nf_stats = $vdo->statistic_services_date_range($start_date, $end_date, 9999);
+            $disney_stats = $vdo->statistic_services_date_range($start_date, $end_date, 9998);
+            $streming = $vdo->statistic_services_date_range($start_date, $end_date, 9997);
 
             $statistic = [
-                'music' => $music,
-                'vdo' => $vdo,
-                'mini' => $mini
+                'music' => $music_stats,
+                'vdo' => $vdo_stats,
+                'mini' => $mini_stats,
+                'nf_stats' => $nf_stats,
+                'disney_stats' => $disney_stats,
+                'streaming' => $streming
             ];
         }
         ;
@@ -1484,8 +1509,8 @@ class Admin extends CI_Controller
         $rows = $model->getAllTime();
 
         return $this->AdminRender('admin/time_setting/page', [
-            'title' => 'ข้อมูลเวลาห้อง',
-            'page' => 'time_setting',
+            'title' => 'ตั้งค่าเวลาห้อง',
+            'page' => 'setting',
             'rows' => $rows,
             'get_type' => function ($r_s_id) {
                 return $this->get_type_byId($r_s_id);
@@ -1501,8 +1526,8 @@ class Admin extends CI_Controller
         // echo "</pre>";
         // exit;
         return $this->AdminRender('admin/time_system_setting/page', [
-            'title' => 'ข้อมูลเวลาระบบ',
-            'page' => 'time_setting',
+            'title' => 'ตั้งค่าเวลาระบบ',
+            'page' => 'setting',
             'rows' => $rows,
         ]);
     }
@@ -1658,4 +1683,214 @@ class Admin extends CI_Controller
 
     }
 
+    public function no_service_page()
+    {
+        return $this->AdminRender('admin/no_service_date/page', [
+            'title' => 'ตั้งค่าวันปิดระบบ',
+            'page' => 'setting'
+        ]);
+    }
+    public function get_holiday_table()
+    {
+        $holidays_model = $this->Model('', 'Holiday_Model', false);
+        $data = $holidays_model->getAllDate();
+
+        if ($data) {
+            echo json_encode([
+                'items' => $data,
+                'status' => 200,
+                'message' => 'Successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'items' => null,
+                'status' => 401,
+                'message' => 'Error'
+            ]);
+        }
+    }
+    public function fetch_holiday()
+    {
+        try {
+            $extension = "index.php/";
+            $Holiday_model = $this->Model('', 'Holiday_Model', false);
+            $calendarId = 'th.th#holiday@group.v.calendar.google.com';
+            $api_key = '';
+
+            $yearStart = date('Y-01-01\T00:00:00\Z');
+            $yearEnd = date('Y-12-31\T23:59:59\Z');
+
+            $url = "https://www.googleapis.com/calendar/v3/calendars/" . urlencode($calendarId) .
+                "/events?timeMin={$yearStart}&timeMax={$yearEnd}&singleEvents=true&orderBy=startTime&key={$api_key}";
+
+            // Fetch data from Google API
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10); // prevent hanging
+            $response = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                throw new Exception('cURL Error: ' . curl_error($ch));
+            }
+
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($httpCode !== 200) {
+                throw new Exception("Google API returned status code: {$httpCode}");
+            }
+
+            $data = json_decode($response, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new Exception('JSON Decode Error: ' . json_last_error_msg());
+            }
+
+            // Transform data
+            $holidays = [];
+            if (!empty($data['items'])) {
+                foreach ($data['items'] as $event) {
+                    $holidays[] = [
+                        'title' => $event['summary'] ? $event['summary'] : 'No title',
+                        'date' => $event['start']['date'] ? $event['start']['date'] : null,
+                        'color' => '#ffdddd'
+                    ];
+                }
+            }
+            // echo "<pre>";
+            // print_r($holidays);
+            // echo "</pre>";
+            // exit();
+            if (!empty($holidays)) {
+                $result = $Holiday_model->batchInsertOrUpdateHolidays($holidays);
+            }
+            // Output success
+
+            if ($result) {
+                $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "ดึงข้อมูลสำเร็จ!",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'admin/system/date/holiday"; 
+                });
+            }, 1000);
+            </script>';
+                return $this->sweet($sweet, 'Fetch Holidays', 'Holidays');
+            }
+
+        } catch (Exception $e) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ดึงข้อมูลไม่สำเร็จ!",
+                    text:' . $e->getMessage() . ',
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'admin/system/date/holiday"; 
+                });
+            }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'Fetch Holidays', 'Holidays');
+
+
+        }
+    }
+    public function holiday_data()
+    {
+        $holiday_model = $this->Model('', 'Holiday_Model', false);
+        $rows = $holiday_model->getAllDate();
+        return $this->AdminRender('admin/no_service_date/table/page', [
+            'title' => 'ตารางวันปิดระบบ',
+            'page' => 'setting',
+            'rows' => $rows
+        ]);
+    }
+    public function add_holiday_submit()
+    {
+        $extension = "index.php/";
+        $title = $this->post('title');
+        $date = $this->post('date');
+        $color = $this->post('color');
+        // echo "$title $date $color";
+        // exit();
+        $data = [
+            'title' => $title,
+            'date' => $date,
+            'color' => $color
+        ];
+        $holiday_model = $this->Model('', 'Holiday_Model', false);
+        $result = $holiday_model->insertHoliday($data);
+        if ($result) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "เพิ่มวันหยุดสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/system/date/holiday/table"; 
+                });
+            }, 1000);
+            </script>';
+
+        } else {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "เพิ่มวันหยุดไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/system/date/holiday/table"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Add Holiday', 'setting');
+    }
+    public function delete_holiday($date)
+    {
+        $extension = "index.php/";
+        $model = $this->Model('', 'Holiday_Model', false);
+        $result = $model->deleteHoliday($date);
+
+        if ($result) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "ลบวันหยุดสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/system/date/holiday/table"; 
+                });
+            }, 1000);
+            </script>';
+
+        } else {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "ลบวันหยุดไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/system/date/holiday/table"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Delete Holiday', 'setting');
+    }
 }

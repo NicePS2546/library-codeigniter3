@@ -74,7 +74,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 //database localhost
-$state = "dev";
+$state = "deV";
 
 if($state !== "Production"){
 $db['default'] = [

@@ -1,19 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Welcome extends MY_Controller {
 
 	public function index()
 	{
 		
 		$this->load->library('session');
-		$this->session->set_userdata('userdata','Hi');
-		$userdata = $this->session->userdata('userdata');
+		// $this->session->set_userdata('userdata',[
+		// 	'test'=>[
+		// 		'test_data'=>1
+		// 	],
+		// ]);
+		// $userdata = $this->session->userdata('userdata');
 		// $this->check_expire();
-		
+	
 		return $this->homeRender('welcome_message',[
 			'title'=>'home',
-			'userdata'=>$userdata,
 			'page'=>'home']);
 		
 	}

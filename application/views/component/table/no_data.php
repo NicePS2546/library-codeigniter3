@@ -16,7 +16,15 @@
       align-items: center; /* Center vertically */
   }
 </style>
-
+<?php
+  if($table == 'music'){
+    $msg = 'Music';
+  }elseif($table == 'vdo'){
+    $msg = 'Video On-Demand';
+  }else{
+    $msg = 'Mini-Theater';
+  }
+?>
 
 <section id="main1" class="container not-found">
     <div class="row justify-content-center">   
@@ -24,7 +32,7 @@
   <div class="card-body text-center">
     <h5 class="card-title ">ยังไม่มีการจองในขณะนี้</h5>
     <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-    <p class="card-text">ท่านสามารถจองได้ที่หน้า <a href="<?= base_url("index.php/$page") ?>">Music</a></p>
+    <p class="card-text">ท่านสามารถจองได้ที่หน้า <a href="<?= base_url("index.php/$page") ?>"><?= $msg ?></a></p>
     
   </div>
 </div>

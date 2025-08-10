@@ -393,8 +393,8 @@ html,body{
 </section>
 <!-- /timeline -->
 <footer class="footer" style="height:20%;  padding:20px; text-align: center;"> 
-        <p class="arit d-inline-block m-1">หน่วยโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
+        <p class="arit d-inline-block m-1">บริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
         <p class="m-1">สำนักวิทยบริการและเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครปฐม</p>
-        <p class="d-inline-block m-1">&copy; Copyright 2019 by Library NPRU & Information Technology</p>        
+        <p class="d-inline-block m-1">&copy; 2025 ARIT NPRU ติดต่อ 034109300 ต่อ 3443</p>        
 </footer> 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

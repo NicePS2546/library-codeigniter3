@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class SSO extends CI_Controller
+class SSO extends MY_Controller
 {
     public function __construct()
     {
@@ -204,7 +204,6 @@ class SSO extends CI_Controller
     }
 
     public function delete_reserv($type_id,$reserv_id){
-        $total_pp = $this->post('total_pp');
         switch ($type_id) {
             case 1:
                 $name = 'MusicModel';
@@ -218,10 +217,11 @@ class SSO extends CI_Controller
             default:
             $name = 'MusicModel';
             }
+        
         $model = $this->Model('reservation',$name,true);
+        $row = $model->get_by_reserved_id($reserv_id,'actived');
         
-        
-        $result = $model->delete_by_id($reserv_id);
+        $result = $model->Cancel_Reserv($reserv_id,$row);
         if ($result) {
             $sweet = '<script>
             setTimeout(function() {

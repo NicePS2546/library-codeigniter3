@@ -4,9 +4,10 @@
         alt="image room no.<?= $room['r_number'] ?>">
     <div class="card-body">
         <h5 class="card-title">ห้องที่ <?= $room['r_number']; ?></h5>
-      
+
         <?php
         $room_dynamic = $page == "vdo" ? "service" : "reserv";
+
         if ($room['r_status']): ?>
             <p class="card-text <?= $room['isFree'] ? 'text-danger' : 'text-success' ?>">สถานะ:
                 <?= $room['isFree'] ? 'ไม่ว่าง' : 'ว่าง' ?>
@@ -30,9 +31,9 @@
         <div class="d-flex justify-content-center gap-3">
             <?php if (empty($aviliable_time['availableSlots'])): ?>
 
-                  <?php else: ?>
-                      <a href="<?= base_url() ?>index.php/<?= $url ?>/<?= $room_dynamic ?>/<?= $room['r_id'] ?>" id="card"
-                    class="btn <?= $room['r_status'] ? 'btn-success' : 'btn-danger disabled' ?> ">
+            <?php else: ?>
+                <a href="<?= base_url() ?>index.php/<?= $url ?>/<?= $room_dynamic ?>/<?= $room['r_id'] ?>" id="card"
+                    class="btn <?= $room['r_status'] ? 'btn-x' : 'btn-danger disabled' ?> <?= $isHoliday ? 'btn-secondary disabled' : 'btn-success' ?> ">
                     <?= $room['r_status'] ? 'จองห้อง' : 'ห้องถูกปิด' ?>
                 </a>
             <?php endif ?>

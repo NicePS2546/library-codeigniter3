@@ -1,5 +1,11 @@
 <?php
 
+ if (!$this->session->has_userdata('userData')) {
+    // If no admin session, redirect to homepage
+    $this->session->set_flashdata('error', 'กรุณาเข้าสู่ระบบ!');
+    redirect('/');  // Replace 'home' with the appropriate controller or URL
+}
+
 $music = $statistic['music'];
 $vdo = $statistic['vdo'];
 $mini = $statistic['mini'];

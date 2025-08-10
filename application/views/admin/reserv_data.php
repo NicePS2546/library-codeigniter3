@@ -124,7 +124,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
     <div class="info-box ">
         <div class="info-box-content">
             <div class="row d-flex pt-4 pb-4 justify-content-center align-items-center">
-               
+              
                 
                 <a href="<?= base_url('index.php/admin/check/reserv/music') ?>" class="<?= $card_res ?> text-center">
                     <span class="info-box-icon text-bg-primary shadow-sm btn-shadow" data-label="Music-Relax">
@@ -143,6 +143,11 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
                     </span>
                 </a>
             </div>
+             <!-- <div>
+                <select id="roomSelect">
+                    <option>Loading....</option>
+                </select>
+               </div> -->
             <div>
                 <?= $this->load->view('admin/component/base_table', ['table' => $table], true) ?>
             </div>
@@ -150,7 +155,14 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
     </div>
 
 </div>
-<!-- /.col -->
+<!-- <script>
+    let totalRooms = 
+    const select = document.getElementById('roomSelect');
+    
+    for (let i = 1; i)
+</script> -->
+
+<!-- col -->
 
 <!-- <div class="col-md-12">
   <div class="info-box">

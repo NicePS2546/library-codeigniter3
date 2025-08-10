@@ -35,7 +35,8 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="<?= base_url('public/cdn/boostrap5_3_0/css/bootstrap.min.css') ?>">
 
-  <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" /> <!-- Custom Loader CSS -->
+  <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" />
+  <!-- Custom Loader CSS -->
   <script src="<?= base_url('public/cdn/boostrap5_3_0/js/bootstrap.bundle.min.js') ?>"></script>
   <link rel="stylesheet" href="<?= base_url('public/assets/css/component.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/nav_active.css') ?>?v=<?= time(); ?>" />
@@ -70,7 +71,7 @@
 
     .content {
       flex: 1;
-      
+
       /* Makes the content section grow and take up available space */
     }
 
@@ -82,6 +83,10 @@
       /* Pushes the footer to the bottom */
       width: 100%;
       border-top: 1px solid #ddd;
+    }
+
+    footer div p {
+      margin-bottom: 0 !important;
     }
   </style>
 
@@ -105,7 +110,7 @@
 
   <!-- Modal Structure -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form method="post" id="modal-form" action="<?= base_url() ?>index.php/sso/login" onsubmit="return Submit(event)" >
+    <form method="post" id="modal-form" action="<?= base_url() ?>index.php/sso/login" onsubmit="return Submit(event)">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -120,8 +125,8 @@
                   height="150" alt="...">
               </div>
               <div>
-                <label for="st_id">รหัสนักศึกษา</label>
-                <input type="text" placeholder="โปรดใส่รหัสนักศึกษา" name="st_id" class="form-control" id="st_id">
+                <label for="st_id">รหัสประจำตัว</label>
+                <input type="text" placeholder="โปรดใส่รหัสรหัสประจำตัว" name="st_id" class="form-control" id="st_id">
               </div>
               <div>
                 <label for="password">รหัสผ่าน</label>
@@ -152,9 +157,9 @@
 
   <footer class="footer mt-auto py-3 bg-light">
     <div class="container text-center">
-      <p>ฝ่ายบริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
+      <p>บริการโสตทัศนวัสดุ ชั้น 6 อาคารบรรณราชนครินทร์</p>
       <p>สำนักวิทยบริการและเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครปฐม</p>
-      <p>&copy; 2019 ARIT LibraryNPRU</p>
+      <p>&copy; 2025 ARIT NPRU ติดต่อ 034109300 ต่อ 3443</p>
     </div>
   </footer>
 
@@ -168,35 +173,35 @@
   <!-- Custom Scripts -->
   <script>
     function addUser() {
-        fetch("<?php echo base_url('index.php/online/append/user'); ?>", { method: "POST" });
+      fetch("<?php echo base_url('index.php/online/append/user'); ?>", { method: "POST" });
     }
 
     // Notify the server when user leaves the page
     function removeUser() {
-        fetch("<?php echo base_url('index.php/online/remove/user'); ?>", { method: "POST" });
+      fetch("<?php echo base_url('index.php/online/remove/user'); ?>", { method: "POST" });
     }
 
     // Run when page loads
     window.onload = function () {
-        addUser();
-  
+      addUser();
+
     };
 
     // Run when page is closed or refreshed
     window.onbeforeunload = function () {
-        removeUser();
+      removeUser();
     };
 
     // Run when user switches tabs or minimizes
     document.addEventListener("visibilitychange", function () {
-        if (document.hidden) {
-            removeUser();
-        } else {
-            addUser();
-        }
+      if (document.hidden) {
+        removeUser();
+      } else {
+        addUser();
+      }
     });
 
-</script>
+  </script>
 
   <script>
     // Page loading animation
@@ -209,7 +214,7 @@
         }, 100);
       });
     });
-   
+
 
 
 
@@ -265,7 +270,7 @@
 
   </script>
   <script>
-  function showSweet(status, msg, title) {
+    function showSweet(status, msg, title) {
       if (status == 'success') {
         Swal.fire({
           title: title ? title : "สำเร็จ",
@@ -289,9 +294,9 @@
         });
       }
     }</script>
-   
 
-   <!-- <script>
+
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         const dropdown = document.querySelector('.dropdown-toggle');
         const dropdownMenu = document.querySelector('#dropdownMenu');

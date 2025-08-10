@@ -34,6 +34,12 @@ class MusicModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }
+    public function get_by_reserved_id($reserv_id)
+    {
+        $this->db->select('created_at');
+        $this->db->where('reserv_id', $reserv_id);
+        return $this->db->get($this->table)->row_array();
+    }
     public function get_all_reserved($status = 'expired')
     {
         $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
@@ -64,11 +70,51 @@ class MusicModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }
-    public function delete_by_id($reserv_id)
+    public function Cancel_Reserv($reserv_id, $row)
     {
         $this->db->where('reserv_id', $reserv_id);
-        // Deleting the record
-        return $this->db->delete($this->table);
+        $current_date_time = date("Y-m-d H:i:s");
+        $current_date = date("Y-m-d");
+        $created = strtotime($row['created_at']); // row created time as timestamp
+        $now = strtotime($current_date_time);
+
+        $config = function ($name) {
+            return $this->config->item($name);
+        };
+        $current_time = $config('fixed_time');
+
+        if ($config('stage') == 'Development') {
+            $current_date = $config('fixed_date');
+            $now = strtotime($current_date . ' ' . $config('fixed_time'));
+            $current_date_time = "$current_date $current_time";
+        }
+        ;
+        // echo "<pre>";
+        // echo $now. '<br>';
+        // echo $created. '<br>';
+        // echo $current_date_time. '<br>';
+        // echo "</pre>";
+        // exit();
+
+        if (($now - $created) >= 600) {
+            $data = [
+                'r_status' => 'cancel',
+                'pass_checkmark' => 1,
+                'update_at' => $current_date_time
+            ];
+        } else {
+            $data = [
+                'r_status' => 'cancel',
+                'pass_checkmark' => 0,
+                'update_at' => $current_date_time,
+               
+            ];
+        }
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+        // exit();
+        return $this->db->update($this->table, $data);
     }
     public function get_reserved_row_view($id, $reserved_id)
     {
@@ -99,7 +145,7 @@ class MusicModel extends CI_Model
         return $query->row_array(); // Returns the result as an array
 
     }
-    public function check_duplicate($st_id,$r_id)
+    public function check_duplicate($st_id, $r_id)
     {
         $this->db->select('*');
         $this->db->from($this->table);
@@ -111,24 +157,25 @@ class MusicModel extends CI_Model
         return $query->result_array();
     }
 
-   public function check_day_duplicate($st_id,$r_id)
-{
-    $stage = $this->config->item('stage');
-    $currentDate = date('Y-m-d');
-    if($stage == "Development"){
-        $currentDate = $this->config->item('fixed_date');
-    }
-        
-    $this->db->select('*');
-    $this->db->from($this->table);
-    $this->db->where('r_id', $r_id);
-    $this->db->where('st_id', $st_id);
-    $this->db->where('r_date', $currentDate);
-    $this->db->where_in('r_status', ['actived', 'expired']);
-    $query = $this->db->get();
+    public function check_day_duplicate($st_id, $r_id)
+    {
+        $stage = $this->config->item('stage');
+        $currentDate = date('Y-m-d');
+        if ($stage == "Development") {
+            $currentDate = $this->config->item('fixed_date');
+        }
 
-    return $query->num_rows() > 0;
-}
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where('r_id', $r_id);
+        $this->db->where('st_id', $st_id);
+        $this->db->where('r_date', $currentDate);
+        $this->db->where('pass_checkmark', 1);
+        $this->db->where_in('r_status', ['actived', 'expired','cancel']);
+        $query = $this->db->get();
+
+        return $query->num_rows() > 0;
+    }
 
     public function check_time_duplicate($r_id, $start_time, $exp_time)
     {
@@ -453,13 +500,11 @@ class MusicModel extends CI_Model
     public function statistic_date_range($start_date, $end_date)
     {
         $this->db->select('st_id, COUNT(*) as reservation_count, SUM(total_pp) as total_people');
-        $this->db->from('tbn_vdo_reserv');
+        $this->db->from($this->table);
         $this->db->where('r_date >=', $start_date);
         $this->db->where('r_date <=', $end_date);
-        $this->db->where('r_status !=', 'deleted'); // optional: exclude deleted
         $this->db->group_by('st_id');
         $this->db->order_by('reservation_count', 'DESC');
-
         $query = $this->db->get();
         return $query->result_array(); // return as object array
     }

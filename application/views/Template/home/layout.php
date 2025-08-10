@@ -21,8 +21,8 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script> -->
   <!-- Thai Language Locale for Flatpickr -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/th.js"></script> -->
-  
-  
+
+
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?= base_url('assets/AdminLTE/plugins/fontawesome-free/css/all.min.css') ?>">
@@ -30,12 +30,13 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=K2D&display=swap" rel="stylesheet">
   <!--- online CDN --->
-  
+
   <!--- offline CDN --->
   <!-- Bootstrap CSS -->
-  
 
-  <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" /> <!-- Custom Loader CSS -->
+
+  <link rel="stylesheet" href="<?= base_url('public/assets/css/loading.css') ?>?v=<?= time(); ?>" />
+  <!-- Custom Loader CSS -->
 
   <link rel="stylesheet" href="<?= base_url('public/assets/css/component.css') ?>?v=<?= time(); ?>" />
   <link rel="stylesheet" href="<?= base_url('public/assets/css/nav_active.css') ?>?v=<?= time(); ?>" />
@@ -70,7 +71,7 @@
 
     .content {
       flex: 1;
-      
+
       /* Makes the content section grow and take up available space */
     }
 
@@ -82,6 +83,17 @@
       /* Pushes the footer to the bottom */
       width: 100%;
       border-top: 1px solid #ddd;
+    }
+
+    footer .arit,
+    footer .m-1 {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    footer div p {
+
+      margin-bottom: 0 !important;
     }
   </style>
 
@@ -105,7 +117,7 @@
 
   <!-- Modal Structure -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form method="post" id="modal-form" action="<?= base_url() ?>index.php/sso/login" onsubmit="return Submit(event)" >
+    <form method="post" id="modal-form" action="<?= base_url() ?>index.php/sso/login" onsubmit="return Submit(event)">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -120,12 +132,13 @@
                   height="150" alt="...">
               </div>
               <div>
-                <label for="st_id">รหัสนักศึกษา</label>
-                <input type="text" placeholder="โปรดใส่รหัสนักศึกษา" name="st_id" class="form-control" id="st_id">
+                <label for="st_id">รหัสประจำตัว</label>
+                <input type="text" placeholder="โปรดใส่รหัสประจำตัว" name="st_id" class="form-control" id="st_id">
               </div>
               <div>
                 <label for="password">รหัสผ่าน</label>
-                <input type="password" class="form-control" autocomplete="off" name="password" placeholder="โปรดใส่รหัสผ่าน" id="password">
+                <input type="password" class="form-control" autocomplete="off" name="password"
+                  placeholder="โปรดใส่รหัสผ่าน" id="password">
               </div>
               <label class="form-label text-danger">รหัส SSO ที่เข้าใช้ WI-Fi มหาวิทยาลัย</label>
             </div>
@@ -150,7 +163,7 @@
     </div>
   </div>
 
-  
+
 
 
   <?= $layout['notice'] ? $layout['notice'] : '' ?>
@@ -162,35 +175,35 @@
   <!-- Custom Scripts -->
   <script>
     function addUser() {
-        fetch("<?php echo base_url('index.php/online/append/user'); ?>", { method: "POST" });
+      fetch("<?php echo base_url('index.php/online/append/user'); ?>", { method: "POST" });
     }
 
     // Notify the server when user leaves the page
     function removeUser() {
-        fetch("<?php echo base_url('index.php/online/remove/user'); ?>", { method: "POST" });
+      fetch("<?php echo base_url('index.php/online/remove/user'); ?>", { method: "POST" });
     }
 
     // Run when page loads
     window.onload = function () {
-        addUser();
-       
+      addUser();
+
     };
 
     // Run when page is closed or refreshed
     window.onbeforeunload = function () {
-        removeUser();
+      removeUser();
     };
 
     // Run when user switches tabs or minimizes
     document.addEventListener("visibilitychange", function () {
-        if (document.hidden) {
-            removeUser();
-        } else {
-            addUser();
-        }
+      if (document.hidden) {
+        removeUser();
+      } else {
+        addUser();
+      }
     });
 
-</script>
+  </script>
 
   <script>
     // Page loading animation
@@ -203,14 +216,14 @@
         }, 100);
       });
     });
-   
+
 
 
 
 
 
   </script>
-<?= $layout['footer'] ?>
+  <?= $layout['footer'] ?>
   <script>
 
     $(document).ready(function () {
@@ -259,7 +272,7 @@
 
   </script>
   <script>
-  function showSweet(status, msg, title) {
+    function showSweet(status, msg, title) {
       if (status == 'success') {
         Swal.fire({
           title: title ? title : "สำเร็จ",
@@ -283,9 +296,9 @@
         });
       }
     }</script>
-   
 
-   <!-- <script>
+
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         const dropdown = document.querySelector('.dropdown-toggle');
         const dropdownMenu = document.querySelector('#dropdownMenu');
