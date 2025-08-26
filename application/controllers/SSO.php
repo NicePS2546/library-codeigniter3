@@ -66,6 +66,7 @@ class SSO extends MY_Controller
 
             if ($info['count'] == 1) {
                 if (!ldap_bind($ds, $info[0]['dn'], $password)) {
+                   
                     $this->session->set_flashdata('error', 'รหัสผู้ใช้งานหรือรหัสผ่านผิด');
                     ldap_close($ds);
                     redirect('/');
@@ -207,21 +208,52 @@ class SSO extends MY_Controller
         switch ($type_id) {
             case 1:
                 $name = 'MusicModel';
+                $table = 'music';
                 break;
             case 2:
                 $name = 'VdoModel';
+                $table = 'vdo';
                 break;
             case 3:
                 $name = 'MiniModel';
+                $table = 'mini';
                 break;
             default:
             $name = 'MusicModel';
+            $table = 'music';
             }
         
         $model = $this->Model('reservation',$name,true);
         $row = $model->get_by_reserved_id($reserv_id,'actived');
         
         $result = $model->Cancel_Reserv($reserv_id,$row);
+         
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $reserv_id,
+            'r_service' => $table,
+            'action_type' => 'cancel',
+            'reason' => '',
+            'perform_by' => 'user'
+        ];
+
+        $logging = $log_model->insert($data);
+         if (!$logging) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "logging Error !",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() .'index.php/user/history"; 
+                });
+            }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'History', 'music');
+
+        }
         if ($result) {
             $sweet = '<script>
             setTimeout(function() {

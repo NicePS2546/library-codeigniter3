@@ -130,7 +130,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
     <div class="info-box-content title-container">
         <span class="info-box-text font-title"><?= $title ?></span>
         <div class="my-auto">
-            <button class="btn my-auto btn-primary fetch-btn" id="fetch-btn"
+            <button class="btn my-auto btn-warning fetch-btn" id="fetch-btn"
                 style="width:180px">ดึงวันหยุดจากปฏิทิน</button>
             <a href="<?= base_url('index.php/admin/system/date/holiday/table') ?>" class="btn my-auto btn-primary" style="width:120px" 
                 >ตารางวันหยุด</a>
@@ -185,7 +185,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 
     document.addEventListener('DOMContentLoaded', function () {
         const calendarId = 'th.th#holiday@group.v.calendar.google.com';
-        const api_key = '';
+        const api_key = 'AIzaSyAy2Zu9_A75LaxrFuHm0NYgeg-uKOL01UQ';
         const now = new Date();
         const yearStart = new Date(now.getFullYear(), 0, 1).toISOString();
         const yearEnd = new Date(now.getFullYear(), 11, 31).toISOString();
@@ -196,13 +196,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
 
         ];
 
-        const get_data_from_table = async () => {
-            const res = await fetch(table_url);
-            if (res.ok) {
-                const data = await res.json();
-            }
-        }
-
+        
 
         const fetchHolidayFromTable = async () => {
             const res = await fetch(`<?= base_url("index.php/admin/system/date/holiday/get/table") ?>`)

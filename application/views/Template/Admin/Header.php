@@ -38,9 +38,7 @@
   <script src="<?= base_url('public/cdn/sweetaleart2@11.js') ?>"></script>
   <link rel="stylesheet" href="<?= base_url("public/assets/cdn/sweet2.min.css") ?>">
   <link rel="stylesheet" href="<?= base_url('public/assets/css/admin_page.css') ?>?v=<?= time(); ?>" />
-  <style>
-    /* Box shadow and hover effect for card */
-  </style>
+ 
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">

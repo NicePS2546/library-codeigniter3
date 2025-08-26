@@ -128,6 +128,7 @@ $route['admin/edit/reserv/mini/(:num)'] = 'Admin/edit_reserv_mini/$1';
 $route['admin/update/music'] = 'Admin/update_music';
 $route['admin/update/vdo'] = 'Admin/update_vdo';
 $route['admin/update/mini'] = 'Admin/update_mini';
+$route['admin/reserv/activate/(:num)'] = 'Admin/reserv_activation/$1';
 
 
 $route['admin/view/music'] = 'Admin/view_music';
@@ -186,6 +187,9 @@ $route['online/append/user'] = 'OnlineUser/add';
 $route['online/remove/user'] = 'OnlineUser/remove';
 $route['online/count/user'] = 'OnlineUser/count';
 $route['online/test'] = 'OnlineUser/test';
+
+//test
+$route['admin/test/log'] = "Admin/example_page";
 
 
 

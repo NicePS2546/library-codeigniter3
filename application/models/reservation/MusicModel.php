@@ -107,7 +107,7 @@ class MusicModel extends CI_Model
                 'r_status' => 'cancel',
                 'pass_checkmark' => 0,
                 'update_at' => $current_date_time,
-               
+
             ];
         }
         // echo "<pre>";
@@ -171,7 +171,7 @@ class MusicModel extends CI_Model
         $this->db->where('st_id', $st_id);
         $this->db->where('r_date', $currentDate);
         $this->db->where('pass_checkmark', 1);
-        $this->db->where_in('r_status', ['actived', 'expired','cancel']);
+        $this->db->where_in('r_status', ['actived', 'expired', 'cancel']);
         $query = $this->db->get();
 
         return $query->num_rows() > 0;
@@ -212,7 +212,8 @@ class MusicModel extends CI_Model
     public function reserve($data)
     {
 
-        return $this->db->insert('tbn_music_reserv', $data);
+        $this->db->insert('tbn_music_reserv', $data);
+        return $this->db->insert_id(); // returns the last inserted ID
     }
 
     public function get_past_reservations($currentDateTime)
@@ -309,7 +310,11 @@ class MusicModel extends CI_Model
         $this->db->where('reserv_id', $reservationId);  // Use the correct column name
         return $this->db->update('tbn_music_reserv', $data);  // Update the status to expired
     }
-
+    public function activeReserv($reserv_id)
+    {
+        $this->db->where_in('reserv_id', $reserv_id)->set('r_status', 'actived')->update($this->table);
+        return $this->db->affected_rows() > 0;
+    }
     public function update_data($reservationId, $data)
     {
         $this->db->where('reserv_id', $reservationId);

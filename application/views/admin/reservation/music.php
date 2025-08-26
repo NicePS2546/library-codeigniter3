@@ -32,7 +32,7 @@
         <td class="<?= $row['r_verify'] == 1 ? 'text-success' : 'text-danger' ?>">
             <?= ($row['r_verify'] == 1 ? '<i class="bi bi-check-lg"></i>' : '<i class="bi bi-x-lg"></i>') ?></td>
         <td>
-            <?= $this->load->view('admin/component/manage_row', ['row' => $row], true) ?>
+            <?= $this->load->view('admin/component/reservation/manage_row', ['row' => $row], true) ?>
 
         </td>
         </tr>

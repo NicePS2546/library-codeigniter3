@@ -48,7 +48,7 @@ class Vdo extends MY_Controller
             'aviliable_time' => function ($r_id) {
                 return $this->get_availible_time_card($r_id);
             },
-            'isHoliday'=> $holiday ? true : false
+            'isHoliday' => $holiday ? true : false
 
         ]);
 
@@ -282,7 +282,33 @@ class Vdo extends MY_Controller
         }
 
         $result = $model->reserve($data);
+        $table = 'vdo';
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $result,
+            'r_service' => $table,
+            'action_type' => 'create',
+            'reason' => '',
+            'perform_by' => 'user'
+        ];
 
+        $logging = $log_model->insert($data);
+         if (!$logging) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "logging Error !",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music/"; 
+                });
+            }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'Music Reservation', 'music');
+
+        }
         if ($result) {
             $sweet = '<script>
             setTimeout(function() {
@@ -400,15 +426,25 @@ class Vdo extends MY_Controller
 
         $model = $this->VdoModel;
         $reserveds = $model->get_reserved($r_id, 'actived');
-        foreach ($reserveds as $key => $reserved) {
-            $u_data = $this->get_user_sso_by_id($reserved['st_id']);
-            $service = $this->Vdo_service_Model->get_by_id($reserved['s_id']);
-            // Ensure $u_data exists and has the expected structure
-            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
 
-            // Store fullname in the correct entry inside the array
-            $reserveds[$key]['fullname'] = $fullname;
-            $reserveds[$key]['service'] = $service;
+        if ($this->config->item('is_use_vpn') == true) {
+            foreach ($reserveds as $key => $reserved) {
+                $u_data = $this->get_user_sso_by_id($reserved['st_id']);
+                $service = $this->Vdo_service_Model->get_by_id($reserved['s_id']);
+                // Ensure $u_data exists and has the expected structure
+                $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+
+                // Store fullname in the correct entry inside the array
+                $reserveds[$key]['fullname'] = $fullname;
+                $reserveds[$key]['service'] = $service;
+            }
+        } else {
+            foreach ($reserveds as $key => $reserved) {
+                $service = $this->Vdo_service_Model->get_by_id($reserved['s_id']);
+
+                $reserveds[$key]['fullname'] = "No Vpn Provided";
+                $reserveds[$key]['service'] = $service;
+            }
         }
 
         return $this->Render("checkroom/table.php", [

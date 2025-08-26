@@ -51,15 +51,23 @@ class Admin extends MY_Controller
         $this->load->model('reservation/MusicModel');
         $model = $this->MusicModel;
         $rows = $model->get_all_reserved('actived');
-        foreach ($rows as $key => $reserved) {
-            $u_data = $this->get_user_sso_by_id($reserved['st_id']);
 
-            // Ensure $u_data exists and has the expected structure
-            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+        if ($this->config->item('is_use_vpn') == true) {
+            foreach ($rows as $key => $reserved) {
+                $u_data = $this->get_user_sso_by_id($reserved['st_id']);
 
-            // Store fullname in the correct entry inside the array
-            $rows[$key]['fullname'] = $fullname;
+                // Ensure $u_data exists and has the expected structure
+                $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+
+                // Store fullname in the correct entry inside the array
+                $rows[$key]['fullname'] = $fullname;
+            }
+        } else {
+            foreach ($rows as $key => $reserved) {
+                $rows[$key]['fullname'] = 'NO VPN PROVIDE';
+            }
         }
+
 
         return $this->AdminRender('admin/reserv_data', [
             'title' => 'ข้อมูลการจอง',
@@ -85,18 +93,25 @@ class Admin extends MY_Controller
         //     $r_id -= 1;
 
         // };
-
         $expired_rows = $this->get_expired();
         $this->load->model('reservation/VdoModel');
         $model = $this->VdoModel;
         // $rows = $model->get_by_room_numb($r_id);
         $rows = $model->get_all_reserved('actived');
-        foreach ($rows as $key => $reserved) {
-            $u_data = $this->get_user_sso_by_id($reserved['st_id']);
-            // Ensure $u_data exists and has the expected structure
-            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
-            // Store fullname in the correct entry inside the array
-            $rows[$key]['fullname'] = $fullname;
+
+
+        if ($this->config->item('is_use_vpn') == true) {
+            foreach ($rows as $key => $reserved) {
+                $u_data = $this->get_user_sso_by_id($reserved['st_id']);
+                // Ensure $u_data exists and has the expected structure
+                $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+                // Store fullname in the correct entry inside the array
+                $rows[$key]['fullname'] = $fullname;
+            }
+        } else {
+            foreach ($rows as $key => $reserved) {
+                $rows[$key]['fullname'] = 'NO VPN PROVIDE';
+            }
         }
 
         return $this->AdminRender('admin/reserv_data', [
@@ -149,13 +164,25 @@ class Admin extends MY_Controller
             redirect('/');
             exit();
         }
+        $reason = $this->post('reason');
+        $table = 'music';
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $id,
+            'r_service' => $table,
+            'action_type' => 'cancel',
+            'reason' => $reason,
+            'perform_by' => 'admin'
+        ];
         $extension = 'index.php/';
         $this->load->model('reservation/MusicModel');
         $model = $this->MusicModel;
 
         $result = $model->update_expire($id, false);
         if ($result) {
-            $sweet = '<script>
+            $logging = $log_model->insert($data);
+            if ($logging) {
+                $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -167,6 +194,21 @@ class Admin extends MY_Controller
                 });
             }, 1000);
             </script>';
+
+            } else {
+                $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "logging Error",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+            }
 
         } else {
             $sweet = '<script>
@@ -191,13 +233,25 @@ class Admin extends MY_Controller
             redirect('/');
             exit();
         }
+        $reason = $this->post('reason');
+        $table = 'vdo';
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $id,
+            'r_service' => $table,
+            'action_type' => 'cancel',
+            'reason' => $reason,
+            'perform_by' => 'admin'
+        ];
         $extension = 'index.php/';
         $this->load->model('reservation/VdoModel');
         $model = $this->VdoModel;
 
         $result = $model->update_expire($id, false);
         if ($result) {
-            $sweet = '<script>
+            $logging = $log_model->insert($data);
+            if ($logging) {
+                $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
                     position: "center",
@@ -210,6 +264,20 @@ class Admin extends MY_Controller
             }, 1000);
             </script>';
 
+            } else {
+                $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "logging Error",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/vdo"; 
+                });
+            }, 1000);
+            </script>';
+            }
         } else {
             $sweet = '<script>
             setTimeout(function() {
@@ -280,7 +348,7 @@ class Admin extends MY_Controller
 
         $model = $this->Model('reservation', 'MusicModel', true);
         $row = $model->get_reserved_sole($id);
-
+       
         return $this->AdminRender('admin/reservation/edit/music', [
             'title' => 'แก้ไขรายละเอียดข้อมูลการจอง',
             'page' => 'reserv_data',
@@ -293,7 +361,7 @@ class Admin extends MY_Controller
         $model = $this->Model('reservation', 'VdoModel', true);
         $row = $model->get_reserved_sole($id);
 
-        return $this->AdminRender('admin/reservation/edit/music', [
+        return $this->AdminRender('admin/reservation/edit/vdo', [
             'title' => 'แก้ไขรายละเอียดข้อมูลการจอง',
             'page' => 'reserv_data',
             'row' => $row,
@@ -351,7 +419,7 @@ class Admin extends MY_Controller
 
         ]);
     }
-    public function update_vdo()
+    public function update_music()
     {
         if (!$this->check_admin()) {
             $this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
@@ -373,7 +441,34 @@ class Admin extends MY_Controller
 
         $model = $this->Model('reservation', 'MusicModel', true);
         $result = $model->update_data($reserv_id, $data);
+
+        $table = 'vdo';
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $reserv_id,
+            'r_service' => $table,
+            'action_type' => 'update',
+            'reason' => '',
+            'perform_by' => 'admin'
+        ];
+
         if ($result) {
+            $logging = $log_model->insert($data);
+            if(!$logging){
+                $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "แก้ไขข้อมูลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+            
+            }
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -397,6 +492,86 @@ class Admin extends MY_Controller
                     showConfirmButton: true,
                 }).then(function(){
                      window.location = "' . base_url() . $extension . 'admin/check/reserv/music"; 
+                });
+            }, 1000);
+            </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');
+    }
+
+    public function update_vdo()
+    {
+        if (!$this->check_admin()) {
+            $this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+            redirect('/');
+            exit();
+        }
+        $extension = 'index.php/';
+        $reserv_id = $this->post('reserv_id');
+        $u_id = $this->post('u_id');
+        $total = $this->post('total');
+        $time = $this->post('time_slot');
+        list($start_time, $exp_time) = explode('-', $time);
+        $data = [
+            'st_id' => $u_id,
+            'total_pp' => $total,
+            'start_time' => $start_time,
+            'exp_time' => $exp_time,
+        ];
+
+        $model = $this->Model('reservation', 'VdoModel', true);
+        $result = $model->update_data($reserv_id, $data);
+
+        $table = 'vdo';
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $reserv_id,
+            'r_service' => $table,
+            'action_type' => 'update',
+            'reason' => '',
+            'perform_by' => 'admin'
+        ];
+
+        if ($result) {
+            $logging = $log_model->insert($data);
+            if(!$logging){
+                $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "แก้ไขข้อมูลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/vdo"; 
+                });
+            }, 1000);
+            </script>';
+            
+            }
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "แก้ไขข้อมูลสำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/vdo"; 
+                });
+            }, 1000);
+            </script>';
+
+        } else {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "แก้ไขข้อมูลไม่สำเร็จ",
+                    showConfirmButton: true,
+                }).then(function(){
+                     window.location = "' . base_url() . $extension . 'admin/check/reserv/vdo"; 
                 });
             }, 1000);
             </script>';
@@ -823,14 +998,22 @@ class Admin extends MY_Controller
     {
         $model = $this->Model('', 'AdminModel', false);
         $rows = $model->get_all();
-        foreach ($rows as $key => $reserved) {
-            $u_data = $this->get_user_sso_by_id($reserved['user_id']);
+        if ($this->config->item('is_use_vpn') == true) {
+            foreach ($rows as $key => $reserved) {
+                $u_data = $this->get_user_sso_by_id($reserved['user_id']);
 
-            // Ensure $u_data exists and has the expected structure
-            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+                // Ensure $u_data exists and has the expected structure
+                $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
 
-            // Store fullname in the correct entry inside the array
-            $rows[$key]['fullname'] = $fullname;
+                // Store fullname in the correct entry inside the array
+                $rows[$key]['fullname'] = $fullname;
+            }
+        } else {
+            foreach ($rows as $key => $reserved) {
+
+
+                $rows[$key]['fullname'] = 'No Vpn Provided';
+            }
         }
         return $this->AdminRender('admin/admin_data/page', [
             'title' => 'ข้อมูลผู้ดูแล',
@@ -1132,14 +1315,22 @@ class Admin extends MY_Controller
             ];
         }
         ;
-
-
+        $model = $this->Model('', 'Log_Model', false);
+        $rows = $model->getAllrow();
+        $count = [
+            'create' => $model->getCountRow('create'),
+            'update' => $model->getCountRow('update'),
+            'cancel' => $model->getCountRow('cancel'),
+            'restore' => $model->getCountRow('restore'),
+        ];
         return $this->AdminRender('admin/report/page', [
             'title' => 'รายงานข้อมูล',
             'page' => 'report_page',
             'statistic' => $statistic,
             'start_date' => $start_date,
-            'end_date' => $end_date
+            'end_date' => $end_date,
+            'logs' => $rows,
+            'count' => $count
         ]);
     }
 
@@ -1638,17 +1829,30 @@ class Admin extends MY_Controller
         switch ($table) {
             case 'music':
                 $model = $this->Model('reservation', 'MusicModel', true);
+                 $table = 'music';
                 break;
             case 'vdo':
                 $model = $this->Model('reservation', 'VdoModel', true);
+                 $table = 'vdo';
                 break;
             case 'mini':
                 $model = $this->Model('reservation', 'MiniModel', true);
+                 $table = 'mini';
                 break;
         }
 
         $result = $model->activeReserv($reserv_id);
+       
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $reserv_id,
+            'r_service' => $table,
+            'action_type' => 'restore',
+            'reason' => '',
+            'perform_by' => 'admin'
+        ];
 
+        $logging = $log_model->insert($data);
         if ($result) {
             $sweet = '<script>
                 setTimeout(function() {
@@ -1715,7 +1919,7 @@ class Admin extends MY_Controller
             $extension = "index.php/";
             $Holiday_model = $this->Model('', 'Holiday_Model', false);
             $calendarId = 'th.th#holiday@group.v.calendar.google.com';
-            $api_key = '';
+            $api_key = 'AIzaSyAy2Zu9_A75LaxrFuHm0NYgeg-uKOL01UQ';
 
             $yearStart = date('Y-01-01\T00:00:00\Z');
             $yearEnd = date('Y-12-31\T23:59:59\Z');
@@ -1893,4 +2097,13 @@ class Admin extends MY_Controller
         }
         return $this->sweet($sweet, 'Delete Holiday', 'setting');
     }
+    public function example_page()
+    {
+        $model = $this->Model('', 'Log_Model', false);
+        $rows = $model->getAllrow();
+        return $this->AdminRender('admin/report/example/page', [
+            'logs' => $rows
+        ]);
+    }
+    
 }

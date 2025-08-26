@@ -19,8 +19,9 @@ class Music extends MY_Controller
         $reservModel = $this->MusicModel;
         $isAllFull = $this->checkAllFull($data);
         $inServiceTime = $this->checkSystemTime();
+
         $systemTime = $this->Model('', 'System_time_model', false)->getTimeById(1);
-        
+
         $stage = $this->config->item('stage');
         if ($stage == "Development") {
             $currentTime = $this->config->item('fixed_time');
@@ -32,8 +33,9 @@ class Music extends MY_Controller
         }
 
         $holiday = $this->get_holiday($currentDate);
-        
-        if ($isAllFull && $inServiceTime["status"]) {
+        // print_r($inServiceTime);
+        // exit();
+        if ($isAllFull) {
             echo '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -46,7 +48,7 @@ class Music extends MY_Controller
             }, 1000);
             </script>';
         }
-        
+
 
         return $this->Render("music", [
             'title' => 'Music-Relax',
@@ -325,7 +327,35 @@ class Music extends MY_Controller
             return $this->sweet($sweet, 'Music Reservation', 'music');  // Stop execution if validation fails
 
         }
+
         $result = $musicModel->reserve($data);
+        $table = 'music';
+        $log_model = $this->Model('', "Log_Model", false);
+        $data = [
+            'reserv_id' => $result,
+            'r_service' => $table,
+            'action_type' => 'create',
+            'reason' => '',
+            'perform_by' => 'user'
+        ];
+
+        $logging = $log_model->insert($data);
+        if (!$logging) {
+            $sweet = '<script>
+            setTimeout(function() {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "logging Error !",
+                    showConfirmButton: true,
+                }).then(function() {
+                    window.location = "' . base_url() . $extension . 'music/"; 
+                });
+            }, 1000);
+            </script>';
+            return $this->sweet($sweet, 'Music Reservation', 'music');
+
+        }
 
         if ($result) {
             $sweet = '<script>
@@ -361,10 +391,18 @@ class Music extends MY_Controller
     public function get_user_sso()
     {
         $uid = $this->input->post('uid');
-        $u_data = $this->get_user_sso_by_id($uid);
-        $user_id = $u_data[0]['uid'][0];
-        $fullname = $u_data[0]['cn'][0];
+        if ($this->config->item('is_use_vpn') == true) {
+            $u_data = $this->get_user_sso_by_id($uid);
+            $user_id = $u_data[0]['uid'][0];
+            $fullname = $u_data[0]['cn'][0];
+        } else {
+            $u_data = true;
+            $user_id = $this->config->item('set_user_id');
+            $fullname = 'No Vpn Provided';
+        }
+
         $is_reserv = $this->input->post('reserv');
+
         $info = [
             'uid' => $user_id,
             'fullname' => $fullname
@@ -400,15 +438,24 @@ class Music extends MY_Controller
         $this->load->model('reservation/MusicModel');
         $model = $this->MusicModel;
         $reserveds = $model->get_reserved($r_id, 'actived');
-        foreach ($reserveds as $key => $reserved) {
-            $u_data = $this->get_user_sso_by_id($reserved['st_id']);
+        if ($this->config->item('is_use_vpn') == true) {
+            foreach ($reserveds as $key => $reserved) {
+                $u_data = $this->get_user_sso_by_id($reserved['st_id']);
 
-            // Ensure $u_data exists and has the expected structure
-            $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
+                // Ensure $u_data exists and has the expected structure
+                $fullname = isset($u_data[0]['cn'][0]) ? $u_data[0]['cn'][0] : 'Unknown';
 
-            // Store fullname in the correct entry inside the array
-            $reserveds[$key]['fullname'] = $fullname;
+                // Store fullname in the correct entry inside the array
+                $reserveds[$key]['fullname'] = $fullname;
+            }
+        } else {
+            foreach ($reserveds as $key => $reserved) {
+
+                // Store fullname in the correct entry inside the array
+                $reserveds[$key]['fullname'] = "No Vpn Provived";
+            }
         }
+
 
         return $this->Render("checkroom/table.php", [
             'rows' => $reserveds,

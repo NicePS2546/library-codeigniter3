@@ -112,9 +112,9 @@
 
 <script src="<?= base_url('public/cdn/jQuery/jquery-3.7.1.js') ?>"></script>
 <script src="<?= base_url('public/cdn/dataTables.min.js') ?>"></script>
-<script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.bootstrap5.js')?>"></script>
-<script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.responsive.js')?>"></script>
-<script src="<?= base_url('public/cdn/dataTable/js/responsive/responsive.bootstrap5.js')?>"></script>
+<script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.bootstrap5.js') ?>"></script>
+<script src="<?= base_url('public/cdn/dataTable/js/responsive/dataTables.responsive.js') ?>"></script>
+<script src="<?= base_url('public/cdn/dataTable/js/responsive/responsive.bootstrap5.js') ?>"></script>
 
 
 <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -124,11 +124,13 @@
 <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.js"></script> -->
 
 <script>
+    let reserv_id = 0;
+    let fullname = "";
     // let table = new DataTable('#productTable');
     function intializingDataTable(table) {
         new DataTable(table, {
             responsive: true,
-             
+
         });
 
     };
@@ -156,10 +158,19 @@
 
 <script>
     // ฟังก์ชันสาหรับแสดงกล่องยืนยัน ํ SweetAlert2
+    // const reasonList = [
+    //     'switch'=>'ต้องการเปลี่ยนเครื่อง',
+    //     'wrong_time'=>'จองผิดเวลา',
+    //     'duplicate'=>'จองใช้บริการได้แค่ กลุ่มละ 1 ครั้ง ต่อวัน เท่านั้น',
+    // ];
+
     function showDeleteConfirmation(id, name) {
+        const reason = document.getElementById('cancelReason'); // 👈 get selected value
+        const reasonText = reason.options[reason.selectedIndex].text;
+        // console.log(reason, reasonText);
         Swal.fire({
             title: 'คุณแน่ใจหรือไม่?',
-            text: 'คุณแน่ใจใช่ใหมว่าจะปิดห้องของ ' + name + '?',
+            html: 'คุณแน่ใจใช่ไหมว่าจะปิดห้องของ <b>' + name + '</b><br>เพราะ ' + reasonText + ' ?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'ปืด',
@@ -174,67 +185,32 @@
                 input.type = 'hidden';
                 input.name = 'id';
                 input.value = id;
+
+                const selectReason = document.createElement('input');
+                selectReason.type = 'hidden';
+                selectReason.name = 'reason';
+                selectReason.value = reason.value;
+
                 form.appendChild(input);
+                form.appendChild(selectReason);
                 document.body.appendChild(form);
                 form.submit();
             }
         });
     }
-    // function showDeleteAllConfirmation(table) {
-    //     Swal.fire({
-    //         title: 'คุณแน่ใจหรือไม่?',
-    //         text: 'คุณแน่ใจใช่ใหมว่าจะลบทั้งหมด ?',
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonText: 'ลบ',
-    //         cancelButtonText: 'ยกเลิก',
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
-    //             const form = document.createElement('form');
-    //             form.method = 'POST';
-    //             form.action = '<?= base_url("index.php/admin/update/deleteAll/reserv") ?>';
-    //             const input = document.createElement('input');
-    //             input.type = 'hidden';
-    //             input.name = 'table';
-    //             input.value = table;
-    //             form.appendChild(input);
-    //             document.body.appendChild(form);
-    //             form.submit();
-    //         }
-    //     });
-    // }
-    // แนบตัวตรวจจับเหตุการณ์คลิกกับองค์ปุ่ มลบทั้งหมดที่มีคลาส delete-button
-    // const deleteButtons = document.querySelectorAll('.delete-button');
 
-    // deleteButtons.forEach((button) => {
-    //     button.addEventListener('click', () => {
-    //         const get_id = button.getAttribute('data-user-id');
-    //         const name = button.getAttribute('data-user-fullname');
-    //         showDeleteConfirmation(get_id, name);
-    //     });
-    // });
-
-    // const deleteAllBtn = document.querySelectorAll('.delete-all-btn');
-    // console.log(deleteAllBtn);
-    // deleteAllBtn.forEach((button) => {
-    //     button.addEventListener('click', () => {
-    //         const table = button.getAttribute('data-table');
-    //         showDeleteAllConfirmation(table);
-    //     });
-    // });
 
 
 
     document.addEventListener('click', function (event) {
-    // ตรวจสอบว่าคลิกที่ปุ่มที่มีคลาส .delete-button หรือไม่
-    if (event.target.classList.contains('delete-button')) {
-        const button = event.target;
-        const get_id = button.getAttribute('data-user-id');
-        const name = button.getAttribute('data-user-fullname');
-        showDeleteConfirmation(get_id, name);
-    }
-});
+        // ตรวจสอบว่าคลิกที่ปุ่มที่มีคลาส .delete-button หรือไม่
+        if (event.target.classList.contains('delete-button')) {
+            const button = event.target;
+            // const get_id = button.getAttribute('data-user-id');
+            // const name = button.getAttribute('data-user-fullname');
+            showDeleteConfirmation(reserv_id, fullname);
+        }
+    });
 
 </script>
 
@@ -268,6 +244,29 @@
     </div>
 </div>
 
+<div class="modal fade" id="reasonModal" tabindex="-1" arialabelledby="memberModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title" id="memberModalLabel">เหตุผลการยกเลิกจอง</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column">
+                <select id="cancelReason" class="form-control" name="reason">
+                    <option value="switch">ต้องการเปลี่ยนเครื่อง</option>
+                    <option value="wrong_time">จองผิดเวลา</option>
+                    <option value="duplicate">จองใช้บริการได้แค่ กลุ่มละ 1 ครั้ง ต่อวัน เท่านั้น</option>
+                </select>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger delete-button">ยกเลิกห้อง</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal Structure -->
 <div class="modal fade" id="exampleModal" tabindex="-200" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -296,109 +295,66 @@
 </div>
 
 <script>
-    // $(document).ready(function () {
-    //     <?php $post_url = base_url("index.php/admin/view/$table"); ?>
-    //     // เมื่อคลิกปุ่ ม View
-    //     $('.view-reserved-button').on('click', function () {
-    //         const reserv_id = $(this).data('reserved-id');
-    //         const r_id = $(this).data('r-id');
-    //         console.log('<?= $post_url ?>')
-    //         $.ajax({ // ส่ง AJAX
-    //             url: '<?= $post_url ?>',
-    //             type: 'POST', // ใช้เมธอด POST
-    //             data: { // ส่งข้อมูลไปด้วย
-    //                 id: r_id,
-    //                 reserved_id: reserv_id
-    //             },
-    //             success: function (response) { // ถ้าสําเร็จ
-    //                 // นําข้อมูลที่ได้มาแสดงใน Modal
-    //                 const reserved = response; // แปลงข้อความ JSON ให้กลายเป็นObject
-    //                 console.log(reserved);
-    //                 const status = reserved.r_verify == 1 ? 'ยืนยันแล้ว' : 'ยังไม่ยืนยัน';
-    //                 $('#reserved-uid').text(reserved.st_id); // แสดงข้อมูลใน Modal โดยใช้ ID ของแต่ละข้อมูล
-    //                 $('#reserved-name').text(reserved.fullname);
-    //                 $('#reserved-r_numb').text(reserved.r_number);
-    //                 $('#reserved-people').text(reserved.total_pp + " คน");
-    //                 $('#reserved-start').text(reserved.start_time);
-    //                 $('#reserved-exp').text(reserved.exp_time);
-    //                 $('#reserved-date').text(reserved.r_date);
-    //                 $('#reserved-status').text(status);
-
-    //                 if (reserved.r_verify == 1) {
-    //                     $('#reserved-status').removeClass('text-danger').addClass('text-success');
-    //                 } else {
-    //                     $('#reserved-status').removeClass('text-success').addClass('text-danger');
-    //                 }
-    //                 $('#reservedModal').modal('show'); // แสดง Modal
-                    
-    //             },
-    //             error: function (xhr, status, error) {
-    //                 console.error("AJAX Error:", status, error);
-    //                 console.log("Response Text:", xhr.responseText);
-    //                 try {
-    //                     const jsonResponse = JSON.parse(xhr.responseText);
-    //                     console.log("Parsed JSON:", jsonResponse);
-    //                 } catch (e) {
-    //                     console.error("Invalid JSON Response:", xhr.responseText);
-    //                 }
-    //             }
-    //         });
-    //     });
-
-    // });
-
-    $(document).ready(function () {
     <?php $post_url = base_url("index.php/admin/view/$table"); ?>
+    $(document).ready(function () {
 
+        $(document).on('click', '.show-reason-list', function () {
+            const data_fullname = $(this).data('user-fullname');
+            const r_id = $(this).data('reserv-id');
+            reserv_id = r_id;
+            fullname = data_fullname;
+            console.log("reserv id = ", reserv_id, "fullname = ", fullname);
+            $('#reasonModal').modal('show');
+        });
 
-    // ใช้ Event Delegation แทนการผูก event โดยตรง
-    $(document).on('click', '.view-reserved-button', function () {
-        const reserv_id = $(this).data('reserved-id');
-        const r_id = $(this).data('r-id');
+        // ใช้ Event Delegation แทนการผูก event โดยตรง
+        $(document).on('click', '.view-reserved-button', function () {
+            const reserv_id = $(this).data('reserved-id');
+            const r_id = $(this).data('r-id');
 
-        console.log('<?= $post_url ?>');
+            console.log('<?= $post_url ?>');
 
-        $.ajax({
-            url: '<?= $post_url ?>',
-            type: 'POST',
-            data: { 
-                id: r_id,
-                reserved_id: reserv_id
-            },
-            success: function (response) {
-                const reserved = response;
-                console.log(reserved);
-                const status = reserved.r_verify == 1 ? 'ยืนยันแล้ว' : 'ยังไม่ยืนยัน';
+            $.ajax({
+                url: '<?= $post_url ?>',
+                type: 'POST',
+                data: {
+                    id: r_id,
+                    reserved_id: reserv_id
+                },
+                success: function (response) {
+                    const reserved = response;
+                    console.log(reserved);
+                    const status = reserved.r_verify == 1 ? 'ยืนยันแล้ว' : 'ยังไม่ยืนยัน';
 
-                $('#reserved-uid').text(reserved.st_id);
-                $('#reserved-name').text(reserved.fullname);
-                $('#reserved-r_numb').text(reserved.r_number);
-                $('#reserved-people').text(reserved.total_pp + " คน");
-                $('#reserved-start').text(reserved.start_time);
-                $('#reserved-exp').text(reserved.exp_time);
-                $('#reserved-date').text(reserved.r_date);
-                $('#reserved-status').text(status);
+                    $('#reserved-uid').text(reserved.st_id);
+                    $('#reserved-name').text(reserved.fullname);
+                    $('#reserved-r_numb').text(reserved.r_number);
+                    $('#reserved-people').text(reserved.total_pp + " คน");
+                    $('#reserved-start').text(reserved.start_time);
+                    $('#reserved-exp').text(reserved.exp_time);
+                    $('#reserved-date').text(reserved.r_date);
+                    $('#reserved-status').text(status);
 
-                if (reserved.r_verify == 1) {
-                    $('#reserved-status').removeClass('text-danger').addClass('text-success');
-                } else {
-                    $('#reserved-status').removeClass('text-success').addClass('text-danger');
+                    if (reserved.r_verify == 1) {
+                        $('#reserved-status').removeClass('text-danger').addClass('text-success');
+                    } else {
+                        $('#reserved-status').removeClass('text-success').addClass('text-danger');
+                    }
+
+                    $('#reservedModal').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    console.log("Response Text:", xhr.responseText);
+                    try {
+                        const jsonResponse = JSON.parse(xhr.responseText);
+                        console.log("Parsed JSON:", jsonResponse);
+                    } catch (e) {
+                        console.error("Invalid JSON Response:", xhr.responseText);
+                    }
                 }
-
-                $('#reservedModal').modal('show'); 
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", status, error);
-                console.log("Response Text:", xhr.responseText);
-                try {
-                    const jsonResponse = JSON.parse(xhr.responseText);
-                    console.log("Parsed JSON:", jsonResponse);
-                } catch (e) {
-                    console.error("Invalid JSON Response:", xhr.responseText);
-                }
-            }
+            });
         });
     });
-});
 
 </script>

@@ -149,7 +149,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
                 </select>
                </div> -->
             <div>
-                <?= $this->load->view('admin/component/base_table', ['table' => $table], true) ?>
+                <?= $this->load->view('admin/component/reservation/base_table', ['table' => $table], true) ?>
             </div>
         </div>
     </div>

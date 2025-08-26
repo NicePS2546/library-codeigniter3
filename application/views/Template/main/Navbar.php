@@ -89,7 +89,7 @@
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <?php if($admin_info){
-              echo '<a class="dropdown-item " href="'.base_url('index.php/admin').'">หน้า Admin</a>';
+              echo '<a class="dropdown-item " href="'.base_url('index.php/admin').'">หน้าผู้ดูแล</a>';
               } ?>  
               <a class="dropdown-item" href="<?= base_url('index.php/user/history') ?>">ประวัติการจอง</a>
               <a class="dropdown-item" href="<?= base_url('index.php/sso/logout') ?>">ออกจากระบบ</a>

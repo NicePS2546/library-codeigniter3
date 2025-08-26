@@ -21,7 +21,8 @@ class VdoModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); // return as object array
     }
-    public function statistic_services_date_range($start_date, $end_date,$s_id)
+   
+    public function statistic_services_date_range($start_date, $end_date, $s_id)
     {
         $this->db->select('st_id, COUNT(*) as reservation_count, SUM(total_pp) as total_people');
         $this->db->from($this->table);
@@ -33,7 +34,58 @@ class VdoModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array(); // return as object array
     }
-       public function activeReserv($reserv_id)
+    public function update_data($reservationId, $data)
+    {
+        $this->db->where('reserv_id', $reservationId);
+        return $this->db->update($this->table, $data);
+    }
+    public function Cancel_Reserv($reserv_id, $row)
+    {
+        $this->db->where('reserv_id', $reserv_id);
+        $current_date_time = date("Y-m-d H:i:s");
+        $current_date = date("Y-m-d");
+        $created = strtotime($row['created_at']); // row created time as timestamp
+        $now = strtotime($current_date_time);
+
+        $config = function ($name) {
+            return $this->config->item($name);
+        };
+        $current_time = $config('fixed_time');
+
+        if ($config('stage') == 'Development') {
+            $current_date = $config('fixed_date');
+            $now = strtotime($current_date . ' ' . $config('fixed_time'));
+            $current_date_time = "$current_date $current_time";
+        }
+        ;
+        // echo "<pre>";
+        // echo $now. '<br>';
+        // echo $created. '<br>';
+        // echo $current_date_time. '<br>';
+        // echo "</pre>";
+        // exit();
+
+        if (($now - $created) >= 600) {
+            $data = [
+                'r_status' => 'cancel',
+                'pass_checkmark' => 1,
+                'update_at' => $current_date_time
+            ];
+        } else {
+            $data = [
+                'r_status' => 'cancel',
+                'pass_checkmark' => 0,
+                'update_at' => $current_date_time,
+
+            ];
+        }
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+        // exit();
+        return $this->db->update($this->table, $data);
+    }
+    public function activeReserv($reserv_id)
     {
         $this->db->where_in('reserv_id', $reserv_id)
             ->set('r_status', 'actived')
@@ -71,41 +123,41 @@ class VdoModel extends CI_Model
         $this->db->from('tbn_room_vdo');
         $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
         $this->db->where('tbn_vdo_reserv.r_status', $status);
-        
+
         $query = $this->db->get();
 
         return $query->result_array();
     }
-    public function get_all_reserved_expired($status='expired')
+    public function get_all_reserved_expired($status = 'expired')
     {
         $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
         $this->db->from('tbn_room_vdo');
         $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
         $this->db->where('tbn_vdo_reserv.r_status', $status);
-        
+
         $query = $this->db->get();
 
         return $query->result_array();
     }
-    public function get_all_by_reserv_id($st_id,$status = ['expired', 'deleted'])
+    public function get_all_by_reserv_id($st_id, $status = ['expired', 'deleted'])
     {
         $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
         $this->db->from('tbn_room_vdo');
         $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
         $this->db->where_in('tbn_vdo_reserv.r_status', $status);
         $this->db->where('tbn_vdo_reserv.st_id', $st_id);
-    
+
         $query = $this->db->get();
 
         return $query->result_array();
     }
-	public function delete_by_id($reserv_id)
+    public function delete_by_id($reserv_id)
     {
         $this->db->where('reserv_id', $reserv_id);
         // Deleting the record
         return $this->db->delete($this->table);
     }
-    public function get_reserved_row_view($id,$reserved_id)
+    public function get_reserved_row_view($id, $reserved_id)
     {
         $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
         $this->db->from('tbn_room_vdo');
@@ -116,13 +168,14 @@ class VdoModel extends CI_Model
         return $query->row_array(); // Returns the result as an array
 
     }
-    public function get_reserved_sole($id){
+    public function get_reserved_sole($id)
+    {
         $this->db->where('reserv_id', $id);
         $query = $this->db->get($this->table);
         return $query->row_array(); // Returns the result as an array
 
     }
-        public function check_duplicate($st_id)
+    public function check_duplicate($st_id)
     {
         $this->db->select('*');
         $this->db->from('tbn_vdo_reserv');
@@ -144,16 +197,18 @@ class VdoModel extends CI_Model
 
         return $query->result_array();
     }
-    public function get_by_room_numb ($r_id){
-      
+    public function get_by_room_numb($r_id)
+    {
+
         $this->db->select('*');
         $this->db->from($this->table);
-        $this->db->where('r_id',$r_id);
-        $this->db->where('r_status','actived');
+        $this->db->where('r_id', $r_id);
+        $this->db->where('r_status', 'actived');
         $query = $this->db->get();
         return $query->result_array();
     }
-    public function check_time_duplicate($r_id, $start_time, $exp_time) {
+    public function check_time_duplicate($r_id, $start_time, $exp_time)
+    {
         $this->db->where('r_id', $r_id);
         $this->db->where('r_date', date('Y-m-d')); // Check for today
         $this->db->where('r_status', 'actived');
@@ -161,7 +216,7 @@ class VdoModel extends CI_Model
             start_time < '$exp_time' 
             AND exp_time > '$start_time'
         )", NULL, FALSE);
-    
+
         $query = $this->db->get($this->table);
         return $query->num_rows() > 0; // TRUE if overlapping reservation exists
     }
@@ -178,9 +233,15 @@ class VdoModel extends CI_Model
 
     public function reserve($data)
     {
-        return $this->db->insert('tbn_vdo_reserv', $data);
+        $this->db->insert('tbn_vdo_reserv', $data);
+        return $this->db->insert_id(); // returns the last inserted ID
     }
-
+    public function get_by_reserved_id($reserv_id)
+    {
+        $this->db->select('created_at');
+        $this->db->where('reserv_id', $reserv_id);
+        return $this->db->get($this->table)->row_array();
+    }
     public function get_past_reservations($currentDateTime)
     {
         $currentDate = date('Y-m-d', strtotime($currentDateTime));
@@ -205,7 +266,7 @@ class VdoModel extends CI_Model
     }
     public function update_expire($reservationId, $expire_by_time = true)
     {
-		$data = [];
+        $data = [];
         if ($expire_by_time) {
             $data = [
                 'r_status' => 'expired',
@@ -244,7 +305,7 @@ class VdoModel extends CI_Model
         return $query->result_array();
     }
 
-    
+
 
     public function get_closest_time($r_id)
     {
@@ -271,27 +332,28 @@ class VdoModel extends CI_Model
             }, $reservedSlots);
 
             $availableSlots = array_diff($validSlots, $reservedSlotRanges);
-            return $this->get_closest_available_slot($availableSlots,  $current_time);
+            return $this->get_closest_available_slot($availableSlots, $current_time);
         } catch (Exception $e) {
             log_message('error', 'Error in fetch_available_slots: ' . $e->getMessage());
             return null;
         }
     }
 
-    protected function get_closest_available_slot($allSlots,  $currentTime) {
+    protected function get_closest_available_slot($allSlots, $currentTime)
+    {
         $closestSlot = null;
         $smallestDiff = PHP_INT_MAX;
-    
+
         $currentTimestamp = strtotime($currentTime);
-    
+
         foreach ($allSlots as $slot) {
             list($startTime, $endTime) = explode('-', $slot);
             $slotStartTimestamp = strtotime($startTime);
-    
+
             // Check if the slot is in the future
             if ($slotStartTimestamp >= $currentTimestamp) {
                 $timeDiff = $slotStartTimestamp - $currentTimestamp;
-    
+
                 // Update if this slot is closer than the previously found closest
                 if ($timeDiff < $smallestDiff) {
                     $smallestDiff = $timeDiff;
@@ -299,8 +361,8 @@ class VdoModel extends CI_Model
                 }
             }
         }
-    
-        return $closestSlot  ;
+
+        return $closestSlot;
     }
 
     public function batch_update_status($ids, $status)
@@ -308,12 +370,12 @@ class VdoModel extends CI_Model
         if (empty($ids)) {
             return false;
         }
-    
+
         // อัปเดตค่า r_status ในตาราง โดยใช้ WHERE IN()
         $this->db->where_in('reserv_id', $ids)
-                 ->set('r_status', $status)
-                 ->update($this->table);
-    
+            ->set('r_status', $status)
+            ->update($this->table);
+
         return $this->db->affected_rows() > 0;
     }
 
@@ -321,29 +383,30 @@ class VdoModel extends CI_Model
     {
         $this->db->where('reserv_id', $reserv_id);
         $this->db->set('r_status', 'deleted');
-    
+
         return $this->db->update($this->table);
     }
 
 
     public function get_data_by_date_range($start_date, $end_date)
-{
-    // Select required columns and sum `total_pp` and count rows for reservations
-    $this->db->select('SUM(total_pp) AS total_people, COUNT(*) AS total_reservations');
-    $this->db->from($this->table);
-    // Add a WHERE condition for the date range
-    $this->db->where('r_date >=', $start_date); // Filter by start date
-    $this->db->where('r_date <=', $end_date);   // Filter by end date
-    
-    // Run the query
-    $query = $this->db->get();
+    {
+        // Select required columns and sum `total_pp` and count rows for reservations
+        $this->db->select('SUM(total_pp) AS total_people, COUNT(*) AS total_reservations');
+        $this->db->from($this->table);
+        // Add a WHERE condition for the date range
+        $this->db->where('r_date >=', $start_date); // Filter by start date
+        $this->db->where('r_date <=', $end_date);   // Filter by end date
 
-    // Return the result
-    return $query->row_array(); // Returns a single row of results
-}
+        // Run the query
+        $query = $this->db->get();
+
+        // Return the result
+        return $query->row_array(); // Returns a single row of results
+    }
 
 
-    public function get_vdo_reservations_by_month($year, $s_id) {
+    public function get_vdo_reservations_by_month($year, $s_id)
+    {
         $this->db->select('MONTH(r_date) AS month, SUM(total_pp) AS total_people, COUNT(*) AS total_reservations, SUM(TIMESTAMPDIFF(HOUR, start_time, exp_time)) AS total_hours');
         $this->db->from('tbn_vdo_reserv');
         $this->db->where('YEAR(r_date)', $year);
@@ -351,16 +414,16 @@ class VdoModel extends CI_Model
         $this->db->group_by('MONTH(r_date)');
         $this->db->order_by('month');
         $query = $this->db->get();
-    
+
         $data = $query->result_array();
-    
+
         // Initialize the chart data with zeros for all 12 months
         $chartData = [
             array_fill(0, 12, 0), // total_pp
             array_fill(0, 12, 0), // total_reservations
             array_fill(0, 12, 0)  // total_hours
         ];
-    
+
         // Loop through the data and populate the corresponding month index
         foreach ($data as $row) {
             $monthIndex = (int) $row['month'] - 1; // Convert to 0-based index
@@ -368,17 +431,17 @@ class VdoModel extends CI_Model
             $chartData[1][$monthIndex] = (int) $row['total_reservations']; // total_reservations
             $chartData[2][$monthIndex] = (int) $row['total_hours'];        // total_hours
         }
-    
+
         return array_values($chartData);
     }
-    
+
     public function get_statistic_by_day($date)
-    { 
-        $this->db->select( "SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
+    {
+        $this->db->select("SUM(total_pp) AS total_people, COUNT(*) AS total_reservations");
         $this->db->from($this->table);
         $this->db->where("DATE(created_at)", $date); // Extract only the DATE part
-        
-    
+
+
         $query = $this->db->get();
         return $query->result_array(); // Returns an array of results
     }

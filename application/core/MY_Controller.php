@@ -1,17 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class MY_Controller extends CI_Controller{
-    public function __construct()
-    {
-        parent::__construct();
+class MY_Controller extends CI_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
 
-        // Load anything global you want here, e.g., helpers, libraries
-        // $this->load->helper('url');
-        // $this->load->library('session');
-    }
+		// Load anything global you want here, e.g., helpers, libraries
+		// $this->load->helper('url');
+		// $this->load->library('session');
+	}
 
-    public function view($view, $data = [], $return = false)
+	public function view($view, $data = [], $return = false)
 	{
 		return $this->load->view($view, $data, $return);
 	}
@@ -30,8 +31,8 @@ class MY_Controller extends CI_Controller{
 		// print_r($get_sys_time);
 		// echo "</pre>";
 		// exit();
-		
-		
+
+
 		// Layout structure
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
@@ -63,10 +64,14 @@ class MY_Controller extends CI_Controller{
 		}
 		$holiday = $this->get_holiday($current_date);
 		$day = getDay($current_date);
+		// echo '<pre>';
 		// print_r($holiday);
+		// // print_r($current_date);
+		// echo '</pre>';
 		// exit();
+		
 		if ($day == "Saturday" || $holiday && !in_array(true, [$reservPage['music'], $reservPage['vdo'], $reservPage['mini']], true)) {
-			$layout['notice'] = $this->view('component/holiday', ['row'=> $holiday], true);
+			$layout['notice'] = $this->view('component/holiday', ['row' => $holiday], true);
 		} else if ($currentTime < $sys_time['start_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', ['time' => $sys_time['start_sys_time']], true);
 		} else if ($currentTime > $sys_time['end_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
@@ -115,7 +120,7 @@ class MY_Controller extends CI_Controller{
 		$day = getDay($current_date);
 		$holiday = $this->get_holiday($current_date);
 		if ($day == "Saturday" || $holiday) {
-			$layout['notice'] = $this->view('component/holiday', ['row'=> $holiday], true);
+			$layout['notice'] = $this->view('component/holiday', ['row' => $holiday], true);
 		} else if ($currentTime < $sys_time['start_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
 			$layout['notice'] = $this->view('component/not_in_time', ['time' => $sys_time['start_sys_time']], true);
 		} else if ($currentTime > $sys_time['end_sys_time'] && ($page['index'] || $page['music'] || $page['vdo'] || $page['mini'])) {
@@ -518,15 +523,27 @@ class MY_Controller extends CI_Controller{
 
 	}
 
-	
+
 	public function checkSystemTime()
 	{
-		$sysTime = $this->getTimeSystem(1);
+		// $sysTime = $this->getTimeSystem(1);
+		// $current_time = strtotime(date('H:i:s')); // current time as timestamp
+		// $start_time = strtotime($sysTime['start_sys_time']);
+		// $end_time = strtotime($sysTime['end_sys_time']);
+		
+		
+		// if ($this->config->item('stage') == "Development") {
+		// 	$fixed_time = $this->config->item('fixed_time');
+		// 	$current_time = strtotime($fixed_time);
+		// }
+
+		$getSysTime = $this->getTimeSystem(1);
+		$sysTime = $getSysTime['data'];
 		$current_time = date("H:i");
 		if ($this->config->item('stage') == "Development") {
 			$current_time = $this->config->item('fixed_time');
 		}
-
+		
 		if ($current_time < $sysTime['start_sys_time']) {
 			$data = [
 				'message' => 'too early',
@@ -548,22 +565,25 @@ class MY_Controller extends CI_Controller{
 		}
 		return $data;
 	}
-	
-	public function checkStage(){
-		if($this->config->item('stage')== 'Development'){
+
+	public function checkStage()
+	{
+		if ($this->config->item('stage') == 'Development') {
 			return [
 				'stage' => $this->config->item('stage'),
-				'fixed_time'=>$this->confi->item('fixed_time'),
-				'fixed_date'=>$this->confi->item('fixed_date'),
+				'fixed_time' => $this->confi->item('fixed_time'),
+				'fixed_date' => $this->confi->item('fixed_date'),
 
 			];
-		}		
+		}
 	}
-    public function get_holiday ($currentDate){
-		$holiday_model = $this->Model('','Holiday_Model',false);
-		return $holiday_model->getDate($currentDate);
+	public function get_holiday($currentDate)
+	{
+		$formatted = date('Y-m-d', strtotime($currentDate));
+		$holiday_model = $this->Model('', 'Holiday_Model', false);
+		return $holiday_model->getDate($formatted);
 	}
-   public function SweeetRender($view, $data)
+	public function SweeetRender($view, $data)
 	{
 		$type = $this->get_type();
 		$this->check_expire_music(); // check expire for music
@@ -571,14 +591,14 @@ class MY_Controller extends CI_Controller{
 		$this->check_expire_mini(); // check expire for music
 		$get_sys_time = $this->getTimeSystem(1);
 		$sys_time = $get_sys_time['data'];
-		
+
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
 			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model' => $data['model'], 'type' => $type], true), // Return navbar as string
 			'content' => $this->view($view, $data, true), // Return content as string
 		];
 
-		
+
 		$data['layout'] = $layout;
 
 		return $this->view("Template/main/Layout", $data);
