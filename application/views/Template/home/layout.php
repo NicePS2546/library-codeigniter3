@@ -262,12 +262,41 @@
         return false; // Stop execution if input is empty
       }
 
+        // AJAX call
+        $.ajax({
+            url: '<?= site_url("music/get/user") ?>', // API endpoint
+            type: 'POST',
+            data: { uid: uid },
+            success: function (response) {
+                const data = JSON.parse(response);
 
-      setTimeout(function () {
-        document.getElementById('modal-form').submit(); // Submit the form
-      }, 800); // Wait 2 seconds (2000ms)
+                if (data.message === "fail" || !data.userdata) {
 
-      return false; // Prevent default submission until AJAX completes
+                    showSweet('warn', 'รหัสผู้ใช้ผิดหรือไม่พบผู้ใช้งาน') // Show error toast
+                    return false; // Stop execution if validation fails
+                }
+
+                Toast.fire({
+                    icon: "success",
+                    title: "กำลังดำเนินการ"
+                });
+                setTimeout(function () {
+                    document.getElementById('modal-form').submit(); // Submit the form
+                }, 800); // Wait 2 seconds (2000ms)
+            },
+            error: function () {
+                showSweet('error', 'เว็บไซต์ขัดข้องโปรดติดต่อเจ้าหน้าที่')
+                return false; // Stop execution on error
+            }
+        });
+
+        return false; // Prevent default submission until AJAX completes
+
+      // setTimeout(function () {
+      //   document.getElementById('modal-form').submit(); // Submit the form
+      // }, 800); // Wait 2 seconds (2000ms)
+
+      // return false; // Prevent default submission until AJAX completes
     }
 
   </script>

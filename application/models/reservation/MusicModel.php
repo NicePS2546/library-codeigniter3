@@ -24,6 +24,7 @@ class MusicModel extends CI_Model
         // Return the reserved slots as an array
         return $query->result_array();
     }
+    
     public function get_reserved($id, $status)
     {
         $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
@@ -401,12 +402,12 @@ class MusicModel extends CI_Model
     {
         try {
             $current_date = date('Y-m-d');
+            $current_time = date("H:i");
             $stage = $this->config->item('stage');
             if ($stage == "Development") {
                 $current_time = $this->config->item('fixed_time');
-            } else {
-                $current_time = date("H:i");
-            }
+                $current_date = $this->config->item('fixed_date');
+            } 
             // Get the reserved slots from the model
             $reservedSlots = $this->get_reserved_slots($current_date, $r_id);
 

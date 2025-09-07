@@ -310,9 +310,10 @@ class VdoModel extends CI_Model
     public function get_closest_time($r_id)
     {
         try {
-            $current_date = date('Y-m-d');
+            
             $stage = $this->config->item('stage');
             $current_time = $stage == "Development" ? $this->config->item('fixed_time') : date("H:i");
+            $current_date = $stage == "Development" ? $this->config->item('fixed_date') : date('Y-m-d');
 
             $reservedSlots = $this->get_reserved_slots($current_date, $r_id);
             // $allSlots = [

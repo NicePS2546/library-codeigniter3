@@ -59,9 +59,9 @@
                         <div class="row mt-3">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="s_desc">คำอธิบายห้อง</label>
+                                    <label for="s_desc">คำอธิบาย</label>
                                     <textarea id="s_desc" name="s_desc" class="form-control"
-                                        placeholder="โปรดใส่คำอธิบายห้อง" cols="3" rows="3"
+                                        placeholder="โปรดใส่คำอธิบาย" cols="3" rows="3"
                                         ><?= $row['s_desc'] ?></textarea>
                                 </div>
                             </div>

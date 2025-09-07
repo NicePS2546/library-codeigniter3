@@ -26,7 +26,9 @@
 
         <?php else: ?>
             <p class="card-text"><?= $room['r_close_desc'] ?></p>
-        <?php endif; ?>
+        <?php endif; 
+        // print_r($aviliable_time['availableSlots']) 
+        ?>
 
         <div class="d-flex justify-content-center gap-3">
             <?php if (empty($aviliable_time['availableSlots'])): ?>

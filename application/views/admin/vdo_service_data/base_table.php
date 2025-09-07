@@ -132,7 +132,8 @@
             text: 'คุณแน่ใจใช่ใหมว่าจะลบบริการ ' + name + '?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'ปืด',
+             confirmButtonColor: '#d33',
+            confirmButtonText: 'ลบ',
             cancelButtonText: 'ยกเลิก',
         }).then((result) => {
             if (result.isConfirmed) {

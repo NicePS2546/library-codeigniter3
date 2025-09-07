@@ -119,7 +119,10 @@ class Vdo extends MY_Controller
         $this->load->model('reservation/MusicModel');
         $musicModel = $this->MusicModel;
 
-
+        $sys_time = $this->getTimeSystem(1);
+        $sys_time = $sys_time['data'];
+        print_r($sys_time);
+    
 
         $extension = "index.php/";
         $r_id = $this->input->post('r_id');  // Room number
@@ -129,12 +132,12 @@ class Vdo extends MY_Controller
 
         $time_slot = $this->input->post('time_slot'); // Selected time slot
         $currentDate = date('Y-m-d');  // Get the current date
-
+        $currentTime = date('H:i');  // Get the current time
         $stage = $this->config->item('stage');
+
         if ($stage == "Development") {
             $currentTime = $this->config->item('fixed_time');
-        } else {
-            $currentTime = date('H:i');  // Get the current time
+            $currentDate = $this->config->item('fixed_date');
         }
 
 
@@ -172,7 +175,7 @@ class Vdo extends MY_Controller
             'update_at' => date('Y-m-d H:i:s')
         ];
         $sweet = '';
-        $day = getDay(date("Y-m-d H:i"));
+        $day = getDay($currentDate);
         if ($day === "Saturday") {
             $sweet = '<script>
             setTimeout(function() {
@@ -188,7 +191,7 @@ class Vdo extends MY_Controller
             </script>';
             return $this->sweet($sweet, 'Video Reservation', 'vdo');  // Stop execution if validation fails
         }
-        if ($currentTime > "16:00") {
+        if ($currentTime > $sys_time['end_sys_time']) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -202,7 +205,7 @@ class Vdo extends MY_Controller
             }, 1000);
             </script>';
             return $this->sweet($sweet, 'Video Reservation', 'vdo');  // Stop execution if validation fails
-        } else if ($currentTime < "09:00") {
+        } else if ($currentTime < $sys_time['start_sys_time']) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -293,7 +296,7 @@ class Vdo extends MY_Controller
         ];
 
         $logging = $log_model->insert($data);
-         if (!$logging) {
+        if (!$logging) {
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -349,11 +352,12 @@ class Vdo extends MY_Controller
 
             // Get today's date or use the date passed by the user
             $current_date = date('Y-m-d');
+            $current_time = date("H:i");
+
             $stage = $this->config->item('stage');
             if ($stage == "Development") {
                 $current_time = $this->config->item('fixed_time');
-            } else {
-                $current_time = date("H:i");
+                $current_date = $this->config->item('fixed_date');
             }
             // Get the reserved slots from the model
             $reservedSlots = $this->VdoModel->get_reserved_slots($current_date, $r_id);
@@ -394,7 +398,7 @@ class Vdo extends MY_Controller
             //     'closest_time'=>$closest_time
             // ]);
 
-            $day = getDay(date("Y-m-d H:i"));
+            $day = getDay($current_date);
 
             if ($day == "Saturday") {
                 echo json_encode([
@@ -498,11 +502,11 @@ class Vdo extends MY_Controller
 
             // Get today's date or use the date passed by the user
             $current_date = date('Y-m-d');
+            $current_time = date("H:i");
             $stage = $this->config->item('stage');
             if ($stage == "Development") {
                 $current_time = $this->config->item('fixed_time');
-            } else {
-                $current_time = date("H:i");
+                $current_date = $this->config->item('fixed_date');
             }
             // Get the reserved slots from the model
             $reservedSlots = $this->VdoModel->get_reserved_slots($current_date, $r_id);

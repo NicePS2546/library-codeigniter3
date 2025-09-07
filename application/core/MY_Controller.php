@@ -594,13 +594,13 @@ class MY_Controller extends CI_Controller
 
 		$layout = [
 			'title' => isset($data['title']) ? $data['title'] : "Default Title",  // Default title if not provided
-			'navbar' => $this->view('Template/main/Navbar', ['page' => $data['page'], 'model' => $data['model'], 'type' => $type], true), // Return navbar as string
+			'navbar' => $this->view('Template/Sweet_al/Navbar', ['page' => $data['page'], 'model' => $data['model'], 'type' => $type], true), // Return navbar as string
 			'content' => $this->view($view, $data, true), // Return content as string
 		];
 
 
 		$data['layout'] = $layout;
 
-		return $this->view("Template/main/Layout", $data);
+		return $this->view("Template/Sweet_al/Layout", $data);
 	}
 }

@@ -173,7 +173,8 @@
             html: 'คุณแน่ใจใช่ไหมว่าจะปิดห้องของ <b>' + name + '</b><br>เพราะ ' + reasonText + ' ?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'ปืด',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'ปิด',
             cancelButtonText: 'ยกเลิก',
         }).then((result) => {
             if (result.isConfirmed) {

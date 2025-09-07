@@ -46,6 +46,8 @@ if (!$this->session->has_userdata('is_friend')) {
 
                     $room['isFree'] = $model->get_reserv_in_Time_range($room['r_id']);
                     $closest = $model->get_closest_time($room['r_id']);
+                    //  print_r($closest);
+                    
                     list($closestStartTime, $closestEndTime) = explode('-', $closest);
                     ?>
                     <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-5">

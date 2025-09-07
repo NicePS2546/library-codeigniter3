@@ -138,6 +138,7 @@
             text: 'คุณแน่ใจใช่ใหมว่าจะลบห้องของ ' + name + '?',
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#d33',
             confirmButtonText: 'ลบ',
             cancelButtonText: 'ยกเลิก',
         }).then((result) => {
@@ -170,6 +171,7 @@
             text: 'คุณแน่ใจใช่ใหมว่าจะลบทั้งหมด ?',
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#d33',
             confirmButtonText: 'ลบ',
             cancelButtonText: 'ยกเลิก',
         }).then((result) => {

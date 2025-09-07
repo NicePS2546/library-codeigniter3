@@ -227,6 +227,7 @@ $card_res = "col-12 col-sm-2 col-md-2 col-lg-1";
             text: msg + name + '?',
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: status == 1 ? '#d33': '#145eb3',
             confirmButtonText: status == 1 ? 'ปิด' : 'เปิด',
             cancelButtonText: 'ยกเลิก',
         }).then((result) => {

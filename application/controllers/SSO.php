@@ -14,7 +14,7 @@ class SSO extends MY_Controller
     public function index()
     {
         // Retrieve POST data
-        $state = "Deployment";
+        $state = "x";
         if ($state === "Deployment") {
             $st_id = $this->input->post('st_id');
             $password = $this->input->post('password');
@@ -137,8 +137,8 @@ class SSO extends MY_Controller
             $this->session->set_userdata([
                 'admin_data' => [
                     'uid' => "654230015",
-                    'fname' => "Nice",
-                    'lname' => "Pasit"
+                    'fname' => "Dev",
+                    'lname' => "TEST"
                 ]
             ]);
             $this->session->set_flashdata('success', "ยินดีต้อนรับผู้พัฒนา Nice Pasit");

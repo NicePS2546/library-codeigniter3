@@ -479,24 +479,11 @@ class Music extends MY_Controller
                 $current_date = $this->config->item('fixed_date');
             } else {
                 $current_time = date("H:i");
-                $current_date = date('Y-m-d H:i');
+                $current_date = date('Y-m-d');
             }
             // Get the reserved slots from the model
             $reservedSlots = $this->MusicModel->get_reserved_slots($current_date, $r_id);
-
-
-
-            // Define all possible slots
-            // $allSlots = [
-            //     '09:00-10:00',
-            //     '10:00-11:00',
-            //     '11:00-12:00',
-            //     '12:00-13:00',
-            //     '13:00-14:00',
-            //     '14:00-15:00',
-            //     '15:00-16:00',
-            //     // Add more slots as needed
-            // ];
+            
 
             $allSlots = $this->get_all_time(1);
 
@@ -536,7 +523,9 @@ class Music extends MY_Controller
                     'availableSlots' => array_values($availableSlots), // Available slots
                     'rows_fromtable' => $reservedSlotRanges, // Reserved slots
                     'date' => $current_date,
-                    'closest_time' => $closest_time
+                    'closest_time' => $closest_time,
+                    'time'=>$current_time,
+                    'msg'=>'success'
                 ]);
             }
 
@@ -596,12 +585,16 @@ class Music extends MY_Controller
 
             // Get today's date or use the date passed by the user
             $current_date = date('Y-m-d');
+            $current_time = date("H:i");
+
             $stage = $this->config->item('stage');
             if ($stage == "Development") {
                 $current_time = $this->config->item('fixed_time');
-            } else {
-                $current_time = date("H:i");
+                $current_date= $this->config->item('fixed_date');
             }
+            //  $current_time = date("H:i");
+            //  print($current_time);
+
             // Get the reserved slots from the model
             $reservedSlots = $this->MusicModel->get_reserved_slots($current_date, $r_id);
 

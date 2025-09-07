@@ -33,7 +33,7 @@ if (!empty($rooms)) { ?>
                 $room['isFree'] = $model->get_reserv_in_Time_range($room['r_id']);
                 $closest = $model->get_closest_time($room['r_id']);
                 list($closestStartTime, $closestEndTime) = explode('-', $closest);
-
+                // print_r($closest);
                 ?>
 
                 <div class="col-12 col-sm-6 pb-4 col-md-5 col-lg-3">

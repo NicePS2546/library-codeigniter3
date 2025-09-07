@@ -134,13 +134,14 @@
 </script>
 
 <script>
-    function showDeleteConfirmation(r_id) {
+    function showDeleteConfirmation(r_id,r_number) {
     Swal.fire({
         title: 'คุณแน่ใจหรือไม่?',
-        text: 'คุณแน่ใจใช่ไหมว่าจะลบห้องหมายเลขที่ ' + r_id + '?',
+        text: 'คุณแน่ใจใช่ไหมว่าจะลบห้องหมายเลขที่ ' + r_number + '?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'ลบ',
+        confirmButtonColor: '#d33',
         cancelButtonText: 'ยกเลิก',
     }).then((result) => {
         if (result.isConfirmed) {
@@ -171,7 +172,8 @@
 document.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-button')) {
         const r_id = event.target.getAttribute('data-r-id');
-        showDeleteConfirmation(r_id);
+        const r_number = event.target.getAttribute('data-r-numb');
+        showDeleteConfirmation(r_id,r_number);
     }
 });
 </script>

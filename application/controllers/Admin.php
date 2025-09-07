@@ -13,9 +13,12 @@ class Admin extends MY_Controller
 
         $this->load->model('OnlineUser_model');
         $online_model = $this->OnlineUser_model;
-
+        
         $day = date('Y-m-d');
-
+        $stage = $this->config->item("stage");
+        if($stage == "Development"){
+            $day = $this->config->item("fixed_date");
+        }
         $music = $this->Model('reservation', 'MusicModel', true)->get_statistic_by_day($day);
         $vdo = $this->Model('reservation', 'VdoModel', true)->get_statistic_by_day($day);
         $mini = $this->Model('reservation', 'MiniModel', true)->get_statistic_by_day($day);
