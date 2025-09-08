@@ -2,7 +2,7 @@
 class Holiday_Model extends CI_Model
 {
 
-    public $table = 'tbn_holiday';
+    public $table = 'tbn_holiday_present';
     public $primaryKey = 'r_id';
 
     public $allowedFields = [
@@ -83,12 +83,21 @@ class Holiday_Model extends CI_Model
         return $this->db->get($this->table)->row_array();
     }
 
-
-
     public function deleteHoliday($date)
     {
         $this->db->where('date', $date); // Replace 'id' with your table's primary key column
         return $this->db->delete($this->table); // Replace 'rooms' with your table name
     }
+
+    public function batch_delete_old_date()
+{
+    $current_date = date('Y-m-d');
+    
+    $this->db->where('date <', $current_date);
+    $this->db->delete($this->table);
+
+    return $this->db->affected_rows() > 0;
+}
+
 }
 ?>

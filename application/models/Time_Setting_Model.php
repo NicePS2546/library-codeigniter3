@@ -1,7 +1,7 @@
 <?php
 class Time_Setting_Model extends CI_Model {
 
-    public $table = 'tbn_time_slot_settings';
+    public $table = 'tbn_time_slot_settings_present';
     public $primaryKey = 't_id';
     public $service_id = 's_id';
     public $allowedFields = [

@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class MusicModel extends CI_Model
 {
-    protected $table = 'tbn_music_reserv';
+    protected $table = 'tbn_music_reserv_present';
     protected $primaryKey = 'r_id';
     // Constructor
     public function __construct()
@@ -15,7 +15,7 @@ class MusicModel extends CI_Model
     {
         // Query to fetch reserved start_time and exp_time for the given date
         $this->db->select('start_time, exp_time');
-        $this->db->from('tbn_music_reserv');
+        $this->db->from('tbn_music_reserv_present');
         $this->db->where('r_date', $r_date);
         $this->db->where('r_id', $r_id);
         $this->db->where('r_status', 'actived');
@@ -27,11 +27,11 @@ class MusicModel extends CI_Model
     
     public function get_reserved($id, $status)
     {
-        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
-        $this->db->where('tbn_music_reserv.r_status', $status);
-        $this->db->where('tbn_room_music.r_id', $id);
+        $this->db->select('tbn_room_music_present.r_number, tbn_music_reserv_present.*');
+        $this->db->from('tbn_room_music_present');
+        $this->db->join('tbn_music_reserv_present', 'tbn_room_music_present.r_id = tbn_music_reserv_present.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv_present.r_status', $status);
+        $this->db->where('tbn_room_music_present.r_id', $id);
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }
@@ -43,31 +43,31 @@ class MusicModel extends CI_Model
     }
     public function get_all_reserved($status = 'expired')
     {
-        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
-        $this->db->where('tbn_music_reserv.r_status', $status);
+        $this->db->select('tbn_room_music_present.r_number, tbn_music_reserv_present.*');
+        $this->db->from('tbn_room_music_present');
+        $this->db->join('tbn_music_reserv_present', 'tbn_room_music_present.r_id = tbn_music_reserv_present.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv_present.r_status', $status);
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
 
     }
     public function get_all_reserved_expired($status = 'expired')
     {
-        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
-        $this->db->where('tbn_music_reserv.r_status', $status);
+        $this->db->select('tbn_room_music_present.r_number, tbn_music_reserv_present.*');
+        $this->db->from('tbn_room_music_present');
+        $this->db->join('tbn_music_reserv_present', 'tbn_room_music_present.r_id = tbn_music_reserv_present.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv_present.r_status', $status);
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
 
     }
     public function get_all_by_reserv_id($st_id, $status = ['expired', 'deleted'])
     {
-        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
-        $this->db->where_in('tbn_music_reserv.r_status', $status);
-        $this->db->where('tbn_music_reserv.st_id', $st_id);
+        $this->db->select('tbn_room_music_present.r_number, tbn_music_reserv_present.*');
+        $this->db->from('tbn_room_music_present');
+        $this->db->join('tbn_music_reserv_present', 'tbn_room_music_present.r_id = tbn_music_reserv_present.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where_in('tbn_music_reserv_present.r_status', $status);
+        $this->db->where('tbn_music_reserv_present.st_id', $st_id);
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }
@@ -119,21 +119,21 @@ class MusicModel extends CI_Model
     }
     public function get_reserved_row_view($id, $reserved_id)
     {
-        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
-        $this->db->where('tbn_music_reserv.reserv_id', $reserved_id);
-        $this->db->where('tbn_room_music.r_id', $id);
+        $this->db->select('tbn_room_music_present.r_number, tbn_music_reserv_present.*');
+        $this->db->from('tbn_room_music_present');
+        $this->db->join('tbn_music_reserv_present', 'tbn_room_music_present.r_id = tbn_music_reserv_present.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv_present.reserv_id', $reserved_id);
+        $this->db->where('tbn_room_music_present.r_id', $id);
         $query = $this->db->get();
         return $query->row_array(); // Returns the result as an array
 
     }
     public function get_reserved_row($id, $reserved_id)
     {
-        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
-        $this->db->where('tbn_music_reserv.reserv_id', $reserved_id);
+        $this->db->select('tbn_room_music_present.r_number, tbn_music_reserv_present.*');
+        $this->db->from('tbn_room_music_present');
+        $this->db->join('tbn_music_reserv_present', 'tbn_room_music_present.r_id = tbn_music_reserv_present.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->where('tbn_music_reserv_present.reserv_id', $reserved_id);
 
         $query = $this->db->get();
         return $query->row_array(); // Returns the result as an array
@@ -188,7 +188,7 @@ class MusicModel extends CI_Model
             AND exp_time > '$start_time'
         )", NULL, FALSE);
 
-        $query = $this->db->get('tbn_music_reserv');
+        $query = $this->db->get('tbn_music_reserv_present');
         return $query->num_rows() > 0; // TRUE if overlapping reservation exists
     }
 
@@ -200,7 +200,7 @@ class MusicModel extends CI_Model
             ->where('start_time <', $endTime)
             ->where('exp_time >', $startTime)
             ->where('r_status', 'actived') // Only active reservations
-            ->get('tbn_music_reserv');
+            ->get('tbn_music_reserv_present');
 
         if ($query->num_rows() > 0) {
             return false; // Conflict found
@@ -213,7 +213,7 @@ class MusicModel extends CI_Model
     public function reserve($data)
     {
 
-        $this->db->insert('tbn_music_reserv', $data);
+        $this->db->insert('tbn_music_reserv_present', $data);
         return $this->db->insert_id(); // returns the last inserted ID
     }
 
@@ -234,7 +234,7 @@ class MusicModel extends CI_Model
 
         // Query to select expired reservations
         $this->db->select('reserv_id, r_date, exp_time');
-        $this->db->from('tbn_music_reserv');
+        $this->db->from('tbn_music_reserv_present');
         $this->db->where('r_status', 'actived');
         $this->db->group_start()
             ->where('r_date <', $currentDate) // If the reservation date is in the past
@@ -255,7 +255,7 @@ class MusicModel extends CI_Model
     //     $currentTime = date('H:i');
     //     $currentTime = "11:01";
     //     $this->db->select('reserv_id, r_date');
-    //     $this->db->from('tbn_music_reserv');
+    //     $this->db->from('tbn_music_reserv_present');
     //     $this->db->where('r_status', 'actived');
     //     $this->db->where('r_date <', $currentDate); // Compare with current date only
 
@@ -275,7 +275,7 @@ class MusicModel extends CI_Model
             $currentTime = date('H:i');
         }
         $this->db->select('*');
-        $this->db->from('tbn_music_reserv');
+        $this->db->from('tbn_music_reserv_present');
         $this->db->where('r_id', $r_id);
         $this->db->where('start_time <=', $currentTime);
         $this->db->where('r_status', 'actived');
@@ -291,7 +291,7 @@ class MusicModel extends CI_Model
     //         'r_status' => 'expired',
     //     ];
     //     $this->db->where('reserv_id', $reservationId);  // Use the correct column name
-    //     return $this->db->update('tbn_music_reserv', $data);  // Update the status to expired
+    //     return $this->db->update('tbn_music_reserv_present', $data);  // Update the status to expired
     // }
 
     public function update_expire($reservationId, $expire_by_time = true)
@@ -309,7 +309,7 @@ class MusicModel extends CI_Model
         }
 
         $this->db->where('reserv_id', $reservationId);  // Use the correct column name
-        return $this->db->update('tbn_music_reserv', $data);  // Update the status to expired
+        return $this->db->update('tbn_music_reserv_present', $data);  // Update the status to expired
     }
     public function activeReserv($reserv_id)
     {

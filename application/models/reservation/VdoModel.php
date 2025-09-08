@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class VdoModel extends CI_Model
 {
-    protected $table = 'tbn_vdo_reserv';
+    protected $table = 'tbn_vdo_reserv_present';
     protected $primaryKey = 'r_id';
     // Constructor
     public function __construct()
@@ -97,7 +97,7 @@ class VdoModel extends CI_Model
     public function get_reserved_slots($r_date, $r_id)
     {
         $this->db->select('start_time, exp_time');
-        $this->db->from('tbn_vdo_reserv');
+        $this->db->from('tbn_vdo_reserv_present');
         $this->db->where('r_date', $r_date);
         $this->db->where('r_id', $r_id);
         $this->db->where('r_status', 'actived');
@@ -108,21 +108,21 @@ class VdoModel extends CI_Model
 
     public function get_reserved($id, $status)
     {
-        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
-        $this->db->from('tbn_room_vdo');
-        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
-        $this->db->where('tbn_vdo_reserv.r_status', $status);
-        $this->db->where('tbn_room_vdo.r_id', $id);
+        $this->db->select('tbn_room_vdo_present.r_number, tbn_vdo_reserv_present.*');
+        $this->db->from('tbn_room_vdo_present');
+        $this->db->join('tbn_vdo_reserv_present', 'tbn_room_vdo_present.r_id = tbn_vdo_reserv_present.r_id', 'inner');
+        $this->db->where('tbn_vdo_reserv_present.r_status', $status);
+        $this->db->where('tbn_room_vdo_present.r_id', $id);
         $query = $this->db->get();
 
         return $query->result_array();
     }
     public function get_all_reserved($status)
     {
-        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
-        $this->db->from('tbn_room_vdo');
-        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
-        $this->db->where('tbn_vdo_reserv.r_status', $status);
+        $this->db->select('tbn_room_vdo_present.r_number, tbn_vdo_reserv_present.*');
+        $this->db->from('tbn_room_vdo_present');
+        $this->db->join('tbn_vdo_reserv_present', 'tbn_room_vdo_present.r_id = tbn_vdo_reserv_present.r_id', 'inner');
+        $this->db->where('tbn_vdo_reserv_present.r_status', $status);
 
         $query = $this->db->get();
 
@@ -130,10 +130,10 @@ class VdoModel extends CI_Model
     }
     public function get_all_reserved_expired($status = 'expired')
     {
-        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
-        $this->db->from('tbn_room_vdo');
-        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
-        $this->db->where('tbn_vdo_reserv.r_status', $status);
+        $this->db->select('tbn_room_vdo_present.r_number, tbn_vdo_reserv_present.*');
+        $this->db->from('tbn_room_vdo_present');
+        $this->db->join('tbn_vdo_reserv_present', 'tbn_room_vdo_present.r_id = tbn_vdo_reserv_present.r_id', 'inner');
+        $this->db->where('tbn_vdo_reserv_present.r_status', $status);
 
         $query = $this->db->get();
 
@@ -141,11 +141,11 @@ class VdoModel extends CI_Model
     }
     public function get_all_by_reserv_id($st_id, $status = ['expired', 'deleted'])
     {
-        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
-        $this->db->from('tbn_room_vdo');
-        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
-        $this->db->where_in('tbn_vdo_reserv.r_status', $status);
-        $this->db->where('tbn_vdo_reserv.st_id', $st_id);
+        $this->db->select('tbn_room_vdo_present.r_number, tbn_vdo_reserv_present.*');
+        $this->db->from('tbn_room_vdo_present');
+        $this->db->join('tbn_vdo_reserv_present', 'tbn_room_vdo_present.r_id = tbn_vdo_reserv_present.r_id', 'inner');
+        $this->db->where_in('tbn_vdo_reserv_present.r_status', $status);
+        $this->db->where('tbn_vdo_reserv_present.st_id', $st_id);
 
         $query = $this->db->get();
 
@@ -159,11 +159,11 @@ class VdoModel extends CI_Model
     }
     public function get_reserved_row_view($id, $reserved_id)
     {
-        $this->db->select('tbn_room_vdo.r_number, tbn_vdo_reserv.*');
-        $this->db->from('tbn_room_vdo');
-        $this->db->join('tbn_vdo_reserv', 'tbn_room_vdo.r_id = tbn_vdo_reserv.r_id', 'inner');
-        $this->db->where('tbn_vdo_reserv.reserv_id', $reserved_id);
-        $this->db->where('tbn_room_vdo.r_id', $id);
+        $this->db->select('tbn_room_vdo_present.r_number, tbn_vdo_reserv_present.*');
+        $this->db->from('tbn_room_vdo_present');
+        $this->db->join('tbn_vdo_reserv_present', 'tbn_room_vdo_present.r_id = tbn_vdo_reserv_present.r_id', 'inner');
+        $this->db->where('tbn_vdo_reserv_present.reserv_id', $reserved_id);
+        $this->db->where('tbn_room_vdo_present.r_id', $id);
         $query = $this->db->get();
         return $query->row_array(); // Returns the result as an array
 
@@ -178,7 +178,7 @@ class VdoModel extends CI_Model
     public function check_duplicate($st_id)
     {
         $this->db->select('*');
-        $this->db->from('tbn_vdo_reserv');
+        $this->db->from('tbn_vdo_reserv_present');
         $this->db->where('st_id', $st_id);
         $this->db->where('r_status', 'actived');
         $query = $this->db->get();
@@ -226,14 +226,14 @@ class VdoModel extends CI_Model
             ->where('start_time <', $endTime)
             ->where('exp_time >', $startTime)
             ->where('r_status', 'actived')
-            ->get('tbn_vdo_reserv');
+            ->get('tbn_vdo_reserv_present');
 
         return $query->num_rows() === 0;
     }
 
     public function reserve($data)
     {
-        $this->db->insert('tbn_vdo_reserv', $data);
+        $this->db->insert('tbn_vdo_reserv_present', $data);
         return $this->db->insert_id(); // returns the last inserted ID
     }
     public function get_by_reserved_id($reserv_id)
@@ -251,7 +251,7 @@ class VdoModel extends CI_Model
             $currentTime = $this->config->item('fixed_time');
         }
         $this->db->select('reserv_id, r_date, exp_time');
-        $this->db->from('tbn_vdo_reserv');
+        $this->db->from('tbn_vdo_reserv_present');
         $this->db->where('r_status', 'actived');
         $this->db->group_start()
             ->where('r_date <', $currentDate)
@@ -280,7 +280,7 @@ class VdoModel extends CI_Model
         }
 
         $this->db->where('reserv_id', $reservationId);  // Use the correct 
-        return $this->db->update('tbn_vdo_reserv', $data);  // Update the status to expired
+        return $this->db->update('tbn_vdo_reserv_present', $data);  // Update the status to expired
     }
 
     public function expire_reserv($rows)
@@ -297,7 +297,7 @@ class VdoModel extends CI_Model
         $currentTime = $stage == "Development" ? $this->config->item('fixed_time') : date('H:i');
 
         $this->db->select('*');
-        $this->db->from('tbn_vdo_reserv');
+        $this->db->from('tbn_vdo_reserv_present');
         $this->db->where('r_id', $r_id);
         $this->db->where('start_time <', $currentTime);
         $this->db->where('r_status', 'actived');
@@ -409,7 +409,7 @@ class VdoModel extends CI_Model
     public function get_vdo_reservations_by_month($year, $s_id)
     {
         $this->db->select('MONTH(r_date) AS month, SUM(total_pp) AS total_people, COUNT(*) AS total_reservations, SUM(TIMESTAMPDIFF(HOUR, start_time, exp_time)) AS total_hours');
-        $this->db->from('tbn_vdo_reserv');
+        $this->db->from('tbn_vdo_reserv_present');
         $this->db->where('YEAR(r_date)', $year);
         $this->db->where('s_id', $s_id);
         $this->db->group_by('MONTH(r_date)');

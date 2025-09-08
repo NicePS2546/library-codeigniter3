@@ -2,7 +2,7 @@
 class Log_Model extends CI_Model
 {
 
-    public $table = 'tbn_reservation_log';
+    public $table = 'tbn_reservation_log_present';
     public $primaryKey = 'id';
 
     public $allowedFields = [

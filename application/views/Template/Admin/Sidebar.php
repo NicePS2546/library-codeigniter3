@@ -35,7 +35,7 @@
                   <p>สถิติประจำวัน</p>
                 </a>
               </li>
-              <li class="nav-item menu-open ">
+              <li class="nav-item <?= $page == "reserv_data" || $page == 'service_data'  || $page == "admin_data"  ? "menu-open" :"" || $page == "room_data" ? "menu-open" : '' ?>  ">
                 <a href="#" class="nav-link ">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>
@@ -77,7 +77,7 @@
                   <p>Theme Generate</p>
                 </a>
               </li> -->
-              <li class="nav-item menu-open  ">
+              <li class="nav-item <?= $page == "statistic" || $page == "netflix" || $page == "disney" || $page == "report_page"  ? "menu-open" : '' ?>  ">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>
@@ -113,7 +113,7 @@
                   
                 </ul>
               </li>
-              <li class="nav-item menu-open">
+              <li class="nav-item <?= $page == "setting"  ? "menu-open" : "" ?>">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>

@@ -1,7 +1,7 @@
 <?php
 class RoomMini extends CI_Model {
 
-    public $table = 'tbn_room_mini';
+    public $table = 'tbn_room_mini_present';
     public $primaryKey = 'r_id';
 
     public $allowedFields = [

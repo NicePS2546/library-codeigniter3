@@ -603,4 +603,9 @@ class MY_Controller extends CI_Controller
 
 		return $this->view("Template/Sweet_al/Layout", $data);
 	}
+
+	public function check_delete_old_date($holiday_model){
+        $result = $holiday_model->batch_delete_old_date();
+		
+    }
 }

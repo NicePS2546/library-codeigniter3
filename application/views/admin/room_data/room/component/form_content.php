@@ -7,7 +7,7 @@
 
 
 <div class="container mt-4">
-    <h1 class="text-center"><?= $row ?  'แก้ไขข้อมูล' : 'เพิ่มข้อมูลห้อง' ?></h1>
+    <h1 class="text-center"><?= $row ? 'แก้ไขข้อมูล' : 'เพิ่มข้อมูลห้อง' ?></h1>
     <div class="row">
         <div class="col-lg-7 mx-auto">
             <div class="card mt-2 p-4 bg-light">
@@ -20,7 +20,7 @@
                                 <div class="form-group">
                                     <label for="r_numb">หมายเลขห้อง</label>
                                     <input id="r_numb" type="text" name="r_numb" value="<?= $row['r_number'] ?>"
-                                        class="form-control" placeholder="โปรดใส่หมายเลขห้อง" >
+                                        class="form-control" placeholder="โปรดใส่หมายเลขห้อง">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -28,8 +28,12 @@
                                     <label for="status">สถานะห้อง</label>
                                     <select name="r_status" id="status"
                                         class="form-control text-center <?= ($row['r_status'] == 1) ? 'text-success' : 'text-danger' ?>">
-                                        <option class="text-success" value="1" <?= ($row['r_status'] == 1) ? 'selected' : ''; ?>>เปิด</option>
-                                        <option class="text-danger" value="0" <?= ($row['r_status'] == 0) ? 'selected' : ''; ?>>ปิด</option>
+                                        <option class="text-success" value="1" <?= (isset($row) ? ($row['r_status'] == 1 ? 'selected' : '') : 'selected'); ?>>
+                                            เปิด
+                                        </option>
+                                        <option class="text-danger" value="0" <?= (isset($row) && $row['r_status'] == 0 ? 'selected' : ''); ?>>
+                                            ปิด
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -41,8 +45,8 @@
                                 <div class="form-group">
                                     <label for="r_desc">คำอธิบายห้อง</label>
                                     <textarea id="r_desc" name="r_desc" class="form-control"
-                                        placeholder="โปรดใส่คำอธิบายห้อง" cols="3" rows="3"
-                                        ><?= $row['r_desc'] ?></textarea>
+                                        placeholder="โปรดใส่คำอธิบายห้อง" cols="3"
+                                        rows="3"><?= $row['r_desc'] ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +75,8 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="form_message">รูปที่จะอัพโหลด</label>
-                                    <img id="preview" src="<?= base_url("public/assets/img/room_img/" . $row['r_img']) ?>"
+                                    <img id="preview"
+                                        src="<?= base_url("public/assets/img/room_img/" . $row['r_img']) ?>"
                                         class="img-fluid border border-1 border-dark rounded-2">
                                 </div>
                             </div>
@@ -80,7 +85,8 @@
                         <!-- Submit Button -->
                         <div class="row mt-3">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-success btn-block"><?= $row ?  'แก้ไข' : 'เพิ่ม' ?></button>
+                                <button type="submit"
+                                    class="btn btn-success btn-block"><?= $row ? 'แก้ไข' : 'เพิ่ม' ?></button>
                             </div>
                         </div>
 

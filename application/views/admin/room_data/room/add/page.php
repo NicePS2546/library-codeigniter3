@@ -165,10 +165,11 @@
         } else if (!r_status) {
             showSweet('warn', 'โปรดเลือกสถานะห้อง')
             return false; // Stop execution if input is empty
-        } else if (!r_close_desc && r_status == 0) {
-            showSweet('warn', 'โปรดใส่คำอธิบายการปิดห้อง')
-            return false; // Stop execution if input is empty
         }
+        //  else if (!r_close_desc && r_status == 0) {
+        //     showSweet('warn', 'โปรดใส่คำอธิบายการปิดห้อง')
+        //     return false; // Stop execution if input is empty
+        // }
         Toast.fire({
             icon: "success",
             title: "กำลังดำเนินการ"

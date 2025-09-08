@@ -9,7 +9,7 @@
                
 
                 <button type="button" class="btn btn-danger btn-action delete-button"
-                    data-r-id="<?= $row['r_id']; ?>" data-service-name="<?= $row['name_TH']; ?>"  ><i class="bi bi-x-square" ></i></button>
+                    data-service-id="<?= $row['service_id']; ?>" data-service-name="<?= $row['name_TH']; ?>"  ><i class="bi bi-x-square" ></i></button>
             </div>
         </div>
 

@@ -1,7 +1,7 @@
 <?php
 class OnlineUser_model extends CI_Model {
     
-    public $table = "tbn_online_users";
+    public $table = "tbn_online_users_present";
     public function __construct() {
         parent::__construct();
         $this->load->database();

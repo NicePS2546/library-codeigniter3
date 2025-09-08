@@ -1,7 +1,7 @@
 <?php
 class RoomMusic extends CI_Model {
 
-    public $table = 'tbn_room_music';
+    public $table = 'tbn_room_music_present';
     public $primaryKey = 'r_id';
 
     public $allowedFields = [
@@ -80,11 +80,11 @@ class RoomMusic extends CI_Model {
 
      public function get_reserved($id, $status)
     {
-        $this->db->select('tbn_room_music.r_number, tbn_music_reserv.*');
-        $this->db->from('tbn_room_music');
-        $this->db->join('tbn_music_reserv', 'tbn_room_music.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
+        $this->db->select('tbn_room_music_present.r_number, tbn_music_reserv.*');
+        $this->db->from('tbn_room_music_present');
+        $this->db->join('tbn_music_reserv', 'tbn_room_music_present.r_id = tbn_music_reserv.r_id', 'inner'); // Use 'left', 'right', or 'outer' if needed
         $this->db->where('tbn_music_reserv.r_status', $status);
-        $this->db->where('tbn_room_music.r_id', $id);
+        $this->db->where('tbn_room_music_present.r_id', $id);
         $query = $this->db->get();
         return $query->result_array(); // Returns the result as an array
     }

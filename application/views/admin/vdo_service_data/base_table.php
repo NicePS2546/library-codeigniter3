@@ -140,7 +140,7 @@
                 // หากผู้ใชยืนยัน ให ้ส ้ งค่าฟอร์มไปยัง ่ delete.php เพื่อลบข ้อมูล
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= base_url("index.php/admin/remove/room/$table/") ?>' + id;
+                form.action = '<?= base_url("index.php/admin/video/service/delete/") ?>' + id;
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = 'id';
@@ -155,7 +155,7 @@
     const deleteButtons = document.querySelectorAll('.delete-button');
     deleteButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            const get_id = button.getAttribute('data-user-id');
+            const get_id = button.getAttribute('data-service-id');
             const name = button.getAttribute('data-service-name');
             showDeleteConfirmation(get_id, name);
         });

@@ -121,7 +121,7 @@ class Vdo extends MY_Controller
 
         $sys_time = $this->getTimeSystem(1);
         $sys_time = $sys_time['data'];
-        print_r($sys_time);
+        // print_r($sys_time);
     
 
         $extension = "index.php/";

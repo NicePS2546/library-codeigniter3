@@ -33,10 +33,10 @@
 <div class="container">
     <div class="col-12 col-sm-8 pb-4 col-md-6 col-lg-10 mt-4 mx-auto ani-element">
 
-        <form class="text-end" action="<?php echo base_url('index.php/admin/video/service/add/submit'); ?>"  id="formId"
+        <form class="text-end" action="<?php echo base_url('index.php/admin/video/service/add/submit'); ?>" id="formId"
             onsubmit="return update_service(event)" method="POST" enctype="multipart/form-data">
-            
-            
+
+
             <?= $this->load->view('admin/vdo_service_data/component/form_content', ['row' => $row], true) ?>
 
         </form>
@@ -65,7 +65,7 @@
         }, 500);
     });
 
-  
+
     function update_service(event) {
         event.preventDefault(); // Prevent default form submission
 
@@ -74,7 +74,7 @@
         const name_TH = $('#name_TH').val();
         const s_type = $('#s_type').val();
         const s_desc = $('#s_desc').val();
-       
+
 
         const Toast = Swal.mixin({
             toast: true,
@@ -101,7 +101,12 @@
             showSweet('warn', 'โปรดใส่รูปแบบ')
             return false; // Stop execution if input is empty
         }
-           
+
+        if (service_id.length < 1 || service_id.length > 4) {
+            showSweet('warn', 'หมายเลขบริการต้องมีความยาว 1-4 หลัก');
+            return false;
+        }
+        
         Toast.fire({
             icon: "success",
             title: "กำลังดำเนินการ"
@@ -109,7 +114,7 @@
         setTimeout(function () {
             document.getElementById('formId').submit(); // Submit the form
         }, 800); // Wait 2 seconds (2000ms)
-      
+
 
     }
 

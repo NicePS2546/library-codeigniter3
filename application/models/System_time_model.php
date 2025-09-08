@@ -1,7 +1,7 @@
 <?php
 class System_time_model extends CI_Model {
 
-    public $table = 'tbn_time_system';
+    public $table = 'tbn_time_system_present';
     public $primaryKey = 'time_id';
 
     public $allowedFields = [

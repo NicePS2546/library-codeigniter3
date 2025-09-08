@@ -163,7 +163,8 @@ $route['admin/statistic/service/disney'] = 'Admin/vdo_service_disney_static';
 $route['admin/statistic/service/test'] = 'Admin/vdo_service_static_test';
 
 $route ['admin/video/service/data'] = 'Admin/vdo_service_data';  
-$route ['admin/video/service/add'] = 'Admin/vdo_service_add';  
+$route ['admin/video/service/add'] = 'Admin/vdo_service_add';
+$route ['admin/video/service/delete/(:num)'] = 'Admin/vdo_service_delete/$1';
 $route ['admin/video/service/add/submit'] = 'Admin/vdo_service_add_submit';  
 $route ['admin/video/service/edit/(:num)'] = 'Admin/vdo_service_edit/$1';  
 $route ['admin/video/service/edit/submit'] = 'Admin/vdo_service_submit';  

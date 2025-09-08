@@ -1,7 +1,7 @@
 <?php
 class RoomVdo extends CI_Model {
 
-    public $table = 'tbn_room_vdo';
+    public $table = 'tbn_room_vdo_present';
     public $primaryKey = 'r_id';
 
     public $allowedFields = [

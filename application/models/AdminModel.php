@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class AdminModel extends CI_Model
 {
-    protected $table = 'tbn_admin';
+    protected $table = 'tbn_admin_present';
     protected $primaryKey = 'admin_id';
 
     public function __construct()
@@ -68,7 +68,7 @@ public function get_monthly_reservations_by_service($year = 2025) {
     ];
 
     // Query for each service table (assuming service_id corresponds to the table)
-    $services = ['tbn_music_reserv' => 1, 'tbn_vdo_reserv' => 2, 'tbn_mini_reserv' => 3];
+    $services = ['tbn_music_reserv_present' => 1, 'tbn_vdo_reserv_present' => 2, 'tbn_mini_reserv_present' => 3];
 
     foreach ($services as $table => $serviceId) {
         $this->db->select('MONTH(created_at) as month, SUM(total_pp) as total_users');

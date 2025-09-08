@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Vdo_service_Model extends CI_Model
 {
     // Table name
-    private $table = 'tbn_vdo_services';
+    private $table = 'tbn_vdo_services_present';
 
     public function __construct()
     {

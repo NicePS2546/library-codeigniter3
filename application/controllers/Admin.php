@@ -13,10 +13,10 @@ class Admin extends MY_Controller
 
         $this->load->model('OnlineUser_model');
         $online_model = $this->OnlineUser_model;
-        
+
         $day = date('Y-m-d');
         $stage = $this->config->item("stage");
-        if($stage == "Development"){
+        if ($stage == "Development") {
             $day = $this->config->item("fixed_date");
         }
         $music = $this->Model('reservation', 'MusicModel', true)->get_statistic_by_day($day);
@@ -351,7 +351,7 @@ class Admin extends MY_Controller
 
         $model = $this->Model('reservation', 'MusicModel', true);
         $row = $model->get_reserved_sole($id);
-       
+
         return $this->AdminRender('admin/reservation/edit/music', [
             'title' => 'แก้ไขรายละเอียดข้อมูลการจอง',
             'page' => 'reserv_data',
@@ -457,7 +457,7 @@ class Admin extends MY_Controller
 
         if ($result) {
             $logging = $log_model->insert($data);
-            if(!$logging){
+            if (!$logging) {
                 $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -470,7 +470,7 @@ class Admin extends MY_Controller
                 });
             }, 1000);
             </script>';
-            
+
             }
             $sweet = '<script>
             setTimeout(function() {
@@ -537,7 +537,7 @@ class Admin extends MY_Controller
 
         if ($result) {
             $logging = $log_model->insert($data);
-            if(!$logging){
+            if (!$logging) {
                 $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -550,7 +550,7 @@ class Admin extends MY_Controller
                 });
             }, 1000);
             </script>';
-            
+
             }
             $sweet = '<script>
             setTimeout(function() {
@@ -1344,7 +1344,6 @@ class Admin extends MY_Controller
 
         $current_year = date('Y');
         $current_day = date('Y-m-d');
-        // $model = $this->Model('statistic', 'StatisticModel', true);
         $year = $get_year ? $get_year : $current_year;
         $day = $get_day ? $get_day : $current_day;
 
@@ -1515,6 +1514,7 @@ class Admin extends MY_Controller
 
 
         $data = [
+            'service_id' => $id,
             's_type' => $s_type,
             'name_EN' => $name_EN,
             'name_TH' => $name_TH,
@@ -1531,7 +1531,7 @@ class Admin extends MY_Controller
             Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "แก้ไข",
+                title: "เพิ่มบริการสำเร็จ",
                 showConfirmButton: true,
             }).then(function(){
                  window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
@@ -1545,7 +1545,7 @@ class Admin extends MY_Controller
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "ลบทั้งหมดไม่สำเร็จ",
+                title: "เพิ่มบริการไม่สำเร็จ",
                 showConfirmButton: true,
             }).then(function(){
                  window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
@@ -1556,6 +1556,48 @@ class Admin extends MY_Controller
         return $this->sweet($sweet, 'Reservation Data', 'admin');
     }
 
+    public function vdo_service_delete($id)
+    {
+        if (!$this->check_admin()) {
+            $this->session->set_flashdata('error', "คุณไม่มีสิทธิ์เข้าถึง");
+            redirect('/');
+            exit();
+        }
+
+        $vdo_s_model = $this->Model('', 'Vdo_service_Model', false);
+        $extension = 'index.php/';
+
+        $result = $vdo_s_model->delete($id);
+
+        if ($result) {
+            $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "ลบบริการสำเร็จ",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
+            });
+        }, 1000);
+        </script>';
+        } else {
+            $sweet = '<script>
+        setTimeout(function() {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "ลบบริการไม่สำเร็จ",
+                showConfirmButton: true,
+            }).then(function(){
+                 window.location = "' . base_url() . $extension . 'admin/video/service/data"; 
+            });
+        }, 1000);
+        </script>';
+        }
+        return $this->sweet($sweet, 'Reservation Data', 'admin');
+    }
 
     public function get_total_user_reservations()
     {
@@ -1832,20 +1874,20 @@ class Admin extends MY_Controller
         switch ($table) {
             case 'music':
                 $model = $this->Model('reservation', 'MusicModel', true);
-                 $table = 'music';
+                $table = 'music';
                 break;
             case 'vdo':
                 $model = $this->Model('reservation', 'VdoModel', true);
-                 $table = 'vdo';
+                $table = 'vdo';
                 break;
             case 'mini':
                 $model = $this->Model('reservation', 'MiniModel', true);
-                 $table = 'mini';
+                $table = 'mini';
                 break;
         }
 
         $result = $model->activeReserv($reserv_id);
-       
+
         $log_model = $this->Model('', "Log_Model", false);
         $data = [
             'reserv_id' => $reserv_id,
@@ -1901,7 +1943,7 @@ class Admin extends MY_Controller
     {
         $holidays_model = $this->Model('', 'Holiday_Model', false);
         $data = $holidays_model->getAllDate();
-
+        $this->check_delete_old_date($holidays_model);
         if ($data) {
             echo json_encode([
                 'items' => $data,
@@ -1920,7 +1962,7 @@ class Admin extends MY_Controller
     {
         try {
             $extension = "index.php/";
-            $Holiday_model = $this->Model('', 'Holiday_Model', false);
+            $holiday_model = $this->Model('', 'Holiday_Model', false);
             $calendarId = 'th.th#holiday@group.v.calendar.google.com';
             $api_key = 'AIzaSyAy2Zu9_A75LaxrFuHm0NYgeg-uKOL01UQ';
 
@@ -1970,11 +2012,12 @@ class Admin extends MY_Controller
             // echo "</pre>";
             // exit();
             if (!empty($holidays)) {
-                $result = $Holiday_model->batchInsertOrUpdateHolidays($holidays);
+                $result = $holiday_model->batchInsertOrUpdateHolidays($holidays);
             }
             // Output success
 
             if ($result) {
+                $this->check_delete_old_date($holiday_model);
                 $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -2013,12 +2056,14 @@ class Admin extends MY_Controller
     {
         $holiday_model = $this->Model('', 'Holiday_Model', false);
         $rows = $holiday_model->getAllDate();
+        $this->check_delete_old_date($holiday_model);
         return $this->AdminRender('admin/no_service_date/table/page', [
             'title' => 'ตารางวันปิดระบบ',
             'page' => 'setting',
             'rows' => $rows
         ]);
     }
+
     public function add_holiday_submit()
     {
         $extension = "index.php/";
@@ -2035,6 +2080,7 @@ class Admin extends MY_Controller
         $holiday_model = $this->Model('', 'Holiday_Model', false);
         $result = $holiday_model->insertHoliday($data);
         if ($result) {
+
             $sweet = '<script>
             setTimeout(function() {
                 Swal.fire({
@@ -2108,5 +2154,5 @@ class Admin extends MY_Controller
             'logs' => $rows
         ]);
     }
-    
+
 }

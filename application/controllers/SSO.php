@@ -14,7 +14,7 @@ class SSO extends MY_Controller
     public function index()
     {
         // Retrieve POST data
-        $state = "x";
+        $state = "Deployment";
         if ($state === "Deployment") {
             $st_id = $this->input->post('st_id');
             $password = $this->input->post('password');
